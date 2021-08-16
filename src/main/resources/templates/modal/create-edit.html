@@ -1,0 +1,41 @@
+<div class="modal fade" id="createEditModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Create Meal</h5>
+        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function editMeal(id) {
+    $('#createEditModal .modal-title').html("Edit Meal");
+    $.ajax({
+    url: contextpath + 'meal/edit/' + id,
+    method: "GET",
+        success: function(data) {
+          $('#createEditModal .modal-body').html(data);
+          $('#createEditModal').modal('show');
+        }
+    });
+  }
+  function createMeal() {
+    $('#createEditModal .modal-title').html("Create Meal");
+    $.ajax({
+    url: contextpath + 'meal/create',
+    method: "GET",
+        success: function(data) {
+          $('#createEditModal .modal-body').html(data);
+          $('#createEditModal').modal('show');
+        }
+    });
+  }
+</script>

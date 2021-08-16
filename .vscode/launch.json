@@ -1,0 +1,36 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Debug (Launch) - Current File",
+            "request": "launch",
+            "mainClass": "${file}",
+            "env": {
+                "MEALS_MAIL_DBL": "stephenjw@fastmail.com",
+                "MEALS_MAIL_PW": "dummy_val",
+                "MEALS_MAIL_UN": "stephenjw@fastmail.com",
+                "MEALS_MAIL_LEVEL": "DEBUG",
+                "MEALS_MAIL_SMTP": "smtp.fastmail.com",
+                "MEALS_MAIL_PORT": "587",
+                "MEALS_DATASOURCE_INIT": "always",
+                "MEALS_JDBC_DATASOURCE_URL": "jdbc:h2:mem:Meals;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE",
+                "MEALS_JDBC_DRIVER": "com.mysql.jdbc.Driver",
+                "MEALS_JDBC_DRIVER_H2": "org.h2.Driver",
+                "MEALS_JDBC_PASSWORD": "sa",
+                "MEALS_JDBC_USERNAME": "sa",
+                "MEALS_JDBC_PLATFORM": "org.hibernate.dialect.H2Dialect"
+            }
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)-MealPlannerWebApplication<meals>",
+            "request": "launch",
+            "mainClass": "com.sjwi.meals.MealPlannerWebApplication",
+            "projectName": "meals"
+        }
+    ]
+}

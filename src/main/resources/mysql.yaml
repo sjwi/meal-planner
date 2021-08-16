@@ -1,0 +1,26 @@
+getAllMeals: >
+  select m.ID,m.NAME, MAX(w.DATE_BEGIN) as LAST_EATEN, m.FAVORITE,m.RECIPE_URL,m.NOTES, COUNT(*) as CNT from Meals m LEFT JOIN PlannedMeals pm on pm.MEAL_ID = m.ID LEFT JOIN WeeklySchedule w on w.ID = pm.SCHEDULE_ID where m.DISABLED = 0 group by m.ID
+
+getAllWeeks: >
+  select * from WeeklySchedule where DISABLED = 0
+
+getAllMealsInWeek: >
+  select m.ID,m.NAME,m.FAVORITE,m.RECIPE_URL,m.NOTES from PlannedMeals pm INNER JOIN Meals m on pm.MEAL_ID = m.ID where pm.SCHEDULE_ID = ?
+
+getMealLastEaten: >
+  select MAX(DATE_BEGIN) as LAST_EATEN from PlannedMeals pm INNER JOIN WeeklySchedule w on w.ID = pm.SCHEDULE_ID where pm.MEAL_ID = ?
+
+getIngredientsInMeal: >
+  select i.ID,i.NAME,i.DISABLED from Ingredients i INNER JOIN MealIngredients mi ON i.ID = mi.INGREDIENT_ID where mi.MEAL_ID = ?
+
+getMealTags: >
+  select * from MealTags mt INNER JOIN Tags t on mt.TAG_ID = t.ID where mt.MEAL_ID = ?
+
+getAllTags: >
+  select * from Tags
+
+getAllIngredients: >
+  select * from Ingredients
+
+getMealById: >
+  select m.ID,m.NAME, MAX(w.DATE_BEGIN) as LAST_EATEN, m.FAVORITE,m.RECIPE_URL,m.NOTES, COUNT(*) as CNT from Meals m LEFT JOIN PlannedMeals pm on pm.MEAL_ID = m.ID LEFT JOIN WeeklySchedule w on w.ID = pm.SCHEDULE_ID where m.DISABLED = 0 AND m.ID = ? group by m.ID

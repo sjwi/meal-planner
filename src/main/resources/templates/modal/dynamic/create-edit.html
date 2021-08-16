@@ -1,0 +1,51 @@
+<form>
+  <div class="input-group mb-1">
+    <input type="text" class="form-control input-meal-name" th:value="${meal == null? '': meal.name}" placeholder="Meal name" aria-label="Meal name" required>
+    <div class="invalid-feedback">
+      Please enter a meal name
+    </div>
+  </div>
+  <div class="form-check form-switch mb-2 offset-8">
+    <input class="form-check-input" type="checkbox" id="createEditFavorite">
+    <label class="form-check-label" for="createEditFavorite">Favorite</label>
+  </div>
+  <div class="form-group mb-2">
+    <label for="inputMealIngredients text-primary">Ingredients</label>
+    <select class="form-select form-select-lg input-meal-ingredients" data-width="100%" id="inputMealIngredients" multiple="multiple">
+      <option th:if="${meal != null}" th:each="ingredient : ${ingredients}" th:selected="${#lists.contains(ingredientIds, ingredient.id)}" th:value="${ingredient.id}" th:text="${ingredient.name}"></option>
+      <option th:if="${meal == null}" th:each="ingredient : ${ingredients}" th:value="${ingredient.id}" th:text="${ingredient.name}"></option>
+    </select>
+  </div>
+  <div class="form-group mb-2">
+    <label for="inputMealTags text-primary">Tags</label>
+    <select class="form-select form-select-lg input-meal-tags" data-width="100%" id="inputMealTags" multiple="multiple">
+      <option th:if="${meal != null}" th:each="tag : ${tags}" th:selected="${#maps.containsKey(meal.tags, tag.key)}" th:value="${tag.key}" th:text="${tag.value}"></option>
+      <option th:if="${meal == null}" th:each="tag : ${tags}" th:value="${tag.key}" th:text="${tag.value}"></option>
+    </select>
+  </div>
+  <div class="input-group mb-2">
+    <textArea type="text" class="form-control input-meal-notes" th:text="${meal == null? '': meal.notes}" placeholder="Notes" aria-label="Meal notes"></textArea>
+  </div>
+  <div class="input-group mb-2">
+    <input type="text" class="form-control input-meal-recipe-url" th:value="${meal == null? '': meal.recipeUrl}" placeholder="Recipe URL" aria-label="Recipe URL">
+  </div>
+</form>
+<script>
+  $(document).ready(function(){
+    $('.input-meal-ingredients, .input-meal-tags').select2({
+      placeholder: 'Click to add',
+      tags: true,
+      selectionCssClass: ':all:'
+    });
+    $('.input-meal-ingredients, .input-meal-tags').on('select2:unselecting', function(e){
+      unselecting = true;
+    });
+    $('.input-meal-ingredients, .input-meal-tags').on('select2:opening', function(e){
+      if (unselecting) {
+        unselecting = false;
+        return false;
+      }
+      return true;
+    });
+  })
+</script>
