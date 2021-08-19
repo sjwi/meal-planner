@@ -1,5 +1,6 @@
 package com.sjwi.meals.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,6 +15,13 @@ public class Week {
         this.start = start;
         this.end = end;
         this.meals = meals;
+    }
+
+    public Week(Date start, Date end) {
+        this.id = 0;
+        this.start = start;
+        this.end = end;
+        this.meals = new ArrayList<>();
     }
 
     public int getId() {

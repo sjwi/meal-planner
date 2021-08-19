@@ -6,6 +6,34 @@
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+        <form>
+          <div class="input-group mb-1 has-validation">
+            <input id="inputMealName" type="text" class="form-control input-meal-name" placeholder="Meal name*" aria-label="Meal name" required>
+            <div class="invalid-feedback">
+              Please enter a meal name
+            </div>
+          </div>
+          <div class="form-check form-switch mb-2 offset-8">
+            <input class="form-check-input" type="checkbox" id="createEditFavorite">
+            <label class="form-check-label" for="createEditFavorite">Favorite</label>
+          </div>
+          <div class="form-group mb-2">
+            <label for="inputMealIngredients text-primary">Ingredients</label>
+            <select class="form-select form-select-lg input-meal-ingredients" data-width="100%" id="inputMealIngredients" multiple="multiple">
+            </select>
+          </div>
+          <div class="form-group mb-2">
+            <label for="inputMealTags text-primary">Tags</label>
+            <select class="form-select form-select-lg input-meal-tags" data-width="100%" id="inputMealTags" multiple="multiple">
+            </select>
+          </div>
+          <div class="input-group mb-2">
+            <textArea id="inputMealNotes" type="text" class="form-control input-meal-notes" placeholder="Notes" aria-label="Meal notes"></textArea>
+          </div>
+          <div class="input-group mb-2">
+            <input id="inputRecipeUrl" type="text" class="form-control input-recipe-url" placeholder="Recipe URL" aria-label="Recipe URL">
+          </div>
+        </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
@@ -16,26 +44,62 @@
 </div>
 
 <script>
-  function editMeal(id) {
+  async function editMeal(id) {
     $('#createEditModal .modal-title').html("Edit Meal");
-    $.ajax({
-    url: contextpath + 'meal/edit/' + id,
-    method: "GET",
-        success: function(data) {
-          $('#createEditModal .modal-body').html(data);
-          $('#createEditModal').modal('show');
-        }
+    $('#inputMealName').val($('#mealName_' + id).text());
+    $('#createEditFavorite').prop('checked',$('#favoriteCheckbox_' + id).hasClass("fas"));
+    $('#inputMealNotes').text($('#mealNotes_' + id).text());
+    $('#inputRecipeUrl').val($('#mealRecipeUrl_' + id).attr("href"));
+    
+    //Ingredients
+    let mealIngredients = $('#accordion_' + id + ' .meal-ingredient').map(function(){
+      return $(this).data('target');
+    }).get();
+    await ingredients.forEach(i => {
+      jQuery('<option/>', {
+            value: i.id,
+            html: i.name,
+            selected: mealIngredients.includes(i.id)
+            }).appendTo('#inputMealIngredients'); 
     });
+    //Tags
+    let mealTags = $('#accordion_' + id + ' .meal-tag').map(function(){
+      return $(this).data('target').toString();
+    }).get();
+    await tags.forEach((v,k) => {
+      jQuery('<option/>', {
+            value: k,
+            html: v,
+            selected: mealTags.includes(k)
+            }).appendTo('#inputMealTags'); 
+    });
+    $('.input-meal-ingredients, .input-meal-tags').select2({
+      placeholder: 'Click to add',
+      tags: true
+    });
+    $('.input-meal-ingredients, .input-meal-tags').on('select2:unselecting', function(e){
+      unselecting = true;
+    });
+    $('.input-meal-ingredients, .input-meal-tags').on('select2:opening', function(e){
+      if (unselecting) {
+        unselecting = false;
+        return false;
+      }
+      return true;
+    });
+    $('#createEditModal').modal('show');
   }
   function createMeal() {
     $('#createEditModal .modal-title').html("Create Meal");
-    $.ajax({
-    url: contextpath + 'meal/create',
-    method: "GET",
-        success: function(data) {
-          $('#createEditModal .modal-body').html(data);
-          $('#createEditModal').modal('show');
-        }
-    });
+    $('#createEditModal').modal('show');
   }
+  $('#createEditModal').on('hidden.bs.modal', function () {
+    $('#createEditModal .modal-title').html("");
+    $('#inputMealName').val("");
+    $('#createEditFavorite').prop('checked','false');
+    $('#inputMealNotes').text("");
+    $('#inputRecipeUrl').val("");
+    $('#inputMealTags').find('option').remove().end()
+    $('#inputMealIngredients').find('option').remove().end()
+  })
 </script>

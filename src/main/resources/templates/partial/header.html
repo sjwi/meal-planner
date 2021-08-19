@@ -1,12 +1,22 @@
 <nav class="navbar navbar-dark bg-primary">
   <div class="navbar-nav w-100 row no-gutters">
-    <a class="nav-item text-center col col-6 pb-0 pt-0 nav-link active" href="#">Meals</a>
-    <a class="nav-item text-center col col-6 pb-0 pt-0 nav-link" href="#">Weeks</a>
+    <a id="mealNavLink" data-target="#mealsContainer" class="nav-item text-center col col-6 pb-0 pt-0 nav-link active" href="#tab=meals">Meals</a>
+    <a id="weekNavLink" data-target="#weeksContainer" class="nav-item text-center col col-6 pb-0 pt-0 nav-link" href="#tab=weeks">Weeks</a>
   </div>
 </nav>
 <script>
   $(document).on('click','.nav-item',function(){
     $('.nav-item').removeClass('active');
     $(this).addClass('active');
+    $('.page-container').hide();
+    $($(this).data('target')).show();
+    if ($('#mealsContainer').is(':visible'))
+      $('.create-meal').addClass('showme');
+    else
+      $('.create-meal').removeClass('showme');
+  })
+  $(document).ready(function(){
+    if (tab == 'meals')
+      $('.create-meal').addClass('showme');
   })
 </script>

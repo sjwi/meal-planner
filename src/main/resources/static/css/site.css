@@ -17,15 +17,21 @@
 .alert.add-meal.display {
   bottom: -10px; 
 }
-.btn.add {
+.create-meal {
+  transition-duration: .5s;
   position:fixed;
+  bottom:-75px;
+  right:15px;
+  z-index:1050;
+}
+.btn.add {
+  border-radius: 50%;
   width:53px;
   height:53px;
-  bottom:15px;
-  right:15px;
-  z-index:9998;
-  border-radius: 50%;
   box-shadow: 0 .5rem 1rem rgba(0,0,0,.35)!important;
+}
+.create-meal.showme {
+  bottom:15px;
 }
 span.select2-container {
 	z-index :4001 !important;
@@ -46,6 +52,15 @@ span.select2-container {
  color:rgb(206, 88, 88); 
  border-color:rgb(206, 88, 88); 
 }
+
+ul {
+  list-style-type: none;
+  margin-top:0;
+  margin-bottom:0;
+  padding-top:0;
+  padding-bottom:0;
+}
+
 /* Checkbox */
 /* Checkbox */
 .round {

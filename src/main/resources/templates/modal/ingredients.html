@@ -1,0 +1,29 @@
+<div class="modal fade" id="ingredientsModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Ingredient List</h5>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function openIngredientsModal(id) {
+    $.ajax({
+      url: contextpath + 'week/ingredients/' + id,
+      method: "GET",
+      success: function(data) {
+        $('#ingredientsModal .modal-body').html(data);
+        $('#ingredientsModal').modal('show');
+      },
+      error: function(data){
+        alertWithFade('danger','Something went wrong! Unable to retreive ingredients')
+      },
+    });
+  }
+</script>

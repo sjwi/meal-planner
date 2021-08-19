@@ -74,6 +74,14 @@ public class MealDao {
         });
     }
 
+    public Week getWeekById(int id) {
+        return jdbcTemplate.query(queryStore.get("getWeekById"), new Object[] {id}, r -> {
+            r.next();
+            List<Meal> meals = getMeelsInWeek(r.getInt("ID"));
+            return new Week(r.getInt("ID"),r.getDate("DATE_BEGIN"),r.getDate("DATE_END"),meals);
+        });
+    }
+
     private List<Meal> getMeelsInWeek(int weekId) {
         return jdbcTemplate.query(queryStore.get("getAllMealsInWeek"), new Object[] {weekId}, r -> {
             List<Meal> meals = new ArrayList<>();

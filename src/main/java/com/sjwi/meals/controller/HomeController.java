@@ -1,11 +1,15 @@
 package com.sjwi.meals.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.sjwi.meals.dao.MealDao;
 import com.sjwi.meals.model.Meal;
+import com.sjwi.meals.model.Week;
+import com.sjwi.meals.util.WeekGenerator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,8 +26,10 @@ public class HomeController {
     @RequestMapping("/")
     public ModelAndView homeController(){
         ModelAndView mv = new ModelAndView("home");
+        List<Week> weeks = mealDao.getAllWeeks();
         mv.addObject("meals", mealDao.getAllMeals());
-        mv.addObject("weeks", mealDao.getAllWeeks());
+        mv.addObject("weeks", weeks);
+        mv.addObject("weeksForSelect", WeekGenerator.getWeeksForSelect(weeks));
         mv.addObject("tags", mealDao.getAllTags());
         return mv;
     }
@@ -48,6 +54,25 @@ public class HomeController {
         ModelAndView mv = new ModelAndView("modal/dynamic/create-edit");
         mv.addObject("tags", mealDao.getAllTags());
         mv.addObject("ingredients", mealDao.getAllIngredients());
+        return mv;
+    }
+    @RequestMapping("/week/ingredients/{id}")
+    public ModelAndView getIngredientsInWeek(@PathVariable int id) {
+        Week week = mealDao.getWeekById(id);
+        List<String> ingredients = week.getMeals().stream()
+            .map(m -> m.getIngredients())
+            .flatMap(List::stream)
+            .map(i -> i.getName())
+            .collect(Collectors.toList());
+        Map<String,Integer> ingredientMap = new HashMap<>();
+        for (String ingredient : ingredients){
+            if (ingredientMap.containsKey(ingredient))
+                ingredientMap.put(ingredient, ingredientMap.get(ingredient) + 1);
+            else
+                ingredientMap.put(ingredient,1);
+        }
+        ModelAndView mv = new ModelAndView("modal/dynamic/ingredients");
+        mv.addObject("ingredients", ingredientMap);
         return mv;
     }
 }

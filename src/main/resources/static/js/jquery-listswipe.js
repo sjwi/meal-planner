@@ -78,8 +78,13 @@
 				var touchDelta = getTouchDelta(touch, data, settings);
 
 				var xThreshold = Math.abs(touchDelta.xDelta) / settings.itemActionWidth;
+				var actionButtonClass = touchDelta.xDelta > 0? 'edit':'delete';
 				if (xThreshold >= settings.snapThreshold) {
-					if (touchDelta.xDelta < 0) {
+					if (xThreshold >= 2.5) {
+						$(this).find('.action.' + actionButtonClass).click();
+						touchDelta.xDelta = 0;
+					}
+					else if (touchDelta.xDelta < 0) {
 						touchDelta.xDelta = -settings.itemActionWidth;
 					}
 					else {

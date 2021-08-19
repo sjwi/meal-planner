@@ -2,7 +2,10 @@ getAllMeals: >
   select m.ID,m.NAME, MAX(w.DATE_BEGIN) as LAST_EATEN, m.FAVORITE,m.RECIPE_URL,m.NOTES, COUNT(*) as CNT from Meals m LEFT JOIN PlannedMeals pm on pm.MEAL_ID = m.ID LEFT JOIN WeeklySchedule w on w.ID = pm.SCHEDULE_ID where m.DISABLED = 0 group by m.ID
 
 getAllWeeks: >
-  select * from WeeklySchedule where DISABLED = 0
+  select * from WeeklySchedule where DISABLED = 0 ORDER BY DATE_BEGIN DESC
+
+getWeekById: >
+  select * from WeeklySchedule where ID = ?
 
 getAllMealsInWeek: >
   select m.ID,m.NAME,m.FAVORITE,m.RECIPE_URL,m.NOTES from PlannedMeals pm INNER JOIN Meals m on pm.MEAL_ID = m.ID where pm.SCHEDULE_ID = ?
