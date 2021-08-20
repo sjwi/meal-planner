@@ -15,7 +15,7 @@
   z-index:9999; 
 }
 .alert.add-meal.display {
-  bottom: 0px; 
+  bottom: -5px; 
 }
 .create-meal {
   transition-duration: .5s;
