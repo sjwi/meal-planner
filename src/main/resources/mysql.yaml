@@ -4,8 +4,50 @@ getAllMeals: >
 getAllWeeks: >
   select * from WeeklySchedule where DISABLED = 0 ORDER BY DATE_BEGIN DESC
 
+createWeek: >
+  INSERT INTO WeeklySchedule (DATE_BEGIN,DATE_END) values (?,?)
+
+createMeal: >
+  INSERT INTO Meals (NAME, FAVORITE, NOTES, RECIPE_URL) values (?,?,?,?)
+
+removeMealFromWeek: >
+  DELETE FROM PlannedMeals WHERE MEAL_ID = ? AND SCHEDULE_ID = ?
+
+deleteWeek: >
+  UPDATE WeeklySchedule SET DISABLED = 1 WHERE ID = ?
+
 getWeekById: >
   select * from WeeklySchedule where ID = ?
+
+addMealToWeek: >
+  INSERT INTO PlannedMeals (SCHEDULE_ID,MEAL_ID) values (?,?)
+
+getLatestMealId: >
+  select ID from Meals ORDER BY ID desc LIMIT 1
+
+getLatestWeekId: >
+  select ID from WeeklySchedule ORDER BY ID desc LIMIT 1
+
+addIngredientsToMeal: >
+  INSERT INTO MealIngredients (INGREDIENT_ID,MEAL_ID) values (?,?)
+
+addTagsToMeal: >
+  INSERT INTO MealTags (TAG_ID,MEAL_ID) values (?,?)
+
+updateMeal: >
+  UPDATE Meals SET NAME = ?, FAVORITE = ?, NOTES = ?, RECIPE_URL = ? WHERE ID = ?
+
+deleteIngredientsInMeal: >
+  DELETE FROM MealIngredients WHERE INGREDIENT_ID = ? AND MEAL_ID = ?
+
+deleteTagsInMeal: >
+  DELETE FROM MealTags WHERE TAG_ID = ? AND MEAL_ID = ?
+
+insertMealIngredients: >
+  INSERT INTO MealIngredients (INGREDIENT_ID,MEAL_ID) values (?,?)
+
+insertMealTags: >
+  INSERT INTO MealTags (TAG_ID,MEAL_ID) values (?,?)
 
 getAllMealsInWeek: >
   select m.ID,m.NAME,m.FAVORITE,m.RECIPE_URL,m.NOTES from PlannedMeals pm INNER JOIN Meals m on pm.MEAL_ID = m.ID where pm.SCHEDULE_ID = ?

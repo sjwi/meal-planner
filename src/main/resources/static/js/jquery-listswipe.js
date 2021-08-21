@@ -81,7 +81,7 @@
 				var actionButtonClass = touchDelta.xDelta > 0? 'edit':'delete';
 				if (xThreshold >= settings.snapThreshold) {
 					if (xThreshold >= 2.5) {
-						$(this).find('.action.' + actionButtonClass).click();
+						$item.find('.action.' + actionButtonClass)[0].click();
 						touchDelta.xDelta = 0;
 					}
 					else if (touchDelta.xDelta < 0) {

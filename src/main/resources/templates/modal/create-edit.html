@@ -6,38 +6,38 @@
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form>
+        <form id="createEditForm">
           <div class="input-group mb-1 has-validation">
-            <input id="inputMealName" type="text" class="form-control input-meal-name" placeholder="Meal name*" aria-label="Meal name" required>
+            <input name="inputMealName" id="inputMealName" type="text" class="form-control input-meal-name" placeholder="Meal name*" aria-label="Meal name" required>
             <div class="invalid-feedback">
               Please enter a meal name
             </div>
           </div>
           <div class="form-check form-switch mb-2 offset-8">
-            <input class="form-check-input" type="checkbox" id="createEditFavorite">
+            <input class="form-check-input" type="checkbox" id="createEditFavorite" name="createEditFavorite">
             <label class="form-check-label" for="createEditFavorite">Favorite</label>
           </div>
           <div class="form-group mb-2">
             <label for="inputMealIngredients text-primary">Ingredients</label>
-            <select class="form-select form-select-lg input-meal-ingredients" data-width="100%" id="inputMealIngredients" multiple="multiple">
+            <select class="form-select form-select-lg input-meal-ingredients" data-width="100%" id="inputMealIngredients" name="inputMealIngredients" multiple="multiple">
             </select>
           </div>
           <div class="form-group mb-2">
             <label for="inputMealTags text-primary">Tags</label>
-            <select class="form-select form-select-lg input-meal-tags" data-width="100%" id="inputMealTags" multiple="multiple">
+            <select class="form-select form-select-lg input-meal-tags" data-width="100%" name="inputMealTags" id="inputMealTags" multiple="multiple">
             </select>
           </div>
           <div class="input-group mb-2">
-            <textArea id="inputMealNotes" type="text" class="form-control input-meal-notes" placeholder="Notes" aria-label="Meal notes"></textArea>
+            <textArea name="inputMealNotes" id="inputMealNotes" type="text" class="form-control input-meal-notes" placeholder="Notes" aria-label="Meal notes"></textArea>
           </div>
           <div class="input-group mb-2">
-            <input id="inputRecipeUrl" type="text" class="form-control input-recipe-url" placeholder="Recipe URL" aria-label="Recipe URL">
+            <input id="inputRecipeUrl" name="inputRecipeUrl" type="text" class="form-control input-recipe-url" placeholder="Recipe URL" aria-label="Recipe URL">
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal">Submit</button>
+        <button type="submit" form="createEditForm" class="btn btn-sm btn-primary">Submit</button>
       </div>
     </div>
   </div>
@@ -50,6 +50,7 @@
     $('#createEditFavorite').prop('checked',$('#favoriteCheckbox_' + id).hasClass("fas"));
     $('#inputMealNotes').text($('#mealNotes_' + id).text());
     $('#inputRecipeUrl').val($('#mealRecipeUrl_' + id).attr("href"));
+    $('#createEditModal form').attr('action', contextpath + 'meal/edit/' + id);
     
     //Ingredients
     let mealIngredients = $('#accordion_' + id + ' .meal-ingredient').map(function(){
@@ -89,9 +90,36 @@
     });
     $('#createEditModal').modal('show');
   }
-  function createMeal() {
+  async function createMeal() {
     $('#createEditModal .modal-title').html("Create Meal");
     $('#createEditModal').modal('show');
+    $('#createEditModal form').attr('action', contextpath + 'meal/create');
+    await ingredients.forEach(i => {
+      jQuery('<option/>', {
+            value: i.id,
+            html: i.name,
+            }).appendTo('#inputMealIngredients'); 
+    });
+    await tags.forEach((v,k) => {
+      jQuery('<option/>', {
+            value: k,
+            html: v,
+            }).appendTo('#inputMealTags'); 
+    });
+    $('.input-meal-ingredients, .input-meal-tags').select2({
+      placeholder: 'Click to add',
+      tags: true
+    });
+    $('.input-meal-ingredients, .input-meal-tags').on('select2:unselecting', function(e){
+      unselecting = true;
+    });
+    $('.input-meal-ingredients, .input-meal-tags').on('select2:opening', function(e){
+      if (unselecting) {
+        unselecting = false;
+        return false;
+      }
+      return true;
+    });
   }
   $('#createEditModal').on('hidden.bs.modal', function () {
     $('#createEditModal .modal-title').html("");

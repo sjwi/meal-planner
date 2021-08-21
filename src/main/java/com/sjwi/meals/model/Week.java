@@ -1,5 +1,6 @@
 package com.sjwi.meals.model;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +23,11 @@ public class Week {
         this.start = start;
         this.end = end;
         this.meals = new ArrayList<>();
+    }
+
+    public String getKey() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        return simpleDateFormat.format(start) + simpleDateFormat.format(end);
     }
 
     public int getId() {

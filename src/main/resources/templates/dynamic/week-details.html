@@ -1,0 +1,48 @@
+  <li th:id="${'weekAccordion_' + week.id}"
+    class="pt-0 pb-0 px-0 bg-light container accordion-collapse collapse accordion-header clickable"
+    th:classappend="${stat?.index == 0? 'show':''}" th:attr="data-target=${week.id}" data-parent="#weekTable">
+    <ul class="list-group list-group-flush item-list sub-meal-list" id="subMealList">
+      <th:block th:each="meal: ${week.meals}">
+        <li class="item list-group-item list-group-item-action my-0 bg-light"
+          th:id="${'accordion_header_sub_' + meal.id}" th:attr="data-target=${'#accordion_sub_' + meal.id}"
+          data-toggle="collapse">
+          <button class="action edit bg-primary stop-prop" th:attr="onclick=${'editMeal('+meal.id+')'}">Edit</button>
+          <div th:id="${'subMealName_' + meal.id}" class="meal-text text-truncate col col-12 py-0 sub-meal-text"
+            th:text="${meal.name}"></div>
+          <button th:attr="onclick=${'removeMealFromWeek(' + meal.id + ',' + week.id + ')'}"
+            class="action delete bg-danger stop-prop">Delete</button>
+        </li>
+        <li th:id="${'accordion_sub_' + meal.id}" data-parent="#subMealList"
+          class="container px-4 bg-secondary accordion-collapse collapse">
+          <h6 th:if="${#lists.size(meal.ingredients) > 0}" class="mt-2">Ingredients</h6>
+          <ul th:if="${#lists.size(meal.ingredients) > 0}"
+            class="list-group list-group-flush d-flex flex-row flex-wrap bg-secondary">
+            <li th:each="ingredient : ${meal.ingredients}" class="list-group-item border-bottom"
+              th:classappend="${#lists.size(meal.ingredients) == 1? 'w-100':'w-50'}">
+              <small class="meal-ingredient" th:text="${ingredient.name}"
+                th:attr="data-target=${ingredient.id}"></small>
+            </li>
+          </ul>
+          <h6 th:if="${#maps.size(meal.tags) > 0}" class="mt-2">Tags</h6>
+          <div th:if="${#maps.size(meal.tags) > 0}" class="row no-gutters">
+            <div class="col">
+              <small>
+                <span class="badge rounded-pill bg-dark mx-1 my-1 meal-tag" th:each="tag : ${meal.tags}"
+                  th:attr="data-target=${tag.key}" th:text="${tag.value}"></span>
+              </small>
+            </div>
+          </div>
+          <h6 th:if="${meal.notes != null}" class="mt-2">Notes</h6>
+          <div th:if="${meal.notes != null}" class="row no-gutters">
+            <div class="col px-4">
+              <small th:id="${'mealNotes_' + meal.id}" th:text="${meal.notes}"></small>
+            </div>
+          </div>
+          <div class="my-2 col text-center">
+            <a th:if="${meal.recipeUrl != null}" th:id="${'mealRecipeUrl_' + meal.id}" th:href="${meal.recipeUrl}"
+              target="_blank">View Recipe <i class="ms-1 fas fa-external-link-alt"></i></a>
+          </div>
+        </li>
+      </th:block>
+    </ul>
+  </li>

@@ -1,226 +1,233 @@
 <html>
-	<th:block th:replace="partial/head :: head('Meal Planner')"></th:block>
-    <body>
-        <th:block th:replace="partial/header"></th:block>
-        <div id="mealsContainer" class="page-container container">
-            <div class="row">
-                <div class="col-12 mt-1 mb-0">
-                    <div class="input-group">
-                        <input type="search" class="form-control" placeholder="Search" aria-label="Search"
-                          aria-describedby="search-addon" />
-                        <button type="button" class="input-group-text border-1" data-toggle="modal" data-title="Filter results" data-target="#searchModal">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="24" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
-                                <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <ul class="list-group list-group-flush item-list" id="mealTable">
-                <th:block th:each="meal:${meals}">
-                    <li th:id="${'accordionHeader_' + meal.id}" data-toggle="collapse" th:attr="data-target=${'#accordion_' + meal.id},data-mealid=${meal.id}" class="clickable my-0 accordion-header item list-group-item list-group-item-action">
-                        <button class="action edit bg-primary stop-prop" th:attr="onclick=${'editMeal('+meal.id+')'}">Edit</button>
-                        <div class="row no-gutters">
-                            <div class="round form-check col col-2">
-                                <input type="checkbox" class="form-check-input stop-prop meal-select" th:id="${'mealCheckbox_' + meal.id}" th:attr="data-target=${meal.id}">
-                                <label class="form-check-label stop-prop" th:attr="for=${'mealCheckbox_' + meal.id}"></label>
-                            </div>
-                            <div th:id="${'mealName_' + meal.id}" class="meal-text text-truncate col col-9 ps-0" th:text="${meal.name}"></div>
-                            <div class="col col-1 text-end mt-1 pe-0">
-                                <i th:id="${'favoriteCheckbox_' + meal.id}" class="fa-heart stop-prop" th:classappend="${meal.favorite? 'fas' : 'far'}"></i>
-                            </div>
-                        </div>
-                        <button onclick="alert('deleted')" class="action delete bg-danger stop-prop">Delete</button>
-                    </li>
-                    <li th:id="${'accordion_' + meal.id}" class="pt-0 pb-0 px-2 bg-light container accordion-collapse collapse" th:attr="data-target=${meal.id}" data-parent="#mealTable">
-                        <h6 th:if="${#lists.size(meal.ingredients) > 0}" class="mt-2">Ingredients</h6>
-                        <ul th:if="${#lists.size(meal.ingredients) > 0}" 
-                            class="list-group list-group-flush d-flex flex-row flex-wrap bg-secondary">
-                            <li th:each="ingredient : ${meal.ingredients}" class="list-group-item border-bottom" th:classappend="${#lists.size(meal.ingredients) == 1? 'w-100':'w-50'}">
-                                <small class="meal-ingredient" th:text="${ingredient.name}" th:attr="data-target=${ingredient.id}"></small>
-                            </li>
-                        </ul>
-                        <h6 th:if="${#maps.size(meal.tags) > 0}" class="mt-2">Tags</h6>
-                        <div th:if="${#maps.size(meal.tags) > 0}" class="row no-gutters">
-                            <div class="col">
-                                <small>
-                                    <span class="badge rounded-pill bg-secondary mx-1 my-1 meal-tag" th:each="tag : ${meal.tags}" th:attr="data-target=${tag.key}" th:text="${tag.value}"></span>
-                                </small>
-                            </div>
-                        </div>
-                        <h6 th:if="${meal.notes != null}" class="mt-2">Notes</h6>
-                        <div th:if="${meal.notes != null}" class="row no-gutters">
-                            <div class="col px-4">
-                                <small th:id="${'mealNotes_' + meal.id}" th:text="${meal.notes}"></small>
-                            </div>
-                        </div>
-                        <hr th:if="${#maps.size(meal.tags) > 0}" class="mt-1 mb-0">
-                        <div class="row">
-                            <div class="col-6 pt-2">
-                                <small class="mb-0 text-primary">Last time planned: </small>
-                            </div>
-                            <div class="col-6 pt-2 text-end">
-                                <small th:text="${meal.lastEaten == null? 'Never': meal.getWeeksSinceLastEaten() + ' weeks ago'}"></small>
-                            </div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col-6 pt-1">
-                                <small class="mb-0 text-primary">Total times planned: </small>
-                            </div>
-                            <div class="col-6 pt-2 text-end">
-                                <small th:text="${meal.lastEaten == null? '0': meal.count}"></small>
-                            </div>
-                        </div>
-                        <div class="my-2 col text-center">
-                            <a th:if="${meal.recipeUrl != null}" th:id="${'mealRecipeUrl_' + meal.id}" th:href="${meal.recipeUrl}" target="_blank">View Recipe <i class="ms-1 fas fa-external-link-alt"></i></a>
-                        </div>
-                    </li>
-                </th:block>
-            </ul>
+<th:block th:replace="partial/head :: head('Meal Planner')"></th:block>
+<body>
+  <th:block th:replace="partial/header"></th:block>
+  <div id="mealsContainer" class="page-container container">
+    <div class="row">
+      <div class="col-12 mt-1 mb-0">
+        <div class="input-group">
+          <input type="search" class="form-control" placeholder="Search" aria-label="Search"
+            aria-describedby="search-addon" />
+          <button type="button" class="input-group-text border-1" data-toggle="modal" data-title="Filter results"
+            data-target="#searchModal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="24" fill="currentColor" class="bi bi-filter"
+              viewBox="0 0 16 16">
+              <path
+                d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z">
+              </path>
+            </svg>
+          </button>
         </div>
-        <div id="weeksContainer" class="container page-container collapse">
-            <ul class="list-group list-group-flush item-list" id="weekTable">
-                <th:block th:each="week, stat :${weeks}">
-                    <li th:id="${'weekAccordionHeader_' + week.id}" data-toggle="collapse" th:attr="data-target=${'#weekAccordion_' + week.id},data-weekid=${week.id}" class="clickable my-0 accordion-header item list-group-item list-group-item-action" th:classappend="${stat.index == 0? '':'border-top'}" >
-                        <div class="row no-gutters">
-                            <div th:id="${'weekName_' + week.id}" class="week-text text-truncate col col-11 ps-0" 
-                                th:text="${'Week ' + #dates.format(week.start,'MM/dd/yyyy') + ' - ' + #dates.format(week.end,'MM/dd/yyyy')} + ${ 
-                                    week.start.after(#dates.createNow())? ' (next)':
-                                    week.start.before(#dates.createNow()) && week.end.after(#dates.createNow())? ' (current)': ''}"></div>
-                            <div class="col-1 text-right d-flex align-items-center">
-                                <div>
-                                    <i class="far fa-list-alt text-info clickable stop-prop" th:attr="onclick=${'openIngredientsModal(' + week.id + ')'}" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <button onclick="alert('deleted')" class="action delete bg-danger stop-prop">Delete</button>
-                    </li>
-                    <li th:id="${'weekAccordion_' + week.id}" class="pt-0 pb-0 px-0 bg-light container accordion-collapse collapse accordion-header clickable" th:classappend="${stat.index == 0? 'show':''}" th:attr="data-target=${week.id}" data-parent="#weekTable">
-                        <ul class="list-group list-group-flush item-list sub-meal-list" id="subMealList">
-                            <th:block th:each="meal: ${week.meals}">
-                                <li class="item list-group-item list-group-item-action my-0 bg-light" th:attr="data-target=${'#accordion_sub_' + meal.id}" data-toggle="collapse">
-                                    <button class="action edit bg-primary stop-prop" th:attr="onclick=${'editMeal('+meal.id+')'}">Edit</button>
-                                    <div th:id="${'subMealName_' + meal.id}" class="meal-text text-truncate col col-12 py-0" th:text="${meal.name}"></div>
-                                    <button onclick="alert('deleted')" class="action delete bg-danger stop-prop">Delete</button>
-                                </li>
-                                <li th:id="${'accordion_sub_' + meal.id}" data-parent="#subMealList" class="container px-4 bg-secondary accordion-collapse collapse">
-                                    <h6 th:if="${#lists.size(meal.ingredients) > 0}" class="mt-2">Ingredients</h6>
-                                    <ul th:if="${#lists.size(meal.ingredients) > 0}" 
-                                        class="list-group list-group-flush d-flex flex-row flex-wrap bg-secondary">
-                                        <li th:each="ingredient : ${meal.ingredients}" class="list-group-item border-bottom" th:classappend="${#lists.size(meal.ingredients) == 1? 'w-100':'w-50'}">
-                                            <small class="meal-ingredient" th:text="${ingredient.name}" th:attr="data-target=${ingredient.id}"></small>
-                                        </li>
-                                    </ul>
-                                    <h6 th:if="${#maps.size(meal.tags) > 0}" class="mt-2">Tags</h6>
-                                    <div th:if="${#maps.size(meal.tags) > 0}" class="row no-gutters">
-                                        <div class="col">
-                                            <small>
-                                                <span class="badge rounded-pill bg-dark mx-1 my-1 meal-tag" th:each="tag : ${meal.tags}" th:attr="data-target=${tag.key}" th:text="${tag.value}"></span>
-                                            </small>
-                                        </div>
-                                    </div>
-                                    <h6 th:if="${meal.notes != null}" class="mt-2">Notes</h6>
-                                    <div th:if="${meal.notes != null}" class="row no-gutters">
-                                        <div class="col px-4">
-                                            <small th:id="${'mealNotes_' + meal.id}" th:text="${meal.notes}"></small>
-                                        </div>
-                                    </div>
-                                    <div class="my-2 col text-center">
-                                        <a th:if="${meal.recipeUrl != null}" th:id="${'mealRecipeUrl_' + meal.id}" th:href="${meal.recipeUrl}" target="_blank">View Recipe <i class="ms-1 fas fa-external-link-alt"></i></a>
-                                    </div>
-                                </li>
-                            </th:block>
-                        </ul>
-                    </li>
-                </th:block>
-            </ul>
-        </div>
-    </body>
-    <div class="create-meal">
-        <button onclick="createMeal()" class="btn btn-primary btn-lg shadow add">
-            <i class="fas fa-plus"></i>
-        </button>
+      </div>
     </div>
-    <div class="alert alert-success py-2 add-meal text-center" role="alert">
-        <label for="addMealsWeekSelect" class="mb-2">Add <span id="addMealCount">1</span> meal(s) to week </label>
-        <select id="addMealsWeekSelect" class="form-select form-select-sm text-center">
-            <option th:each="week, iter : ${weeksForSelect}" th:id="${week.id}" th:selected="${iter.count == 10}"
-                th:text="${#dates.format(week.start,'MM/dd/yyyy') + ' - ' + #dates.format(week.end,'MM/dd/yyyy')} + 
+    <ul class="list-group list-group-flush item-list" id="mealTable">
+      <th:block th:each="meal:${meals}">
+        <th:block th:replace="dynamic/meal :: meal(${meal})"></th:block>
+      </th:block>
+    </ul>
+  </div>
+  <div id="weeksContainer" class="container page-container collapse">
+    <ul class="list-group list-group-flush item-list" id="weekTable">
+      <th:block th:each="week, stat :${weeks}">
+        <th:block th:replace="dynamic/week :: week(${week},${stat})"></th:block>
+      </th:block>
+    </ul>
+  </div>
+</body>
+<div class="create-meal">
+  <button onclick="createMeal()" class="btn btn-primary btn-lg shadow add">
+    <i class="fas fa-plus"></i>
+  </button>
+</div>
+<div class="alert alert-success py-2 add-meal text-center" role="alert">
+  <label for="addMealsWeekSelect" class="mb-2">Add <span id="addMealCount">1</span> meal(s) to week </label>
+  <select id="addMealsWeekSelect" class="form-select form-select-sm text-center">
+    <option th:each="week, iter : ${weeksForSelect}" th:value="${week.id}" th:attr="data-add-index=${iter.count}"
+      th:selected="${iter.count == 10}" th:text="${#dates.format(week.start,'MM/dd/yyyy') + ' - ' + #dates.format(week.end,'MM/dd/yyyy')} + 
                     ${iter.count == 10? ' (next)': iter.count == 11? ' (current)': ''}">
-            </option>
-        </select>
-        <div class="row">
-            <div class="col text-center mt-2">
-                <button type="button" class="btn btn-success btn-sm px-5">Add</button>
-            </div>
-        </div>
+    </option>
+  </select>
+  <div class="row">
+    <div id="addMealsToWeekButtonContainer" class="col text-center mt-2">
+      <button type="button" class="btn btn-success btn mt-2 mb-3 px-5" onclick="addSelectedMealsToWeek()">Add</button>
     </div>
+    <div id="addMealsToWeekCheckboxContainer" class="col text-center mt-2 collapse">
+    </div>
+  </div>
+</div>
+
 </html>
 <script th:inline="javascript">
-    let tags;
-    let ingredients;
-    let unselecting = false;
-    $(document).ready(function(){
-        refreshIngredients();
-        refreshTags();
-    });
+  let tags;
+  let ingredients;
+  let unselecting = false;
+  $(document).ready(function () {
+    refreshIngredients();
+    refreshTags();
+  });
 
-    $(document).on('click','button.action',function() {
-        $(this).closest('li').animate({
-            left: 0 + 'px'
-        }, 200);
-    });
-    $(document).on('click','.far.fa-heart',function(){
-        $(this).removeClass('far');
-        $(this).addClass('fas');
-    });
-    $(document).on('click','.fas.fa-heart',function(){
-        $(this).removeClass('fas');
-        $(this).addClass('far');
-    });
-    $(document).on('click','.stop-prop', function (e) {
-        e.stopPropagation();
-    });
-    $(document).on('change','input.meal-select:checkbox',function(e){
-        if ($('input.meal-select:checkbox:checked').length > 0){
-            $('#addMealCount').html($('input.meal-select:checkbox:checked').length)
-            $('.alert.add-meal').addClass('display');
+  $(document).on('click', 'button.action', function () {
+    $(this).closest('li').animate({
+      left: 0 + 'px'
+    }, 200);
+  });
+  $(document).on('click', '.far.fa-heart', function () {
+    $(this).removeClass('far');
+    $(this).addClass('fas');
+  });
+  $(document).on('click', '.fas.fa-heart', function () {
+    $(this).removeClass('fas');
+    $(this).addClass('far');
+  });
+  $(document).on('click', '.stop-prop', function (e) {
+    e.stopPropagation();
+  });
+  $(document).on('change', 'input.meal-select:checkbox', function (e) {
+    if ($('input.meal-select:checkbox:checked').length > 0) {
+      $('#addMealCount').html($('input.meal-select:checkbox:checked').length)
+      $('.alert.add-meal').addClass('display');
+    } else {
+      $('.alert.add-meal').removeClass('display');
+    }
+  });
+  (function() {
+    'use strict';
+    window.addEventListener('load', function() {
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.getElementsByClassName('needs-validation');
+      // Loop over them and prevent submission
+      var validation = Array.prototype.filter.call(forms, function(form) {
+        form.addEventListener('submit', function(event) {
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    }, false);
+  })();
+
+  $('#mealTable').listSwipe();
+  $('#weekTable').listSwipe({
+    leftAction: false,
+    itemSelector: '> li.week-item'
+  });
+  $('.sub-meal-list').listSwipe();
+
+  function addSelectedMealsToWeek() {
+    let selectedMealIds = $('.meal-select:checked').map(function () { return parseInt($(this).val()) }).get();
+    let weekId = parseInt($('#addMealsWeekSelect').val());
+    let addIndex = $('#addMealsWeekSelect option:selected').data('add-index');
+    $.ajax({
+      url: contextpath + 'week/add-meal',
+      method: "POST",
+      dataType: "json",
+      data: {
+        weekId: weekId,
+        meals: JSON.stringify(selectedMealIds),
+        addIndex: addIndex
+      },
+      success: function (data) {
+        if (!$('#weekAccordionHeader_' + data.id).length) {
+          location.reload();
         } else {
+          $('#addMealsToWeekButtonContainer').hide();
+          $('#addMealsToWeekCheckboxContainer').html($('#checkmarkAni').html());
+          $('#addMealsToWeekCheckboxContainer').show();
+          $('input.meal-select:checkbox').prop('checked', false);
+          setTimeout(function(){
             $('.alert.add-meal').removeClass('display');
+            setTimeout(function(){
+              $('#addMealsToWeekCheckboxContainer').hide();
+              $('#addMealsToWeekButtonContainer').show();
+            },1000)
+          },2000)
+          refreshWeek(data.id);
         }
+      }
     });
-    $('#mealTable').listSwipe();
-    $('.sub-meal-list').listSwipe();
-    $('#weekTable').listSwipe({
-        leftAction:false
+  }
+
+  function removeMealFromWeek(mealId, weekId) {
+    $.ajax({
+      url: contextpath + 'meal/remove-from-week',
+      method: "DELETE",
+      data : {
+        mealId: mealId,
+        weekId: weekId
+      },
+      success: function (data) {
+        $('#accordion_header_sub_' + mealId).remove();
+        $('#accordion_sub_' + mealId).remove();
+        refreshMeal(mealId);
+      }
     });
+  }
 
-    function refreshTags() {
-        $.ajax({
-			url: contextpath + 'json/tags',
-			method: "GET",
-            success: function(data) {
-                tags = new Map(Object.entries(data))
-            }
-        });
+  function deleteWeek(id) {
+    if (confirm('Are you sure you want to delete this week')) {
+      $.ajax({
+        url: contextpath + 'week/delete/' + id,
+        method: "DELETE",
+        success: function (data) {
+          $('#weekAccordion_' + id).remove();
+          $('#weekAccordionHeader_' + id).remove();
+          $('#addMealsWeekSelect option[value="' + id + '"]').remove();
+        }
+      });
     }
+  }
 
-    function refreshIngredients() {
-        $.ajax({
-			url: contextpath + 'json/ingredients',
-			method: "GET",
-            success: function(data) {
-                ingredients = data;
-            }
-        });
-    }
+  function refreshMeal(id) {
+    $.ajax({
+      url: contextpath + 'meal/details/' + id + '?view=dynamic/meal',
+      method: "GET",
+      success: function (data) {
+        $('#accordion_' + id).remove();
+        $('#accordionHeader_' + id).replaceWith(data);
+      }
+    });
+  }
 
-    const tab = new URLSearchParams(window.location.hash.substr(1)).get('tab');
-    if (tab == 'weeks'){
-        $('.nav-item').removeClass('active');
-        $('#weekNavLink').addClass('active');
-        $('.page-container').hide();
-        $("#weeksContainer").show();
-    }
+  function refreshWeek(id) {
+    $.ajax({
+      url: contextpath + 'week/details/' + id + '?view=dynamic/week',
+      method: "GET",
+      success: function (data) {
+        $('#weekAccordion_' + id).remove();
+        $('#weekAccordionHeader_' + id).replaceWith(data);
+        $('#weekAccordionHeader_' + id).click();
+      }
+    });
+  }
+
+  function refreshTags() {
+    $.ajax({
+      url: contextpath + 'json/tags',
+      method: "GET",
+      success: function (data) {
+        tags = new Map(Object.entries(data))
+      }
+    });
+  }
+
+  function refreshIngredients() {
+    $.ajax({
+      url: contextpath + 'json/ingredients',
+      method: "GET",
+      success: function (data) {
+        ingredients = data;
+      }
+    });
+  }
+
+  const tab = new URLSearchParams(window.location.hash.substr(1)).get('tab');
+  if (tab == 'weeks') {
+    $('.nav-item').removeClass('active');
+    $('#weekNavLink').addClass('active');
+    $('.page-container').hide();
+    $("#weeksContainer").show();
+  }
 
 </script>

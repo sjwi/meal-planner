@@ -21,9 +21,9 @@ public class WeekGenerator {
   public static List<Week> getWeeksForSelect(List<Week> weeks) {
     List<Week> combinedWeeks = new ArrayList<>(weeks);
     List<Week> futureWeeks = getXNumberOfWeeks(FUTURE_WEEKS);
-    Set<String> existingWeekKeys = combinedWeeks.stream().map(w -> w.getStart().toString() + w.getEnd().toString()).collect(Collectors.toSet());
+    Set<String> existingWeekKeys = combinedWeeks.stream().map(w -> w.getKey()).collect(Collectors.toSet());
     futureWeeks.forEach(w -> {
-      if (!existingWeekKeys.contains(w.getStart().toString() + w.getEnd().toString()))
+      if (!existingWeekKeys.contains(w.getKey()))
         combinedWeeks.add(w);
     });
     combinedWeeks.sort((w1, w2) -> w2.getStart().compareTo(w1.getStart()));
