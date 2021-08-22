@@ -1,13 +1,11 @@
 package com.sjwi.meals.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.sjwi.meals.dao.MealDao;
-import com.sjwi.meals.model.Meal;
 import com.sjwi.meals.model.Week;
 import com.sjwi.meals.util.WeekGenerator;
 
@@ -31,30 +29,20 @@ public class HomeController {
         mv.addObject("meals", mealDao.getAllMeals());
         mv.addObject("weeks", weeks);
         mv.addObject("weeksForSelect", WeekGenerator.getWeeksForSelect(weeks));
-        mv.addObject("tags", mealDao.getAllTags());
         return mv;
     }
 
-    @RequestMapping("/meal/edit/{id}")
-    public ModelAndView editMeal(@PathVariable int id) {
-        ModelAndView mv = new ModelAndView("modal/dynamic/create-edit");
-        Meal meal = mealDao.getMealById(id);
-        List<Integer> ingredientIds = meal.getIngredients() == null?
-            new ArrayList<Integer>(): 
-            meal.getIngredients().stream().map(i -> i.getId())
-                .collect(Collectors.toList());
-        mv.addObject("meal", meal);
-        mv.addObject("tags", mealDao.getAllTags());
-        mv.addObject("ingredients", mealDao.getAllIngredients());
-        mv.addObject("ingredientIds", ingredientIds);
+    @RequestMapping("/meals")
+    public ModelAndView meals(){
+        ModelAndView mv = new ModelAndView("home :: mealList");
+        mv.addObject("meals", mealDao.getAllMeals());
         return mv;
     }
-    
-    @RequestMapping("/meal/create")
-    public ModelAndView createMeal() {
-        ModelAndView mv = new ModelAndView("modal/dynamic/create-edit");
-        mv.addObject("tags", mealDao.getAllTags());
-        mv.addObject("ingredients", mealDao.getAllIngredients());
+
+    @RequestMapping("/weeks")
+    public ModelAndView weeks(){
+        ModelAndView mv = new ModelAndView("home :: weekList");
+        mv.addObject("weeks", mealDao.getAllWeeks());
         return mv;
     }
 
@@ -81,7 +69,6 @@ public class HomeController {
     public ModelAndView getWeekDetails(@PathVariable int id, @RequestParam String view) {
         Week week = mealDao.getWeekById(id);
         ModelAndView mv = new ModelAndView(view);
-        mv.addObject("weeksForSelect", WeekGenerator.getWeeksForSelect(mealDao.getAllWeeks()));
         mv.addObject("week", week);
         return mv;
     }
@@ -89,8 +76,6 @@ public class HomeController {
     @RequestMapping("/meal/details/{id}")
     public ModelAndView getMealDetails(@PathVariable int id, @RequestParam String view) {
         ModelAndView mv = new ModelAndView(view);
-        Meal meal = mealDao.getMealById(id);
-        System.out.println(meal.getCount());
         mv.addObject("meal", mealDao.getMealById(id));
         return mv;
     }

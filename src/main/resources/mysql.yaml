@@ -1,5 +1,5 @@
 getAllMeals: >
-  select m.ID,m.NAME, MAX(w.DATE_BEGIN) as LAST_EATEN, m.FAVORITE,m.RECIPE_URL,m.NOTES, COUNT(*) as CNT from Meals m LEFT JOIN PlannedMeals pm on pm.MEAL_ID = m.ID LEFT JOIN WeeklySchedule w on w.ID = pm.SCHEDULE_ID where m.DISABLED = 0 group by m.ID
+  select m.ID,m.NAME,(SELECT MAX(w.DATE_BEGIN) FROM PlannedMeals pm JOIN WeeklySchedule w on w.ID = pm.SCHEDULE_ID where pm.MEAL_ID = m.ID) as LAST_EATEN, m.FAVORITE,m.RECIPE_URL,m.NOTES, COUNT(m.*) as CNT from Meals m LEFT JOIN PlannedMeals ppm on ppm.MEAL_ID = m.ID where m.DISABLED = 0 group by m.ID
 
 getAllWeeks: >
   select * from WeeklySchedule where DISABLED = 0 ORDER BY DATE_BEGIN DESC
@@ -16,6 +16,9 @@ removeMealFromWeek: >
 deleteWeek: >
   UPDATE WeeklySchedule SET DISABLED = 1 WHERE ID = ?
 
+deleteMeal: >
+  UPDATE Meals SET DISABLED = 1 WHERE ID = ?
+
 getWeekById: >
   select * from WeeklySchedule where ID = ?
 
@@ -23,7 +26,7 @@ addMealToWeek: >
   INSERT INTO PlannedMeals (SCHEDULE_ID,MEAL_ID) values (?,?)
 
 getLatestMealId: >
-  select ID from Meals ORDER BY ID desc LIMIT 1
+  select ID from Meals where DISABLED = 0 ORDER BY ID desc LIMIT 1
 
 getLatestWeekId: >
   select ID from WeeklySchedule ORDER BY ID desc LIMIT 1
@@ -68,4 +71,16 @@ getAllIngredients: >
   select * from Ingredients
 
 getMealById: >
-  select m.ID,m.NAME, MAX(w.DATE_BEGIN) as LAST_EATEN, m.FAVORITE,m.RECIPE_URL,m.NOTES, COUNT(*) as CNT from Meals m LEFT JOIN PlannedMeals pm on pm.MEAL_ID = m.ID LEFT JOIN WeeklySchedule w on w.ID = pm.SCHEDULE_ID where m.DISABLED = 0 AND m.ID = ? group by m.ID
+  select m.ID,m.NAME,(SELECT MAX(w.DATE_BEGIN) FROM PlannedMeals pm JOIN WeeklySchedule w on w.ID = pm.SCHEDULE_ID where pm.MEAL_ID = m.ID) as LAST_EATEN, m.FAVORITE,m.RECIPE_URL,m.NOTES, COUNT(m.*) as CNT from Meals m LEFT JOIN PlannedMeals ppm on ppm.MEAL_ID = m.ID where m.ID = ? group by m.ID
+
+createIngredient: >
+  INSERT INTO Ingredients (NAME) values (?)
+
+getNMostRecentIngredients: >
+  SELECT * FROM Ingredients ORDER BY ID Desc LIMIT ?
+
+createTag: >
+  INSERT INTO Tags (NAME) values (?)
+
+getNMostRecentTags: >
+  SELECT * FROM Tags ORDER BY ID Desc LIMIT ?

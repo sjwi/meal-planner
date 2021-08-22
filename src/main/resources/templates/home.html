@@ -21,14 +21,14 @@
       </div>
     </div>
     <ul class="list-group list-group-flush item-list" id="mealTable">
-      <th:block th:each="meal:${meals}">
+      <th:block th:fragment="mealList" th:each="meal:${meals}">
         <th:block th:replace="dynamic/meal :: meal(${meal})"></th:block>
       </th:block>
     </ul>
   </div>
   <div id="weeksContainer" class="container page-container collapse">
     <ul class="list-group list-group-flush item-list" id="weekTable">
-      <th:block th:each="week, stat :${weeks}">
+      <th:block th:fragment="weekList" th:each="week, stat :${weeks}">
         <th:block th:replace="dynamic/week :: week(${week},${stat})"></th:block>
       </th:block>
     </ul>
@@ -43,8 +43,8 @@
   <label for="addMealsWeekSelect" class="mb-2">Add <span id="addMealCount">1</span> meal(s) to week </label>
   <select id="addMealsWeekSelect" class="form-select form-select-sm text-center">
     <option th:each="week, iter : ${weeksForSelect}" th:value="${week.id}" th:attr="data-add-index=${iter.count}"
-      th:selected="${iter.count == 10}" th:text="${#dates.format(week.start,'MM/dd/yyyy') + ' - ' + #dates.format(week.end,'MM/dd/yyyy')} + 
-                    ${iter.count == 10? ' (next)': iter.count == 11? ' (current)': ''}">
+      th:selected="${week.isNext()}" th:text="${#dates.format(week.start,'MM/dd/yyyy') + ' - ' + #dates.format(week.end,'MM/dd/yyyy')} + 
+                    ${week.isNext()? ' (next)': week.isCurrent()? ' (current)': ''}">
     </option>
   </select>
   <div class="row">
@@ -129,22 +129,20 @@
         addIndex: addIndex
       },
       success: function (data) {
-        if (!$('#weekAccordionHeader_' + data.id).length) {
-          location.reload();
-        } else {
-          $('#addMealsToWeekButtonContainer').hide();
-          $('#addMealsToWeekCheckboxContainer').html($('#checkmarkAni').html());
-          $('#addMealsToWeekCheckboxContainer').show();
-          $('input.meal-select:checkbox').prop('checked', false);
+        $('#addMealsToWeekButtonContainer').hide();
+        $('#addMealsToWeekCheckboxContainer').html($('#checkmarkAni').html());
+        $('#addMealsToWeekCheckboxContainer').show();
+        $('input.meal-select:checkbox').prop('checked', false);
+        setTimeout(function(){
+          $('.alert.add-meal').removeClass('display');
           setTimeout(function(){
-            $('.alert.add-meal').removeClass('display');
-            setTimeout(function(){
-              $('#addMealsToWeekCheckboxContainer').hide();
-              $('#addMealsToWeekButtonContainer').show();
-            },1000)
-          },2000)
-          refreshWeek(data.id);
-        }
+            $('#addMealsToWeekCheckboxContainer').hide();
+            $('#addMealsToWeekButtonContainer').show();
+          },1000)
+        },2000)
+        refreshMealList();
+        refreshWeekList();
+        $('#addMealsWeekSelect option:selected').val(data.id);
       }
     });
   }
@@ -158,15 +156,15 @@
         weekId: weekId
       },
       success: function (data) {
-        $('#accordion_header_sub_' + mealId).remove();
-        $('#accordion_sub_' + mealId).remove();
+        $('#weekAccordion_' + weekId + ' [id^=accordion_header_sub_' + mealId + ']').remove();
+        $('#weekAccordion_' + weekId + ' .accordion-sub-' + mealId).remove();
         refreshMeal(mealId);
       }
     });
   }
 
   function deleteWeek(id) {
-    if (confirm('Are you sure you want to delete this week')) {
+    if (confirm('Are you sure you want to delete this week?')) {
       $.ajax({
         url: contextpath + 'week/delete/' + id,
         method: "DELETE",
@@ -179,25 +177,102 @@
     }
   }
 
-  function refreshMeal(id) {
+  function deleteMeal(id) {
+    if (confirm('Are you sure you want to delete this meal?')) {
+      $.ajax({
+        url: contextpath + 'meal/delete/' + id,
+        method: "DELETE",
+        success: function (data) {
+          $('#accordionHeader_' + id).remove();
+          $('#accordion_' + id).remove();
+          $('[id^=accordion_header_sub_' + id + ']').remove();
+          $('.accordion-sub-' + id).remove();
+        }
+      });
+    }
+  }
+
+  function refreshMealList() {
     $.ajax({
-      url: contextpath + 'meal/details/' + id + '?view=dynamic/meal',
+      url: contextpath + 'meals',
       method: "GET",
+      beforeSend: function() {
+        $('#mealTable').addClass('loading');
+      },
       success: function (data) {
-        $('#accordion_' + id).remove();
-        $('#accordionHeader_' + id).replaceWith(data);
+        $('#mealTable').removeClass('loading');
+        $('#mealTable').html(data);
       }
     });
   }
 
-  function refreshWeek(id) {
+  function refreshWeekList() {
     $.ajax({
-      url: contextpath + 'week/details/' + id + '?view=dynamic/week',
+      url: contextpath + 'weeks',
+      method: "GET",
+      beforeSend: function() {
+        $('#weekTable').addClass('loading');
+      },
+      success: function (data) {
+        $('#weekTable').removeClass('loading');
+        $('#weekTable').html(data);
+        $('.sub-meal-list').unbind();
+        $('.sub-meal-list').listSwipe();
+      }
+    });
+  }
+
+  function refreshMeal(id) {
+    refreshMealDetails(id);
+    refreshMealSubDetails(id);
+    refreshMealName(id);
+  }
+
+  function refreshMealDetails(mealId) {
+    $.ajax({
+      url: contextpath + 'meal/details/' + mealId + '?view=dynamic/meal-details',
+      method: "GET",
+      beforeSend: function() {
+        $('#accordion_' + mealId).addClass('loading');
+      },
+      success: function (data) {
+        $('#accordion_' + mealId).replaceWith(data);
+        $('#accordion_' + mealId).removeClass('loading');
+      }
+    });
+  }
+  function refreshMealSubDetails(mealId) {
+    $.ajax({
+      url: contextpath + 'meal/details/' + mealId + '?view=dynamic/meal-sub-details',
+      method: "GET",
+      beforeSend: function() {
+        $('.accordion-sub-' + mealId).addClass('loading');
+      },
+      success: function (data) {
+        $('.accordion-sub-' + mealId).replaceWith(data);
+        $('.accordion-sub-' + mealId).removeClass('loading');
+      }
+    });
+  }
+  function refreshMealName(mealId) {
+    $.ajax({
+      url: contextpath + 'json/meal/' + mealId,
       method: "GET",
       success: function (data) {
-        $('#weekAccordion_' + id).remove();
-        $('#weekAccordionHeader_' + id).replaceWith(data);
+        $('#mealName_' + mealId).html(data.name);
+        $('[id^=subMealName_' + mealId +']').html(data.name);
+      }
+    });
+  }
+  function refreshWeek(id) {
+    $.ajax({
+      url: contextpath + 'week/details/' + id + '?view=dynamic/week-details',
+      method: "GET",
+      success: function (data) {
+        $('#weekAccordion_' + id).replaceWith(data);
         $('#weekAccordionHeader_' + id).click();
+        $('.sub-meal-list').unbind();
+        $('.sub-meal-list').listSwipe();
       }
     });
   }

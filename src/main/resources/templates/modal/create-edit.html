@@ -6,7 +6,8 @@
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form id="createEditForm">
+        <form id="createEditForm" method="POST">
+          <input type="hidden" name="inputMealId" id="inputMealId" value="0">
           <div class="input-group mb-1 has-validation">
             <input name="inputMealName" id="inputMealName" type="text" class="form-control input-meal-name" placeholder="Meal name*" aria-label="Meal name" required>
             <div class="invalid-feedback">
@@ -44,9 +45,28 @@
 </div>
 
 <script>
+  $('#createEditForm').on('submit',function(e){
+    var dataString = $(this).serialize();
+    if ($('#inputMealId').val() != 0) {
+      e.preventDefault();
+      $.ajax({
+        url: $(this).attr("action"),
+        type: "POST",
+        method: "POST",
+        data: dataString,
+        success: function () {
+          refreshMeal($('#inputMealId').val());
+          refreshIngredients();
+          refreshTags();
+          $('#createEditModal').modal('hide');
+        }
+      });
+    }
+  });
   async function editMeal(id) {
     $('#createEditModal .modal-title').html("Edit Meal");
     $('#inputMealName').val($('#mealName_' + id).text());
+    $('#inputMealId').val(id);
     $('#createEditFavorite').prop('checked',$('#favoriteCheckbox_' + id).hasClass("fas"));
     $('#inputMealNotes').text($('#mealNotes_' + id).text());
     $('#inputRecipeUrl').val($('#mealRecipeUrl_' + id).attr("href"));
@@ -124,6 +144,7 @@
   $('#createEditModal').on('hidden.bs.modal', function () {
     $('#createEditModal .modal-title').html("");
     $('#inputMealName').val("");
+    $('#inputMealId').val("0");
     $('#createEditFavorite').prop('checked','false');
     $('#inputMealNotes').text("");
     $('#inputRecipeUrl').val("");

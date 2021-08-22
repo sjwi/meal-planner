@@ -1,6 +1,10 @@
 package com.sjwi.meals.model;
 
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +20,18 @@ public class Week {
         this.start = start;
         this.end = end;
         this.meals = meals;
+    }
+
+    public boolean isNext() {
+        LocalDate now = LocalDate.now();
+        LocalDate nextSaturday = now.with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
+        Date nextSaturdayDate = Date.from(nextSaturday.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        return end.compareTo(nextSaturdayDate) > 0 && nextSaturdayDate.compareTo(start) > 0;
+    }
+
+    public boolean isCurrent() {
+        Date now = new Date();
+        return end.compareTo(now) > 0 && now.compareTo(start) > 0;
     }
 
     public Week(Date start, Date end) {

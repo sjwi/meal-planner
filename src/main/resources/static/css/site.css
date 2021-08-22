@@ -100,6 +100,9 @@ ul {
 .round input[type="checkbox"]:checked + label:after {
   opacity: 1;
 }
+.loading {
+  opacity: .25 !important;
+}
 
 
 /* Slide */

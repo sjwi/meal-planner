@@ -52,8 +52,7 @@
           </div>
           <div class="row mt-2">
             <div class="col">
-                <h5 class="d-inline-block" th:each="tag : ${tags}">
-                  <span th:text="${tag.value}" class="badge rounded-pill bg-secondary mx-1 my-1 py-2 search-tag"></span>
+                <h5 class="d-inline-block search-tag-box">
                 </h5>
             </div>
           </div>
@@ -76,6 +75,15 @@
   </div>
 </div>
 <script>
+  $(document).on('show.bs.modal','#searchModal',function(){
+    $('.search-tag-box').html('');
+    tags.forEach((v,k) => {
+      jQuery('<span/>', {
+            class: 'badge rounded-pill bg-secondary mx-1 my-1 py-2 search-tag',
+            html: v
+            }).appendTo('.search-tag-box'); 
+    });
+  })
   $(document).on('click','.search-tag',function(){
     if ($(this).hasClass('active')) {
       $(this).removeClass(['active','bg-info']);

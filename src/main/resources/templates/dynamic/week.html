@@ -5,8 +5,7 @@
     th:classappend="${stat?.index == 0? '':'border-top'}">
     <div class="row no-gutters">
       <div th:id="${'weekName_' + week.id}" class="week-text text-truncate col col-11 ps-0" th:text="${'Week ' + #dates.format(week.start,'MM/dd/yyyy') + ' - ' + #dates.format(week.end,'MM/dd/yyyy')} + ${ 
-                    weeksForSelect[9].id == week.id? ' (next)':
-                    weeksForSelect[10].id == week.id? ' (current)': ''}"></div>
+                    week.isNext()? ' (next)': week.isCurrent()? ' (current)': ''}"></div>
       <div class="col-1 text-right d-flex align-items-center">
         <div>
           <i class="far fa-list-alt text-info clickable stop-prop"
@@ -16,5 +15,5 @@
     </div>
     <button th:attr="onclick=${'deleteWeek(' + week.id + ')'}" class="action delete bg-danger stop-prop">Delete</button>
   </li>
-  <th:block th:replace="dynamic/week-details :: weekDetails(${week})"></th:block>
+  <th:block th:replace="dynamic/week-details :: weekDetails(${week}, ${stat.index})"></th:block>
 </th:block>

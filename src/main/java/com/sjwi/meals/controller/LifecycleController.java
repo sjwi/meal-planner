@@ -15,6 +15,7 @@ import com.sjwi.meals.model.Week;
 import com.sjwi.meals.util.WeekGenerator;
 
 import org.apache.commons.collections4.SetUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -49,14 +50,20 @@ public class LifecycleController {
     public void deleteWeek(@PathVariable int id) {
       mealDao.deleteWeek(id);
     }
-
+ 
+    @RequestMapping(value = "/meal/delete/{id}", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteMeal(@PathVariable int id) {
+      mealDao.deleteMeal(id);
+    }
+ 
     @RequestMapping(value = "meal/remove-from-week", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void removeMealFromWeek(@RequestParam int mealId, @RequestParam int weekId) {
       mealDao.removeMealFromWeek(mealId, weekId);
     }
 
-    @RequestMapping(value = "meal/create", method = RequestMethod.GET)
+    @RequestMapping(value = "meal/create", method = RequestMethod.POST)
     @ResponseBody
     public ModelAndView createMeal(@RequestParam String inputMealName, @RequestParam(name="createEditFavorite", defaultValue = "false") Boolean favorite,
         @RequestParam(name="inputMealIngredients", required = false) List<Integer> ingredients, 
@@ -66,20 +73,49 @@ public class LifecycleController {
       return new ModelAndView("redirect:/");
     }
 
-    @RequestMapping(value = "meal/edit/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "meal/edit/{id}", method = RequestMethod.POST)
     @ResponseBody
     public ModelAndView editMeal(@PathVariable int id, @RequestParam String inputMealName, 
         @RequestParam(name="createEditFavorite", defaultValue = "false") Boolean favorite,
-        @RequestParam(name="inputMealIngredients", required = false) Set<Integer> ingredients, 
-        @RequestParam(name="inputMealTags", required = false) Set<Integer> tags, @RequestParam(name="inputMealNotes", required = false) String notes, 
+        @RequestParam(name="inputMealIngredients", required = false) Set<String> ingredients, 
+        @RequestParam(name="inputMealTags", required = false) Set<String> tags, @RequestParam(name="inputMealNotes", required = false) String notes, 
         @RequestParam(name="inputRecipeUrl", required = false) String recipeUrl) {
+
       Meal originalMeal = mealDao.getMealById(id);
+
+      List<String> ingredientsToCreate = new ArrayList<>();
+      Set<Integer> existingIngredients = new HashSet<>();
+      ingredients.forEach(i -> {
+        if (!NumberUtils.isCreatable(i))
+          ingredientsToCreate.add(i);
+        else
+          existingIngredients.add(Integer.parseInt(i));
+      });
+
+      List<String> tagsToCreate = new ArrayList<>();
+      Set<Integer> existingTags = new HashSet<>();
+      tags.forEach(t -> {
+        if (!NumberUtils.isCreatable(t))
+          tagsToCreate.add(t);
+        else
+          existingTags.add(Integer.parseInt(t));
+      });
+
+      Set<Integer> createdIngredientIds = mealDao.createIngredients(ingredientsToCreate);
+      Set<Integer> createdTagIds = mealDao.createTags(tagsToCreate);
+
+      existingIngredients.addAll(createdIngredientIds);
+      existingTags.addAll(createdTagIds);
+
       Set<Integer> originalIngredients = new HashSet<Ingredient>(originalMeal.getIngredients()).stream().map(i -> i.getId()).collect(Collectors.toSet());
       Set<Integer> originalTags = originalMeal.getTags().entrySet().stream().map(k -> k.getKey()).collect(Collectors.toSet());
-      Set<Integer> ingredientsToDelete = SetUtils.difference(originalIngredients, ingredients);
-      Set<Integer> tagsToDelete = SetUtils.difference(originalTags, tags);
-      Set<Integer> ingredientsToAdd = SetUtils.difference(ingredients, originalIngredients);
-      Set<Integer> tagsToAdd = SetUtils.difference(tags, originalTags);
+
+      Set<Integer> ingredientsToDelete = SetUtils.difference(originalIngredients, existingIngredients);
+      Set<Integer> tagsToDelete = SetUtils.difference(originalTags, existingTags);
+
+      Set<Integer> ingredientsToAdd = SetUtils.difference(existingIngredients, originalIngredients);
+      Set<Integer> tagsToAdd = SetUtils.difference(existingTags, originalTags);
+
       mealDao.editMeal(id,inputMealName,favorite,notes,recipeUrl,ingredientsToAdd,tagsToAdd,ingredientsToDelete,tagsToDelete);
       return new ModelAndView("redirect:/");
     }

@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -41,7 +42,7 @@ public class MealDao {
     return jdbcTemplate.query(queryStore.get("getAllWeeks"), r -> {
       List<Week> weeks = new ArrayList<>();
       while (r.next()) {
-        List<Meal> meals = getMeelsInWeek(r.getInt("ID"));
+        List<Meal> meals = getMealsInWeek(r.getInt("ID"));
         weeks.add(new Week(r.getInt("ID"), r.getDate("DATE_BEGIN"), r.getDate("DATE_END"), meals));
       }
       return weeks;
@@ -75,7 +76,7 @@ public class MealDao {
   }
 
   public Integer getLatestWeekId() {
-    return jdbcTemplate.query(queryStore.get("getLatestMealId"), r -> {
+    return jdbcTemplate.query(queryStore.get("getLatestWeekId"), r -> {
       r.next();
       return r.getInt("ID");
     });
@@ -101,10 +102,14 @@ public class MealDao {
     jdbcTemplate.update(queryStore.get("deleteWeek"), new Object[] { weekId });
   }
 
+  public void deleteMeal(int mealId) {
+    jdbcTemplate.update(queryStore.get("deleteMeal"), new Object[] { mealId });
+  }
+
   public Week getWeekById(int id) {
     return jdbcTemplate.query(queryStore.get("getWeekById"), new Object[] { id }, r -> {
       r.next();
-      List<Meal> meals = getMeelsInWeek(r.getInt("ID"));
+      List<Meal> meals = getMealsInWeek(r.getInt("ID"));
       return new Week(r.getInt("ID"), r.getDate("DATE_BEGIN"), r.getDate("DATE_END"), meals);
     });
   }
@@ -216,7 +221,47 @@ public class MealDao {
     });
   }
 
-  private List<Meal> getMeelsInWeek(int weekId) {
+  public Set<Integer> createIngredients(List<String> ingredientsToCreate) {
+    jdbcTemplate.batchUpdate(queryStore.get("createIngredient"), new BatchPreparedStatementSetter() {
+      @Override
+      public void setValues(PreparedStatement ps, int i) throws SQLException {
+        ps.setString(1, ingredientsToCreate.get(i));
+      }
+      @Override
+      public int getBatchSize() {
+        return ingredientsToCreate.size();
+      }
+    });
+    return jdbcTemplate.query(queryStore.get("getNMostRecentIngredients"), new Object[] {ingredientsToCreate.size()}, r -> {
+      Set<Integer> createdIngredientIds = new HashSet<>();
+      while (r.next()) {
+        createdIngredientIds.add(r.getInt("ID"));
+      }
+      return createdIngredientIds;
+    });
+  }
+
+  public Set<Integer> createTags(List<String> tagsToCreate) {
+    jdbcTemplate.batchUpdate(queryStore.get("createTag"), new BatchPreparedStatementSetter() {
+      @Override
+      public void setValues(PreparedStatement ps, int i) throws SQLException {
+        ps.setString(1, tagsToCreate.get(i));
+      }
+      @Override
+      public int getBatchSize() {
+        return tagsToCreate.size();
+      }
+    });
+    return jdbcTemplate.query(queryStore.get("getNMostRecentTags"), new Object[] {tagsToCreate.size()}, r -> {
+      Set<Integer> createdTagIds = new HashSet<>();
+      while (r.next()) {
+        createdTagIds.add(r.getInt("ID"));
+      }
+      return createdTagIds;
+    });
+  }
+
+  private List<Meal> getMealsInWeek(int weekId) {
     return jdbcTemplate.query(queryStore.get("getAllMealsInWeek"), new Object[] { weekId }, r -> {
       List<Meal> meals = new ArrayList<>();
       while (r.next()) {
