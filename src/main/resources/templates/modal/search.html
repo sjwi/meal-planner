@@ -66,6 +66,9 @@
     $('#sortOrder').val('ASC');
     $('#searchFilterBtn').removeClass('active');
   }
+  $(document).on('hide.bs.modal','#searchModal',function(){
+    $('#searchFilterBtn').blur();
+  })
   $(document).on('show.bs.modal','#searchModal',function(){
     if(!$('#tagFilters .search-tag.active').length) {
       $('#tagFilters').html('');
