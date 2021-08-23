@@ -10,90 +10,29 @@ CREATE TABLE Meals (
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 INSERT INTO Meals (NAME, FAVORITE) values 
-('Frozen Pizza & Salad',0),
-('Creamed Corn Chicken',0),
-('Mushroom penne with walnut pest',0),
-('Lemon chicken orzo soup',0),
-('Burgers',0),
-('Orange chicken',0),
-('Chicken tikka masala',0),
-('Tortellini with turkey meatballs',0),
-('Smoked sausage and potatoes',0),
-('BBQ chicken sandwiches',0),
-('Beef tacos',0),
-('Thai peanut chicken with rice noodles',0),
-('Breakfast burritos',0),
-('French dip sandwiches',0),
-('Chicken tortellini soup',0),
-('Grilled filet and chicken',0),
-('Spaghetti with turkey meatballs',0),
-('Chicken tinga bowls',0),
-('Cookout burgers and dogs',0),
-('Chili',0),
-('Pork tenderloin and polenta',0),
-('Chicken tacos',0),
-('Chicken strips and potatoes',0),
-('Chicken and dumplings',0),
-('White chicken chili',0),
-('Chicken tenders with red potatoes',0),
-('Date night rigatoni ',0),
-('BBQ chicken baked potato bar',0),
-('Egg sandwiches and tots',0),
-('Korean tacos',0),
-('Dirty rice with smoked sausage',0),
-('Black bean crispy tacos w/ mango salsa',0),
-('Teriyaki pork with pineapple',0),
-('Spaghetti with meatballs',0),
-('Sheet pan chicken and cauliflower rice',0),
-('Zuppa toscana ',0),
-('Grilled chicken sandwiches',0),
-('Panko crusted cod with cheesy lemon orzo',0),
-('Ground turkey & veggie lo mein',0),
-('Rosemary pork tenderloin',0),
-('Baked potatoes, steak, asparagus',0),
-('Teriyaki pork with pineapple',0),
-('Chicken gnocchi soup',0),
-('Grilled cheese and tomato soup',0),
-('Breakfast',0),
-('Pesto ravioli',0),
-('Pot stickers with fried rice',0),
-('Jambalaya',0),
-('Vodka fettuccine with turkey meatballs',0),
-('Whole roast chicken with potatoes',0),
-('Mushroom and wild rice soup',0),
-('Breakfast hash brown casserole',0),
-('Shepherds pie',0),
-('Meatloaf with mashed potatoes',0),
-('Hot dogs with Mac n cheese',0),
-('Sun-dried tomato orzo and chicke',0),
-('Turkey sausage and potatoes',0),
-('Whole chicken with fries & rings',0),
-('Mushroom chicken with egg noodles',0),
-('Boursin burgers and potato wedges',0),
-('Pan seared chicken with pasta',0),
-('Pretzel honey chicken tenders',0),
-('Shredded taco chicken bowls',0),
-('Alfredo with meatballs & broccoli',0),
-('Pancakes and eggs',0),
-('Lasagna',0),
-('Tilapia with wild rice and asparagus',0),
-('Spicy sausage pasta bake',0),
-('Taco soup with ground turkey',0),
-('Coconut curry chicken',0),
-('Tuscan chicken fettuccini',0),
-('Charcuterie',0),
-('Chicken Tinga Taquitos',0),
-('Zucchini Orzo with chicken meatballs',0),
-('Tilapia with couscous',0),
-('Ravioli soup (sausage)',0),
-('Parmesan asparagus orzo and chicken',0),
-('Chicken strip salads',0),
-('Salmon bowls with mango salsa',0),
-('Moroccan chickpea bowls',0),
-('Lemon pesto chicken sandwiches',0),
-('Monterey chicken spaghetti',0),
-('French toast with sausage and tots',0),
-('Chicken fajita bowls',0);
+('Meal 1',1),
+('Meal 2',0),
+('Meal 3',1),
+('Meal 4',0),
+('Meal 5',0),
+('Meal 6',0),
+('Meal 7',0),
+('Meal 8',1),
+('Meal 9',0),
+('Meal 10',0),
+('Meal 11',0),
+('Meal 12',0),
+('Meal 13',0);
+INSERT INTO Meals (NAME, FAVORITE, RECIPE_URL, NOTES) values 
+('Meal 14',0,'https://stephenky.com','Notes about this meal'),
+('Meal 15',0,'https://stephenky.com','Notes about this meal'),
+('Meal 16',0,'https://stephenky.com','Notes about this meal'),
+('Meal 17',0,'https://stephenky.com','Notes about this meal'),
+('Meal 18',0,'https://stephenky.com','Notes about this meal'),
+('Meal 19',0,'https://stephenky.com','Notes about this meal'),
+('Meal 20',0,'https://stephenky.com','Notes about this meal'),
+('Meal 21',0,'https://stephenky.com','Notes about this meal'),
+('Meal 22',0,'https://stephenky.com','Notes about this meal');
 
 DROP TABLE IF EXISTS Ingredients;
 CREATE TABLE Ingredients (
@@ -102,6 +41,18 @@ CREATE TABLE Ingredients (
   DISABLED BOOLEAN DEFAULT 0,
   PRIMARY KEY (ID)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
+INSERT INTO Ingredients (NAME) values
+('Ingredient 1'),
+('Ingredient 2'),
+('Ingredient 3'),
+('Ingredient 4'),
+('Ingredient 5'),
+('Ingredient 6'),
+('Ingredient 7'),
+('Ingredient 8'),
+('Ingredient 9'),
+('Ingredient 10');
 
 
 DROP TABLE IF EXISTS MealIngredients;
@@ -114,6 +65,28 @@ CREATE TABLE MealIngredients (
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 INSERT INTO MealIngredients (MEAL_ID,INGREDIENT_ID) values
+(1,1),
+(1,5),
+(1,9),
+(2,2),
+(2,6),
+(3,10),
+(3,3),
+(3,7),
+(3,2),
+(3,4),
+(3,5),
+(4,4),
+(4,4),
+(4,8),
+(4,9),
+(5,2),
+(6,3),
+(7,3),
+(7,4),
+(8,4),
+(9,5),
+(9,4);
 
 DROP TABLE IF EXISTS WeeklySchedule;
 CREATE TABLE WeeklySchedule (
@@ -125,77 +98,13 @@ CREATE TABLE WeeklySchedule (
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 INSERT INTO WeeklySchedule (DATE_BEGIN,DATE_END) values
-('2021-8-06', '2021-8-13'),
-('2021-7-30', '2021-8-06'),
-('2021-7-23', '2021-7-30'),
-('2021-7-16', '2021-7-23'),
-('2021-7-09', '2021-7-16'),
-('2021-7-02', '2021-7-09'),
-('2021-6-25', '2021-7-02'),
-('2021-6-18', '2021-6-25'),
-('2021-6-11', '2021-6-18'),
-('2021-6-04', '2021-6-11'),
-('2021-5-28', '2021-6-04'),
-('2021-5-21', '2021-5-28'),
-('2021-5-14', '2021-5-21'),
-('2021-5-07', '2021-5-14'),
-('2021-4-30', '2021-5-07'),
-('2021-4-23', '2021-4-30'),
-('2021-4-16', '2021-4-23'),
-('2021-4-09', '2021-4-16'),
-('2021-4-02', '2021-4-09'),
-('2021-3-26', '2021-4-02'),
-('2021-3-19', '2021-3-26'),
-('2021-3-12', '2021-3-19'),
-('2021-3-05', '2021-3-12'),
-('2021-2-26', '2021-3-05'),
-('2021-2-19', '2021-2-26'),
-('2021-2-12', '2021-2-19'),
-('2021-2-05', '2021-2-12'),
-('2021-1-29', '2021-2-05'),
-('2021-1-22', '2021-1-29'),
-('2021-1-15', '2021-1-22'),
-('2021-1-08', '2021-1-15'),
-('2021-1-01', '2021-1-08'),
-('2020-12-25', '2021-1-01'),
-('2020-12-18', '2020-12-25'),
-('2020-12-11', '2020-12-18'),
-('2020-12-04', '2020-12-11'),
-('2020-11-27', '2020-12-04'),
-('2020-11-20', '2020-11-27'),
-('2020-11-13', '2020-11-20'),
-('2020-11-06', '2020-11-13'),
-('2020-10-30', '2020-11-06'),
-('2020-10-23', '2020-10-30'),
-('2020-10-16', '2020-10-23'),
-('2020-10-09', '2020-10-16'),
-('2020-10-02', '2020-10-09'),
-('2020-9-25', '2020-10-02'),
-('2020-9-18', '2020-9-25'),
-('2020-9-11', '2020-9-18'),
-('2020-9-04', '2020-9-11'),
-('2020-8-28', '2020-9-04'),
-('2020-8-21', '2020-8-28'),
-('2020-8-14', '2020-8-21'),
-('2020-8-07', '2020-8-14'),
-('2020-7-31', '2020-8-07'),
-('2020-7-24', '2020-7-31'),
-('2020-7-17', '2020-7-24'),
-('2020-7-10', '2020-7-17'),
-('2020-7-03', '2020-7-10'),
-('2020-6-26', '2020-7-03'),
-('2020-6-19', '2020-6-26'),
-('2020-6-12', '2020-6-19'),
-('2020-6-05', '2020-6-12'),
-('2020-5-29', '2020-6-05'),
-('2020-5-22', '2020-5-29'),
-('2020-5-15', '2020-5-22');
--- (PARSEDATETIME('07/30/2021','MM/dd/yyyy'), PARSEDATETIME('08/06/2021','MM/dd/yyyy')),
--- (PARSEDATETIME('07/23/2021','MM/dd/yyyy'), PARSEDATETIME('07/30/2021','MM/dd/yyyy')),
--- (PARSEDATETIME('07/16/2021','MM/dd/yyyy'), PARSEDATETIME('07/23/2021','MM/dd/yyyy')),
--- (PARSEDATETIME('07/09/2021','MM/dd/yyyy'), PARSEDATETIME('07/16/2021','MM/dd/yyyy')),
--- (PARSEDATETIME('07/02/2021','MM/dd/yyyy'), PARSEDATETIME('07/09/2021','MM/dd/yyyy')),
--- (PARSEDATETIME('06/25/2021','MM/dd/yyyy'), PARSEDATETIME('07/02/2021','MM/dd/yyyy'));
+(PARSEDATETIME('08/06/2021','MM/dd/yyyy'), PARSEDATETIME('08/13/2021','MM/dd/yyyy')),
+(PARSEDATETIME('07/30/2021','MM/dd/yyyy'), PARSEDATETIME('08/06/2021','MM/dd/yyyy')),
+(PARSEDATETIME('07/23/2021','MM/dd/yyyy'), PARSEDATETIME('07/30/2021','MM/dd/yyyy')),
+(PARSEDATETIME('07/16/2021','MM/dd/yyyy'), PARSEDATETIME('07/23/2021','MM/dd/yyyy')),
+(PARSEDATETIME('07/09/2021','MM/dd/yyyy'), PARSEDATETIME('07/16/2021','MM/dd/yyyy')),
+(PARSEDATETIME('07/02/2021','MM/dd/yyyy'), PARSEDATETIME('07/09/2021','MM/dd/yyyy')),
+(PARSEDATETIME('06/25/2021','MM/dd/yyyy'), PARSEDATETIME('07/02/2021','MM/dd/yyyy'));
 -- (DATEADD(DAY, -4, CURRENT_DATE), DATEADD(DAY, 3, CURRENT_DATE)),
 -- (DATEADD(DAY, 4, CURRENT_DATE), DATEADD(DAY, 11, CURRENT_DATE));
 
@@ -209,12 +118,40 @@ CREATE TABLE PlannedMeals (
   PRIMARY KEY (ID)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
+INSERT INTO PlannedMeals (SCHEDULE_ID,MEAL_ID) values
+(1,1),
+(1,3),
+(1,5),
+(1,7),
+(2,2),
+(2,1),
+(3,3),
+(3,6),
+(3,8),
+(3,9),
+(3,10),
+(4,11),
+(4,12),
+(4,13),
+(4,14),
+(5,15),
+(5,16),
+(5,17),
+(5,18);
+
 DROP TABLE IF EXISTS Tags;
 CREATE TABLE Tags (
   ID int(11) NOT NULL AUTO_INCREMENT,
   NAME varchar(255),
   PRIMARY KEY (ID)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
+INSERT INTO Tags (NAME) values
+('Tag 1'),
+('Tag 2'),
+('Tag 3'),
+('Tag 4'),
+('Tag 5');
 
 DROP TABLE IF EXISTS MealTags;
 CREATE TABLE MealTags (
@@ -223,6 +160,36 @@ CREATE TABLE MealTags (
   MEAL_ID int(11),
   PRIMARY KEY (ID)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
+INSERT INTO MealTags (TAG_ID,MEAL_ID) values
+(1,1),
+(1,3),
+(1,5),
+(2,1),
+(2,4),
+(2,6),
+(2,7),
+(2,8),
+(2,9),
+(2,2),
+(3,3),
+(3,8),
+(3,7),
+(3,5),
+(3,9),
+(4,8),
+(4,1),
+(4,3),
+(4,2),
+(4,7),
+(4,6),
+(5,1),
+(5,2),
+(5,3),
+(5,4),
+(5,5),
+(5,8),
+(5,9);
 
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
@@ -239,8 +206,7 @@ CREATE TABLE users (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO users (username,firstname,lastname,password,email,enabled,pinFavorites,sort,sortDirection) VALUES 
-('imoodge','Elizabeth','Williams','$2a$10$wcjwEuirYWvhU8hidin7W.2OHuvGoouJFi1ADMF04BEuPAkhupyAq','imoodge@gmail.com',1,0,'NAME','ASC'),
-('sjwi','Stephen','Williams','$2a$10$7y499wToK2lGwgbkCMu1F.DKJ0B3iIwEV.yHbEFTP2uiQntOw2h7q','stephenjw@fastmail.com',1,0,'NAME','ASC');
+('admin','Stephen','Williams','$2a$10$KnRdXb09WIgf1gYwYAj/pO7mB7Rp0i0xejpncp2ZZnlqZW9sj4h/m','stephenjw@fastmail.com',1,1,'CNT','DESC');
 
 DROP TABLE IF EXISTS authorities;
 CREATE TABLE authorities (
@@ -251,10 +217,8 @@ CREATE TABLE authorities (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO authorities VALUES 
-('sjwi','USER'),
-('sjwi','ADMIN'),
-('imoodge','USER'),
-('imoodge','ADMIN');
+('admin','USER'),
+('admin','ADMIN');
 
 DROP TABLE IF EXISTS StoredLogins;
 CREATE TABLE StoredLogins (
@@ -264,3 +228,6 @@ CREATE TABLE StoredLogins (
   CREATED_ON datetime NOT NULL,
   PRIMARY KEY (ID)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
+INSERT INTO StoredLogins (username,LOGIN_COOKIE,CREATED_ON) values
+('admin','DeT5FlpnmstPnU3O+A3omeHRYXceastOig+wRxEB/gyHKGe1oymRVfxnt3j5xX64N4+J5TybrD0+eFh+8qGdEcVzycrDsuFMQwtOi7+gk1R396O8Fujx8SbzOgmcAq5Fj+FG0UiYeH/dJCv6wM16qIbvH4oZdEwG49XnRSSpSm2EikOi6366kY2j+2w7Td4apfjaepc+GX3rx4AB7mTKEqdQR+MEuh4Rs6d90DB9nIHa7dA2jVt7ay6LHosz3HhTAwkz8i5RWWkFO+uZDuQU8wY8fqs6MhriW+Y8/c2sZizpR0m/ifO68BLJgPdOv4zxaZU3Qze3JXT8l5AUlUZOTw==', CURRENT_TIMESTAMP);
