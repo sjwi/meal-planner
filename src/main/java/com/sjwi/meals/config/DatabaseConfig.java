@@ -1,11 +1,6 @@
 package com.sjwi.meals.config;
 
-import java.io.FileNotFoundException;
-import java.util.Map;
-
 import javax.sql.DataSource;
-
-import com.sjwi.meals.model.SqlQueryStore;
 
 import org.h2.server.web.WebServlet;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -17,10 +12,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 @Configuration
 public class DatabaseConfig {
-    @Bean
-	public Map<String,String> queryStore() throws FileNotFoundException{
-		return new SqlQueryStore().getQueries();
-	}
     @Bean
 	public JdbcTemplate jdbcTemplate(DataSource dataSource) {
 	    return new JdbcTemplate(dataSource);

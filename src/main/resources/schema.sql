@@ -10,7 +10,7 @@ CREATE TABLE Meals (
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 INSERT INTO Meals (NAME, FAVORITE) values 
-('Meal 1',0),
+('Meal 1',1),
 ('Meal 2',0),
 ('Meal 3',1),
 ('Meal 4',0),
@@ -190,3 +190,44 @@ INSERT INTO MealTags (TAG_ID,MEAL_ID) values
 (5,5),
 (5,8),
 (5,9);
+
+DROP TABLE IF EXISTS users;
+CREATE TABLE users (
+  username varchar(50) NOT NULL,
+  firstname varchar(50) NOT NULL,
+  lastname varchar(50) NOT NULL,
+  password varchar(100) NOT NULL,
+  email varchar(255),
+  sort varchar(50) DEFAULT 'NAME',
+  sortDirection varchar(50) DEFAULT 'ASC',
+  pinFavorites BOOLEAN DEFAULT 0,
+  enabled tinyint(4) NOT NULL DEFAULT '1',
+  PRIMARY KEY (username)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO users (username,firstname,lastname,password,email,enabled,pinFavorites,sort,sortDirection) VALUES 
+('admin','Stephen','Williams','$2a$10$KnRdXb09WIgf1gYwYAj/pO7mB7Rp0i0xejpncp2ZZnlqZW9sj4h/m','stephenjw@fastmail.com',1,1,'CNT','DESC');
+
+DROP TABLE IF EXISTS authorities;
+CREATE TABLE authorities (
+  username varchar(50) NOT NULL,
+  authority varchar(50) NOT NULL,
+  UNIQUE KEY ix_auth_username (username,authority),
+  CONSTRAINT authorities_ibfk_1 FOREIGN KEY (username) REFERENCES users (username)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO authorities VALUES 
+('admin','USER'),
+('admin','ADMIN');
+
+DROP TABLE IF EXISTS StoredLogins;
+CREATE TABLE StoredLogins (
+  ID int(11) NOT NULL AUTO_INCREMENT,
+  username varchar(50) NOT NULL,
+  LOGIN_COOKIE varchar(5000) NOT NULL,
+  CREATED_ON datetime NOT NULL,
+  PRIMARY KEY (ID)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
+INSERT INTO StoredLogins (username,LOGIN_COOKIE,CREATED_ON) values
+('admin','DeT5FlpnmstPnU3O+A3omeHRYXceastOig+wRxEB/gyHKGe1oymRVfxnt3j5xX64N4+J5TybrD0+eFh+8qGdEcVzycrDsuFMQwtOi7+gk1R396O8Fujx8SbzOgmcAq5Fj+FG0UiYeH/dJCv6wM16qIbvH4oZdEwG49XnRSSpSm2EikOi6366kY2j+2w7Td4apfjaepc+GX3rx4AB7mTKEqdQR+MEuh4Rs6d90DB9nIHa7dA2jVt7ay6LHosz3HhTAwkz8i5RWWkFO+uZDuQU8wY8fqs6MhriW+Y8/c2sZizpR0m/ifO68BLJgPdOv4zxaZU3Qze3JXT8l5AUlUZOTw==', CURRENT_TIMESTAMP);

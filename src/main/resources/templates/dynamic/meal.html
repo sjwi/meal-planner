@@ -11,8 +11,8 @@
       </div>
       <div th:id="${'mealName_' + meal.id}" class="meal-text text-truncate col col-9 ps-0" th:text="${meal.name}">
       </div>
-      <div class="col col-1 text-end mt-1 pe-0">
-        <i th:id="${'favoriteCheckbox_' + meal.id}" class="fa-heart stop-prop"
+      <div class="col col-1 text-end mt-1 pe-0 meal-list-fav">
+        <i th:id="${'favoriteCheckbox_' + meal.id}" th:attr="data-target=${meal.id}" class="fa-heart stop-prop"
           th:classappend="${meal.favorite? 'fas' : 'far'}"></i>
       </div>
     </div>

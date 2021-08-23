@@ -2,75 +2,85 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Create Meal</h5>
+        <h5 class="modal-title text-dark">Create Meal</h5>
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form id="createEditForm" method="POST">
           <input type="hidden" name="inputMealId" id="inputMealId" value="0">
-          <div class="input-group mb-1 has-validation">
-            <input name="inputMealName" id="inputMealName" type="text" class="form-control input-meal-name" placeholder="Meal name*" aria-label="Meal name" required>
-            <div class="invalid-feedback">
-              Please enter a meal name
+          <div class="input-group mb-3 has-validation">
+            <input name="inputMealName" id="inputMealName" type="text" class="form-control input-meal-name col-11" placeholder="Meal name*" aria-label="Meal name" required>
+            <div class="col-1 text-end my-2">
+              <input type="checkbox" class="collapse" name="createEditFavorite" id="createEditFavorite">
+              <i id="inputFavorite" class="my-1 far fa-heart"></i>
             </div>
           </div>
-          <div class="form-check form-switch mb-2 offset-8">
-            <input class="form-check-input" type="checkbox" id="createEditFavorite" name="createEditFavorite">
-            <label class="form-check-label" for="createEditFavorite">Favorite</label>
-          </div>
-          <div class="form-group mb-2">
+          <div class="form-group mb-3">
             <label for="inputMealIngredients text-primary">Ingredients</label>
             <select class="form-select form-select-lg input-meal-ingredients" data-width="100%" id="inputMealIngredients" name="inputMealIngredients" multiple="multiple">
             </select>
           </div>
-          <div class="form-group mb-2">
+          <div class="form-group mb-3">
             <label for="inputMealTags text-primary">Tags</label>
             <select class="form-select form-select-lg input-meal-tags" data-width="100%" name="inputMealTags" id="inputMealTags" multiple="multiple">
             </select>
           </div>
-          <div class="input-group mb-2">
+          <div class="input-group mb-3">
             <textArea name="inputMealNotes" id="inputMealNotes" type="text" class="form-control input-meal-notes" placeholder="Notes" aria-label="Meal notes"></textArea>
           </div>
-          <div class="input-group mb-2">
+          <div class="input-group mb-3">
             <input id="inputRecipeUrl" name="inputRecipeUrl" type="text" class="form-control input-recipe-url" placeholder="Recipe URL" aria-label="Recipe URL">
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" form="createEditForm" class="btn btn-sm btn-primary">Submit</button>
+        <button type="submit" id="inputSubmitBtn" form="createEditForm" class="btn btn-lg btn-primary w-100"></button>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-  $('#createEditForm').on('submit',function(e){
-    var dataString = $(this).serialize();
-    if ($('#inputMealId').val() != 0) {
-      e.preventDefault();
-      $.ajax({
-        url: $(this).attr("action"),
-        type: "POST",
-        method: "POST",
-        data: dataString,
-        success: function () {
-          refreshMeal($('#inputMealId').val());
-          refreshIngredients();
-          refreshTags();
-          $('#createEditModal').modal('hide');
-        }
-      });
+  $('#inputFavorite').on('click',function(){
+    if($(this).hasClass('far')) {
+      $('#createEditFavorite').prop('checked',true);
+      $(this).removeClass('far');
+      $(this).addClass('fas');
+    } else {
+      $('#createEditFavorite').prop('checked',false);
+      $(this).addClass('far');
+      $(this).removeClass('fas');
     }
   });
+  $('#createEditForm').on('submit',function(e){
+    var dataString = $(this).serialize();
+    e.preventDefault();
+    $.ajax({
+      url: $(this).attr("action"),
+      type: "POST",
+      method: "POST",
+      data: dataString,
+      success: function () {
+        refreshMealList();
+        refreshWeekList();
+        refreshIngredients();
+        refreshTags();
+        $('#createEditModal').modal('hide');
+      }
+    });
+  });
   async function editMeal(id) {
-    $('#createEditModal .modal-title').html("Edit Meal");
+    $('#inputSubmitBtn').text('Edit');
+    $('#createEditModal .modal-title').html("Edit " + $('#mealName_' + id).text());
     $('#inputMealName').val($('#mealName_' + id).text());
     $('#inputMealId').val(id);
     $('#createEditFavorite').prop('checked',$('#favoriteCheckbox_' + id).hasClass("fas"));
     $('#inputMealNotes').text($('#mealNotes_' + id).text());
     $('#inputRecipeUrl').val($('#mealRecipeUrl_' + id).attr("href"));
     $('#createEditModal form').attr('action', contextpath + 'meal/edit/' + id);
+    if ($('#favoriteCheckbox_' + id).hasClass("fas")) {
+      $('#inputFavorite').click();
+    }
     
     //Ingredients
     let mealIngredients = $('#accordion_' + id + ' .meal-ingredient').map(function(){
@@ -111,6 +121,7 @@
     $('#createEditModal').modal('show');
   }
   async function createMeal() {
+    $('#inputSubmitBtn').text('Create a New Meal');
     $('#createEditModal .modal-title').html("Create Meal");
     $('#createEditModal').modal('show');
     $('#createEditModal form').attr('action', contextpath + 'meal/create');
@@ -150,5 +161,8 @@
     $('#inputRecipeUrl').val("");
     $('#inputMealTags').find('option').remove().end()
     $('#inputMealIngredients').find('option').remove().end()
+    $('#createEditFavorite').prop('checked',false);
+    $('#inputFavorite').addClass('far');
+    $('#inputFavorite').removeClass('fas');
   })
 </script>

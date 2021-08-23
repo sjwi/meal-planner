@@ -6,9 +6,8 @@
     <div class="row">
       <div class="col-12 mt-1 mb-0">
         <div class="input-group">
-          <input type="search" class="form-control" placeholder="Search" aria-label="Search"
-            aria-describedby="search-addon" />
-          <button type="button" class="input-group-text border-1" data-toggle="modal" data-title="Filter results"
+          <input id="searchBox" type="search" class="form-control" placeholder="Search" aria-label="Search"/>
+          <button id="searchFilterBtn" type="button" class="input-group-text border-1" data-toggle="modal" data-title="Filter results"
             data-target="#searchModal">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="24" fill="currentColor" class="bi bi-filter"
               viewBox="0 0 16 16">
@@ -71,13 +70,27 @@
       left: 0 + 'px'
     }, 200);
   });
-  $(document).on('click', '.far.fa-heart', function () {
+  $(document).on('click', '.meal-list-fav .far.fa-heart', function () {
     $(this).removeClass('far');
     $(this).addClass('fas');
+    $.ajax({
+      url: contextpath + 'meal/favorite/' + $(this).data('target'),
+      method: "POST",
+      data : {
+        toggle: true
+      }
+    });
   });
-  $(document).on('click', '.fas.fa-heart', function () {
+  $(document).on('click', '.meal-list-fav .fas.fa-heart', function () {
     $(this).removeClass('fas');
     $(this).addClass('far');
+    $.ajax({
+      url: contextpath + 'meal/favorite/' + $(this).data('target'),
+      method: "POST",
+      data : {
+        toggle: false
+      }
+    });
   });
   $(document).on('click', '.stop-prop', function (e) {
     e.stopPropagation();
@@ -90,6 +103,34 @@
       $('.alert.add-meal').removeClass('display');
     }
   });
+  $('#searchBox').on('search',function(){
+    search();
+  });
+  function search() {
+    if($('#tagFilters .search-tag.active').length)
+      $('#searchFilterBtn').addClass('active');
+    let searchTerm = $('#searchBox').val();
+    let dateFilterBegin = $('#dateFilterBegin').val()
+    let dateFilterEnd = $('#dateFilterBegin').val()
+    let tags = $('#tagFilters .search-tag.active').map(function(){
+      return $(this).data('target');
+    }).get();
+    $.ajax({
+      url: contextpath + 'search/meals',
+      method: "GET",
+      data: {
+        searchTerm: searchTerm,
+        tags: tags
+      },
+      beforeSend: function() {
+        $('#mealTable').addClass('loading');
+      },
+      success: function (data) {
+        $('#mealTable').html(data);
+        $('#mealTable').removeClass('loading');
+      }
+    });
+  }
   (function() {
     'use strict';
     window.addEventListener('load', function() {
@@ -193,17 +234,7 @@
   }
 
   function refreshMealList() {
-    $.ajax({
-      url: contextpath + 'meals',
-      method: "GET",
-      beforeSend: function() {
-        $('#mealTable').addClass('loading');
-      },
-      success: function (data) {
-        $('#mealTable').removeClass('loading');
-        $('#mealTable').html(data);
-      }
-    });
+    search();
   }
 
   function refreshWeekList() {

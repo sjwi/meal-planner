@@ -1,5 +1,13 @@
 getAllMeals: >
-  select m.ID,m.NAME,(SELECT MAX(w.DATE_BEGIN) FROM PlannedMeals pm JOIN WeeklySchedule w on w.ID = pm.SCHEDULE_ID where pm.MEAL_ID = m.ID) as LAST_EATEN, m.FAVORITE,m.RECIPE_URL,m.NOTES, COUNT(m.*) as CNT from Meals m LEFT JOIN PlannedMeals ppm on ppm.MEAL_ID = m.ID where m.DISABLED = 0 group by m.ID
+  select m.ID,m.NAME,(SELECT MAX(w.DATE_BEGIN) FROM PlannedMeals pm JOIN WeeklySchedule w on w.ID = pm.SCHEDULE_ID where pm.MEAL_ID = m.ID) as LAST_EATEN, m.FAVORITE,m.RECIPE_URL,m.NOTES, COUNT(m.*) as CNT from Meals m LEFT JOIN PlannedMeals ppm on ppm.MEAL_ID = m.ID where m.DISABLED = 0 group by m.ID,m.NAME
+  ORDER BY m.{{SORT}} {{SORT_DIRECTION}}
+
+searchMeals: >
+  select DISTINCT m.ID from Meals m LEFT JOIN MealTags mt on m.ID = mt.MEAL_ID where LOWER(NAME) like LOWER(:term) and DISABLED = 0 {{ADDITIONAL_PARAMS}}
+  UNION
+  select DISTINCT m.ID from Meals m LEFT JOIN MealIngredients mi on m.ID = mi.MEAL_ID LEFT JOIN Ingredients i on mi.INGREDIENT_ID = i.ID LEFT JOIN MealTags mt on m.ID = mt.MEAL_ID where m.DISABLED = 0 AND LOWER(i.NAME) like LOWER(:term) {{ADDITIONAL_PARAMS}}
+  UNION
+  select DISTINCT m.ID from Meals m LEFT JOIN MealTags mt on m.ID = mt.MEAL_ID where LOWER(NOTES) like LOWER(:term) and DISABLED = 0 {{ADDITIONAL_PARAMS}}
 
 getAllWeeks: >
   select * from WeeklySchedule where DISABLED = 0 ORDER BY DATE_BEGIN DESC
@@ -31,12 +39,6 @@ getLatestMealId: >
 getLatestWeekId: >
   select ID from WeeklySchedule ORDER BY ID desc LIMIT 1
 
-addIngredientsToMeal: >
-  INSERT INTO MealIngredients (INGREDIENT_ID,MEAL_ID) values (?,?)
-
-addTagsToMeal: >
-  INSERT INTO MealTags (TAG_ID,MEAL_ID) values (?,?)
-
 updateMeal: >
   UPDATE Meals SET NAME = ?, FAVORITE = ?, NOTES = ?, RECIPE_URL = ? WHERE ID = ?
 
@@ -65,13 +67,17 @@ getMealTags: >
   select * from MealTags mt INNER JOIN Tags t on mt.TAG_ID = t.ID where mt.MEAL_ID = ?
 
 getAllTags: >
-  select * from Tags
+  select DISTINCT Tags.ID, Tags.NAME from Tags INNER JOIN MealTags on Tags.ID = MealTags.TAG_ID
 
 getAllIngredients: >
-  select * from Ingredients
+  select DISTINCT i.ID, i.NAME, i.DISABLED  from Ingredients i INNER JOIN MealIngredients mi on i.ID = mi.INGREDIENT_ID
 
 getMealById: >
   select m.ID,m.NAME,(SELECT MAX(w.DATE_BEGIN) FROM PlannedMeals pm JOIN WeeklySchedule w on w.ID = pm.SCHEDULE_ID where pm.MEAL_ID = m.ID) as LAST_EATEN, m.FAVORITE,m.RECIPE_URL,m.NOTES, COUNT(m.*) as CNT from Meals m LEFT JOIN PlannedMeals ppm on ppm.MEAL_ID = m.ID where m.ID = ? group by m.ID
+
+getMealsByIds: >
+  select m.ID,m.NAME,(SELECT MAX(w.DATE_BEGIN) FROM PlannedMeals pm JOIN WeeklySchedule w on w.ID = pm.SCHEDULE_ID where pm.MEAL_ID = m.ID) as LAST_EATEN, m.FAVORITE,m.RECIPE_URL,m.NOTES, COUNT(m.*) as CNT from Meals m LEFT JOIN PlannedMeals ppm on ppm.MEAL_ID = m.ID where m.ID IN (:mealIds) group by m.ID
+  ORDER BY {{SORT}} {{SORT_DIRECTION}}
 
 createIngredient: >
   INSERT INTO Ingredients (NAME) values (?)
@@ -84,3 +90,21 @@ createTag: >
 
 getNMostRecentTags: >
   SELECT * FROM Tags ORDER BY ID Desc LIMIT ?
+
+getUser: >
+  SELECT * FROM users where username = :username OR email = :username and enabled = 1
+
+getAuthoritiesByUsername: >
+  SELECT * FROM authorities where username = ?
+
+toggleFavorite: >
+  UPDATE Meals set FAVORITE = ? where ID = ?
+
+storeCookieToken: >
+  insert into StoredLogins (username, LOGIN_COOKIE, CREATED_ON) values (?,?,CURRENT_TIMESTAMP)
+
+getUserCookieToken: >
+  SELECT * FROM StoredLogins where LOGIN_COOKIE = ?
+
+updateUserPreferences: >
+  UPDATE users set pinFavorites = ?, sort = ?, sortDirection = ? where username = ?
