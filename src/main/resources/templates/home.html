@@ -160,6 +160,17 @@
     let selectedMealIds = $('.meal-select:checked').map(function () { return parseInt($(this).val()) }).get();
     let weekId = parseInt($('#addMealsWeekSelect').val());
     let addIndex = $('#addMealsWeekSelect option:selected').data('add-index');
+    $('#addMealsToWeekButtonContainer').hide();
+    $('#addMealsToWeekCheckboxContainer').html($('#checkmarkAni').html());
+    $('#addMealsToWeekCheckboxContainer').show();
+    $('input.meal-select:checkbox').prop('checked', false);
+    setTimeout(function(){
+      $('.alert.add-meal').removeClass('display');
+      setTimeout(function(){
+        $('#addMealsToWeekCheckboxContainer').hide();
+        $('#addMealsToWeekButtonContainer').show();
+      },1000)
+    },2000)
     $.ajax({
       url: contextpath + 'week/add-meal',
       method: "POST",
@@ -170,17 +181,6 @@
         addIndex: addIndex
       },
       success: function (data) {
-        $('#addMealsToWeekButtonContainer').hide();
-        $('#addMealsToWeekCheckboxContainer').html($('#checkmarkAni').html());
-        $('#addMealsToWeekCheckboxContainer').show();
-        $('input.meal-select:checkbox').prop('checked', false);
-        setTimeout(function(){
-          $('.alert.add-meal').removeClass('display');
-          setTimeout(function(){
-            $('#addMealsToWeekCheckboxContainer').hide();
-            $('#addMealsToWeekButtonContainer').show();
-          },1000)
-        },2000)
         refreshMealList();
         refreshWeekList();
         $('#addMealsWeekSelect option:selected').val(data.id);
