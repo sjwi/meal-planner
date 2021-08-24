@@ -39,6 +39,10 @@
   </button>
 </div>
 <div class="alert alert-success py-2 add-meal text-center" role="alert">
+  <div class="col my-0 py-0 text-center" id="hideAddAlert">
+    <i class="fa fa-angle-down" aria-hidden="true"></i>
+    <i class="fa fa-angle-up collapse" aria-hidden="true"></i>
+  </div>
   <label for="addMealsWeekSelect" class="mb-2">Add <span id="addMealCount">1</span> meal(s) to week </label>
   <select id="addMealsWeekSelect" class="form-select form-select-sm text-center">
     <option th:each="week, iter : ${weeksForSelect}" th:value="${week.id}" th:attr="data-add-index=${iter.count}"
@@ -48,7 +52,7 @@
   </select>
   <div class="row">
     <div id="addMealsToWeekButtonContainer" class="col text-center mt-2">
-      <button type="button" class="btn btn-success btn mt-2 mb-3 px-5" onclick="addSelectedMealsToWeek()">Add</button>
+      <button type="button" class="btn btn-success btn mt-2 mb-2 px-5" onclick="addSelectedMealsToWeek()">Add</button>
     </div>
     <div id="addMealsToWeekCheckboxContainer" class="col text-center mt-2 collapse">
     </div>
@@ -81,6 +85,17 @@
       }
     });
   });
+  $(document).on('click','#hideAddAlert',function(){
+    if ($('.alert.add-meal').hasClass('slide-down')) {
+      $('.alert.add-meal').removeClass('slide-down');
+      $('#hideAddAlert .fa-angle-up').hide();
+      $('#hideAddAlert .fa-angle-down').show();
+    } else {
+      $('.alert.add-meal').addClass('slide-down');
+      $('#hideAddAlert .fa-angle-up').show();
+      $('#hideAddAlert .fa-angle-down').hide();
+    }
+  })
   $(document).on('click', '.meal-list-fav .fas.fa-heart', function () {
     $(this).removeClass('fas');
     $(this).addClass('far');
@@ -95,9 +110,15 @@
   $(document).on('click', '.stop-prop', function (e) {
     e.stopPropagation();
   });
+  let cachedCheckedMealIds = new Set();
   $(document).on('change', 'input.meal-select:checkbox', function (e) {
-    if ($('input.meal-select:checkbox:checked').length > 0) {
-      $('#addMealCount').html($('input.meal-select:checkbox:checked').length)
+    if ($(this).is(':checked')) {
+      cachedCheckedMealIds.add($(this).data('target'));
+    } else {
+      cachedCheckedMealIds.delete($(this).data('target'));
+    }
+    if (cachedCheckedMealIds.size > 0) {
+      $('#addMealCount').html(cachedCheckedMealIds.size)
       $('.alert.add-meal').addClass('display');
     } else {
       $('.alert.add-meal').removeClass('display');
@@ -128,6 +149,9 @@
       success: function (data) {
         $('#mealTable').html(data);
         $('#mealTable').removeClass('loading');
+        cachedCheckedMealIds.forEach((id) => {
+          $('#mealCheckbox_' + id).prop('checked',true);
+        });
       }
     });
   }
@@ -157,7 +181,6 @@
   $('.sub-meal-list').listSwipe();
 
   function addSelectedMealsToWeek() {
-    let selectedMealIds = $('.meal-select:checked').map(function () { return parseInt($(this).val()) }).get();
     let weekId = parseInt($('#addMealsWeekSelect').val());
     let addIndex = $('#addMealsWeekSelect option:selected').data('add-index');
     $('#addMealsToWeekButtonContainer').hide();
@@ -177,13 +200,14 @@
       dataType: "json",
       data: {
         weekId: weekId,
-        meals: JSON.stringify(selectedMealIds),
+        meals: JSON.stringify(Array.from(cachedCheckedMealIds)),
         addIndex: addIndex
       },
       success: function (data) {
         refreshMealList();
         refreshWeekList();
         $('#addMealsWeekSelect option:selected').val(data.id);
+        cachedCheckedMealIds = new Set();
       }
     });
   }

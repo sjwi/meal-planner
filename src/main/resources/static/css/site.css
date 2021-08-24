@@ -17,6 +17,9 @@
 .alert.add-meal.display {
   bottom: 0px; 
 }
+.alert.add-meal.slide-down {
+  bottom: -150px; 
+}
 .create-meal {
   transition-duration: .5s;
   position:fixed;
@@ -217,4 +220,8 @@ ul {
   100% {
     box-shadow: inset 0px 0px 0px 30px #7ac142;
   }
+}
+
+.fs-sm {
+  font-size:.8rem;
 }
