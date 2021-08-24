@@ -19,6 +19,7 @@ public class SqlQueryStore {
 	}
 	
 	public String get(String key, Map<String, String> preferences) {
+		System.out.println(Boolean.parseBoolean(preferences.get("pinFavorites")));
 		String sort = Boolean.parseBoolean(preferences.get("pinFavorites"))?
 			"FAVORITE DESC," + preferences.get("sort"):
 			preferences.get("sort");
