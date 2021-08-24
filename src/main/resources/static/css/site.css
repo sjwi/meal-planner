@@ -20,6 +20,10 @@
 .alert.add-meal.slide-down {
   bottom: -150px; 
 }
+#searchFilterBtn:focus {
+  outline: none;
+  box-shadow: none;
+}
 .create-meal {
   transition-duration: .5s;
   position:fixed;
