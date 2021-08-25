@@ -35,9 +35,11 @@
   right:-200px;
   z-index:1040;
   bottom:-.25rem;
+  opacity:0;
 }
 .add-side-alert.show {
   right:0px;
+  opacity:1;
 }
 .create-meal, .create-side {
   transition-duration: .5s;
