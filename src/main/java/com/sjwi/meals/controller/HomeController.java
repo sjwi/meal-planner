@@ -43,7 +43,7 @@ public class HomeController {
   @Autowired
   AuthenticationService authenticationService;
 
-  private static final int DEFAULT_NUMBER_OF_WEEKS = 15;
+  private static final int DEFAULT_NUMBER_OF_WEEKS = 25;
 
   @RequestMapping("/")
   public ModelAndView homeController(Authentication auth) {
