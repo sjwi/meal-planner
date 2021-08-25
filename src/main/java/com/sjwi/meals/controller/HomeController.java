@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.sjwi.meals.dao.MealDao;
+import com.sjwi.meals.model.Ingredient;
 import com.sjwi.meals.model.MealsUser;
 import com.sjwi.meals.model.Week;
 import com.sjwi.meals.service.AuthenticationService;
@@ -117,18 +117,19 @@ public class HomeController {
   @RequestMapping("/week/ingredients/{id}")
   public ModelAndView getIngredientsInWeek(@PathVariable int id) {
     Week week = mealDao.getWeekById(id);
-    List<String> ingredients = week.getMeals().stream().map(m -> m.getIngredientList())
-        .flatMap(List::stream)
-        .map(i -> i.getName()).collect(Collectors.toList());
-    Map<String, Integer> ingredientMap = new HashMap<>();
-    for (String ingredient : ingredients) {
-      if (ingredientMap.containsKey(ingredient))
-        ingredientMap.put(ingredient, ingredientMap.get(ingredient) + 1);
-      else
-        ingredientMap.put(ingredient, 1);
-    }
+
+    Map<Ingredient, Integer> ingredientMaster = new HashMap<>();
+    week.getMeals().stream().map(m -> m.getIngredients())
+        .forEach(im -> {
+          for (Map.Entry<Ingredient,Integer> entry : im.entrySet()){
+            if (ingredientMaster.containsKey(entry.getKey()))
+              ingredientMaster.put(entry.getKey(), ingredientMaster.get(entry.getKey()) + entry.getValue());
+            else
+              ingredientMaster.put(entry.getKey(), entry.getValue());
+          }
+        });
     ModelAndView mv = new ModelAndView("modal/dynamic/ingredients");
-    mv.addObject("ingredients", ingredientMap);
+    mv.addObject("ingredients", ingredientMaster);
     return mv;
   }
 

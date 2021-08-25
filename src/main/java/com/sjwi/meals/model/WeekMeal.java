@@ -1,6 +1,5 @@
 package com.sjwi.meals.model;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -38,12 +37,6 @@ public class WeekMeal {
     }
     public Map<Ingredient,Integer> getIngredients() {
         return ingredients;
-    }
-    public List<Ingredient> getIngredientList() {
-        List<Ingredient> ingredientList = new ArrayList<>();
-        for (Map.Entry<Ingredient,Integer> ing : ingredients.entrySet())
-            ingredientList.add(ing.getKey());
-        return ingredientList;
     }
     public Map<Integer,String> getTags() {
         return tags;
