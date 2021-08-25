@@ -8,14 +8,15 @@
         th:attr="data-target=${ingredient.id}" data-parent="#sideTable" th:each="ingredient:${side.ingredients}">
         <small th:text="${ingredient.name}"></small>
       </span>
-      <div class="mb-2"></div>
-      <h6 th:if="${side.notes != null && side.notes != ''}" class="mt-2">Notes</h6>
-      <div th:if="${side.notes != null && side.notes != ''}" class="row no-gutters">
+      <div class="my-2"></div>
+      <h6 th:if="${side.notes != null && side.notes != ''}" class="my-2">Notes</h6>
+      <div th:if="${side.notes != null && side.notes != ''}" class="row no-gutters my-2">
         <div class="col px-4">
             <p th:id="${'sideNotes_' + side.id}" th:text="${side.notes}" class="text-prewrap text-small mb-0"></p>
         </div>
       </div>
-      <div class="my-2 col text-center">
+      <div class="my-3 col text-center">
+        <hr th:if="${side.recipeUrl != null && side.recipeUrl != ''}" class="my-2">
         <a th:if="${side.recipeUrl != null && side.recipeUrl != ''}" th:id="${'sideRecipeUrl_' + side.id}" th:href="${side.recipeUrl}"
           target="_blank">View Recipe <i class="ms-1 fas fa-external-link-alt"></i></a>
       </div>
