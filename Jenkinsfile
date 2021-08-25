@@ -14,7 +14,7 @@ pipeline {
     stage('Setup Git config') {
       steps {
         withCredentials([
-          string(credentialsId:'github_token', variable: 'TOKEN')
+          usernamePassword(credentialsId:'github_token', usernameVariable: 'USER', passwordVariable: 'TOKEN')
         ]) {
           sh "git remote set-url origin https://$TOKEN@github.com/sjwi/meal-planner.git"
         }
