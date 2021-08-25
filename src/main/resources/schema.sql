@@ -5,54 +5,56 @@ CREATE TABLE Meals (
   FAVORITE BOOLEAN DEFAULT 0,
   RECIPE_URL varchar(2055),
   NOTES varchar(2055),
+  USER varchar(50) NOT NULL,
   DISABLED BOOLEAN DEFAULT 0,
   PRIMARY KEY (ID)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
-INSERT INTO Meals (NAME, FAVORITE) values 
-('Meal 1',1),
-('Meal 2',0),
-('Meal 3',1),
-('Meal 4',0),
-('Meal 5',0),
-('Meal 6',0),
-('Meal 7',0),
-('Meal 8',1),
-('Meal 9',0),
-('Meal 10',0),
-('Meal 11',0),
-('Meal 12',0),
-('Meal 13',0);
-INSERT INTO Meals (NAME, FAVORITE, RECIPE_URL, NOTES) values 
-('Meal 14',0,'https://stephenky.com','Notes about this meal'),
-('Meal 15',0,'https://stephenky.com','Notes about this meal'),
-('Meal 16',0,'https://stephenky.com','Notes about this meal'),
-('Meal 17',0,'https://stephenky.com','Notes about this meal'),
-('Meal 18',0,'https://stephenky.com','Notes about this meal'),
-('Meal 19',0,'https://stephenky.com','Notes about this meal'),
-('Meal 20',0,'https://stephenky.com','Notes about this meal'),
-('Meal 21',0,'https://stephenky.com','Notes about this meal'),
-('Meal 22',0,'https://stephenky.com','Notes about this meal');
+INSERT INTO Meals (NAME, FAVORITE, USER) values 
+('Meal 1',1,'admin'),
+('Meal 2',0,'admin'),
+('Meal 3',1,'admin'),
+('Meal 4',0,'admin'),
+('Meal 5',0,'admin'),
+('Meal 6',0,'admin'),
+('Meal 7',0,'admin'),
+('Meal 8',1,'admin'),
+('Meal 9',0,'admin'),
+('Meal 10',0,'admin'),
+('Meal 11',0,'admin'),
+('Meal 12',0,'admin'),
+('Meal 13',0,'admin');
+INSERT INTO Meals (NAME, FAVORITE, RECIPE_URL, NOTES,USER) values 
+('Meal 14',0,'https://stephenky.com','Notes about this meal','USER'),
+('Meal 15',0,'https://stephenky.com','Notes about this meal','USER'),
+('Meal 16',0,'https://stephenky.com','Notes about this meal','USER'),
+('Meal 17',0,'https://stephenky.com','Notes about this meal','USER'),
+('Meal 18',0,'https://stephenky.com','Notes about this meal','USER'),
+('Meal 19',0,'https://stephenky.com','Notes about this meal','USER'),
+('Meal 20',0,'https://stephenky.com','Notes about this meal','USER'),
+('Meal 21',0,'https://stephenky.com','Notes about this meal','USER'),
+('Meal 22',0,'https://stephenky.com','Notes about this meal','USER');
 
 DROP TABLE IF EXISTS Ingredients;
 CREATE TABLE Ingredients (
   ID int(11) NOT NULL AUTO_INCREMENT,
   NAME varchar(255),
+  USER varchar(50) NOT NULL,
   DISABLED BOOLEAN DEFAULT 0,
   PRIMARY KEY (ID)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
-INSERT INTO Ingredients (NAME) values
-('Ingredient 1'),
-('Ingredient 2'),
-('Ingredient 3'),
-('Ingredient 4'),
-('Ingredient 5'),
-('Ingredient 6'),
-('Ingredient 7'),
-('Ingredient 8'),
-('Ingredient 9'),
-('Ingredient 10');
+INSERT INTO Ingredients (NAME, USER) values
+('Ingredient 1','admin'),
+('Ingredient 2','admin'),
+('Ingredient 3','admin'),
+('Ingredient 4','admin'),
+('Ingredient 5','admin'),
+('Ingredient 6','admin'),
+('Ingredient 7','admin'),
+('Ingredient 8','admin'),
+('Ingredient 9','admin'),
+('Ingredient 10','admin');
 
 DROP TABLE IF EXISTS Sides;
 CREATE TABLE Sides (
@@ -60,33 +62,34 @@ CREATE TABLE Sides (
   NAME varchar(255),
   RECIPE_URL varchar(2055),
   NOTES varchar(2055),
+  USER varchar(50) NOT NULL,
   DISABLED BOOLEAN DEFAULT 0,
   PRIMARY KEY (ID)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
-INSERT INTO Sides (NAME) values
-('Side 1'),
-('Side 2'),
-('Side 3'),
-('Side 4'),
-('Side 5'),
-('Side 6'),
-('Side 7'),
-('Side 8'),
-('Side 9'),
-('Side 10'),
-('Side 11'),
-('Side 12');
+INSERT INTO Sides (NAME, USER) values
+('Side 1','admin'),
+('Side 2','admin'),
+('Side 3','admin'),
+('Side 4','admin'),
+('Side 5','admin'),
+('Side 6','admin'),
+('Side 7','admin'),
+('Side 8','admin'),
+('Side 9','admin'),
+('Side 10','admin'),
+('Side 11','admin'),
+('Side 12','admin');
 
-INSERT INTO Sides (NAME,RECIPE_URL,NOTES) values
-('Side 13','stephenky.com','This is a side note'),
-('Side 14','stephenky.com','This is a side note'),
-('Side 15','stephenky.com','This is a side note'),
-('Side 16','stephenky.com','This is a side note'),
-('Side 17','stephenky.com','This is a side note'),
-('Side 18','stephenky.com','This is a side note'),
-('Side 19','stephenky.com','This is a side note'),
-('Side 20','stephenky.com','This is a side note');
+INSERT INTO Sides (NAME,RECIPE_URL,NOTES,USER) values
+('Side 13','stephenky.com','This is a side note','admin'),
+('Side 14','stephenky.com','This is a side note','admin'),
+('Side 15','stephenky.com','This is a side note','admin'),
+('Side 16','stephenky.com','This is a side note','admin'),
+('Side 17','stephenky.com','This is a side note','admin'),
+('Side 18','stephenky.com','This is a side note','admin'),
+('Side 19','stephenky.com','This is a side note','admin'),
+('Side 20','stephenky.com','This is a side note','admin');
 
 DROP TABLE IF EXISTS MealSides;
 CREATE TABLE MealSides (
@@ -196,6 +199,7 @@ CREATE TABLE WeeklySchedule (
   ID int(11) NOT NULL AUTO_INCREMENT,
   DATE_BEGIN date,
   DATE_END date,
+  USER varchar(50) NOT NULL DEFAULT 'admin',
   DISABLED BOOLEAN DEFAULT 0,
   PRIMARY KEY (ID)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
@@ -246,6 +250,7 @@ DROP TABLE IF EXISTS Tags;
 CREATE TABLE Tags (
   ID int(11) NOT NULL AUTO_INCREMENT,
   NAME varchar(255),
+  USER varchar(50) NOT NULL DEFAULT 'admin',
   PRIMARY KEY (ID)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 

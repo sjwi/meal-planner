@@ -23,12 +23,28 @@
       <th:block th:fragment="mealList" th:each="meal:${meals}">
         <th:block th:replace="dynamic/meal :: meal(${meal})"></th:block>
       </th:block>
+      <th:block th:if="${#lists.size(meals) == 0}">
+        <div class="row my-3">
+          <div class="col text-center">
+            <h4 class="text-dark">You don't have any entr&eacute;es yet!</h4>
+            <h6 class="text-dark">Click the blue button on the bottom right to create a new entr&eacute;e.</h6>
+          </div>
+        </div>
+      </th:block>
     </ul>
   </div>
   <div id="sidesContainer" class="container page-container collapse">
     <ul class="list-group list-group-flush item-list" id="sideTable">
       <th:block th:fragment="sideList" th:each="side:${sides}">
         <th:block th:replace="dynamic/side :: side(${side})"></th:block>
+      </th:block>
+      <th:block th:if="${#lists.size(sides) == 0}">
+        <div class="row my-3">
+          <div class="col text-center">
+            <h4 class="text-dark">You don't have any sides yet!</h4>
+            <h6 class="text-dark">Click the green button on the bottom right to create a new side.</h6>
+          </div>
+        </div>
       </th:block>
     </ul>
   </div>
@@ -43,6 +59,14 @@
         <button class="btn btn-sm btn-outline-primary">Load all weeks...</button>
       </div>
     </div>
+    <th:block th:if="${#lists.size(weeks) == 0}">
+      <div class="row my-3">
+        <div class="col text-center">
+          <h4 class="text-dark">You haven't planned any weeks yet!</h4>
+          <h6 class="text-dark">Go to the <a href="#tab=meals" id="mealsTabDirect">Entr&eacute;es tab</a> to begin planning a week.</h6>
+        </div>
+      </div>
+    </th:block>
   </div>
 </body>
 <div class="create-meal">
@@ -90,6 +114,9 @@
     refreshSides();
   });
 
+  $(document).on('click', '#mealsTabDirect', function () {
+    $('#mealNavLink').click();
+  });
   $(document).on('click', 'button.action', function () {
     $(this).closest('li').animate({
       left: 0 + 'px'
