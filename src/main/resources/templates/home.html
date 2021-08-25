@@ -96,10 +96,8 @@
     }, 200);
   });
   $(document).on('click', '#loadAllWeeks', function () {
-    if (confirm('Warning: loading all planned weeks degrades the performance of this page. Are you sure you want to load all weeks?')) {
-      showAllWeeks = true;
-      refreshWeekList(() => $('#loadAllWeeks').hide());
-    }
+    showAllWeeks = true;
+    refreshWeekList(() => $('#loadAllWeeks').hide());
   });
   $(document).on('click', '.meal-list-fav .far.fa-heart', function () {
     $(this).removeClass('far');
