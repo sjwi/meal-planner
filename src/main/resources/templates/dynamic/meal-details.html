@@ -23,7 +23,7 @@
     <h6 th:if="${meal.notes != null && meal.notes != ''}" class="mt-2">Notes</h6>
     <div th:if="${meal.notes != null}" class="row no-gutters">
       <div class="col px-4">
-        <small th:id="${'mealNotes_' + meal.id}" th:text="${meal.notes}"></small>
+          <p th:id="${'mealNotes_' + meal.id}" th:text="${meal.notes}" class="text-prewrap text-small mb-0"></p>
       </div>
     </div>
     <hr th:if="${#maps.size(meal.tags) > 0}" class="mt-2 mb-0">

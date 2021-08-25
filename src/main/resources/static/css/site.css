@@ -62,6 +62,12 @@
 .create-meal.showme, .create-side.showme {
   bottom:15px;
 }
+.text-prewrap {
+  white-space: pre;
+}
+.text-small {
+  font-size: .875rem
+}
 span.select2-container {
 	z-index :4001 !important;
 }

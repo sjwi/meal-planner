@@ -62,7 +62,7 @@
     $('#createEditSideModal .modal-title').html("Edit " + $('#sideName_' + id).text());
     $('#inputSideName').val($('#sideName_' + id).text());
     $('#inputSideId').val(id);
-    $('#inputSideNotes').text($('#sideNotes_' + id).text());
+    $('#inputSideNotes').val($('#sideNotes_' + id).text());
     $('#inputSideRecipeUrl').val($('#sideRecipeUrl_' + id).attr("href"));
     $('#createEditSideModal form').attr('action', contextpath + 'side/edit/' + id);
     

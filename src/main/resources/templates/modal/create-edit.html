@@ -81,7 +81,7 @@
     $('#inputMealName').val($('#mealName_' + id).text());
     $('#inputMealId').val(id);
     $('#createEditFavorite').prop('checked',$('#favoriteCheckbox_' + id).hasClass("fas"));
-    $('#inputMealNotes').text($('#mealNotes_' + id).text());
+    $('#inputMealNotes').val($('#mealNotes_' + id).text());
     $('#inputRecipeUrl').val($('#mealRecipeUrl_' + id).attr("href"));
     $('#createEditModal form').attr('action', contextpath + 'meal/edit/' + id);
     if ($('#favoriteCheckbox_' + id).hasClass("fas")) {

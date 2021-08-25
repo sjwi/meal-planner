@@ -12,7 +12,7 @@
       <h6 th:if="${side.notes != null && side.notes != ''}" class="mt-2">Notes</h6>
       <div th:if="${side.notes != null && side.notes != ''}" class="row no-gutters">
         <div class="col px-4">
-          <small th:id="${'sideNotes_' + side.id}" th:text="${side.notes}"></small>
+            <p th:id="${'sideNotes_' + side.id}" th:text="${side.notes}" class="text-prewrap text-small mb-0"></p>
         </div>
       </div>
       <div class="my-2 col text-center">

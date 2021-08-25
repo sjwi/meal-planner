@@ -1,6 +1,6 @@
 <th:block th:fragment="mealSubDetails(meal)">
   <li th:classappend="${'accordion-sub-' + meal.id}" th:attr="data-parent=${'#subMealList_' + week.id}"
-    class="container px-4 bg-secondary accordion-collapse collapse">
+    class="container px-4 bg-secondary accordion-collapse collapse pb-2">
     <h6 th:if="${#lists.size(meal.sides) > 0}" class="mt-2">Sides</h6>
     <div th:if="${#lists.size(meal.sides) > 0}" class="row no-gutters">
       <div class="col">
@@ -35,11 +35,11 @@
     <h6 th:if="${meal.notes != null && meal.notes != ''}" class="mt-2">Notes</h6>
     <div th:if="${meal.notes != null}" class="row no-gutters">
       <div class="col px-4">
-        <small th:id="${'mealNotes_' + meal.id}" th:text="${meal.notes}"></small>
+          <p th:id="${'mealNotes_' + meal.id}" th:text="${meal.notes}" class="text-prewrap text-small mb-0"></p>
       </div>
     </div>
-    <div class="my-2 col text-center">
-      <a th:if="${meal.recipeUrl != null && meal.recipeUrl != ''}" th:id="${'mealRecipeUrl_' + meal.id}" th:href="${meal.recipeUrl}"
+    <div th:if="${meal.recipeUrl != null && meal.recipeUrl != ''}" class="my-2 col text-center">
+      <a th:id="${'mealRecipeUrl_' + meal.id}" th:href="${meal.recipeUrl}"
         target="_blank">View Recipe <i class="ms-1 fas fa-external-link-alt"></i></a>
     </div>
   </li>
