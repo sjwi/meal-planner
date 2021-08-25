@@ -55,6 +55,7 @@ function addSelectedMealsToWeek() {
     success: function (data) {
       refreshMealList();
       refreshWeekList();
+      $('#noWeeksMessage').hide();
       $('#addMealsWeekSelect option:selected').val(data.id);
       cachedCheckedMealIds = new Set();
       mealSidesMap = {};

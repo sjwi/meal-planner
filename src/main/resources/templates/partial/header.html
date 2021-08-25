@@ -35,7 +35,7 @@
       $('.create-side').removeClass('showme');
   })
   $(document).ready(function(){
-    if (tab == 'meals')
+    if (tab == 'meals' || tab === null)
       $('.create-meal').addClass('showme');
     if (tab == 'sides')
       $('.create-side').addClass('showme');
