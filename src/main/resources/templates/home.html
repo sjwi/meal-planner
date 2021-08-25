@@ -38,7 +38,7 @@
         <th:block th:replace="dynamic/week :: week(${week},${stat})"></th:block>
       </th:block>
     </ul>
-    <div id="loadAllWeeks" class="row my-2">
+    <div th:if="${#lists.size(weeks) > 14}" id="loadAllWeeks" class="row my-2">
       <div class="col text-center">
         <button class="btn btn-sm btn-outline-primary">Load all weeks...</button>
       </div>
