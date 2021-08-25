@@ -11,6 +11,15 @@ pipeline {
         sh 'sudo cp target/meals.war /opt/tomcat/webapps'
       }
     }
+    stage('Setup Git config') {
+      steps {
+        withCredentials([
+          string(credentialsId:'github_token', variable: 'TOKEN')
+        ]) {
+          sh "git remote set-url origin https://$TOKEN@github.com/sjwi/meal-planner.git"
+        }
+      }
+    }
     stage('Checkout Demo Config') {
       steps {
         sh '''
