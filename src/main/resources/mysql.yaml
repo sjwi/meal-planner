@@ -49,7 +49,7 @@ updateMeal: >
   UPDATE Meals SET NAME = ?, FAVORITE = ?, NOTES = ?, RECIPE_URL = ? WHERE ID = ?
 
 updateSide: >
-  UPDATE Sides SET NAME = ? WHERE ID = ?
+  UPDATE Sides SET NAME = ?, NOTES = ?, RECIPE_URL = ? WHERE ID = ?
 
 deleteIngredientsInMeal: >
   DELETE FROM MealIngredients WHERE INGREDIENT_ID = ? AND MEAL_ID = ?
@@ -142,7 +142,7 @@ getNMostRecentWeekMeals: >
   SELECT * FROM PlannedMeals order by ID desc LIMIT ?
 
 getMealSides: >
-  SELECT * FROM Sides s JOIN MealSides ms on s.ID = ms.SIDE_ID JOIN PlannedMeals pm on ms.MEAL_ID = pm.ID where pm.MEAL_ID = ? and pm.SCHEDULE_ID = ? where s.DISABLED = 0
+  SELECT * FROM Sides s JOIN MealSides ms on s.ID = ms.SIDE_ID JOIN PlannedMeals pm on ms.MEAL_ID = pm.ID where pm.MEAL_ID = ? and pm.SCHEDULE_ID = ? AND s.DISABLED = 0
 
 addSideToMeal: >
   INSERT INTO MealSides (MEAL_ID,SIDE_ID) values ((select ID From PlannedMeals where MEAL_ID = ? and SCHEDULE_ID = ? ORDER BY ID DESC LIMIT 1),?)

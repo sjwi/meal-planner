@@ -58,6 +58,8 @@ DROP TABLE IF EXISTS Sides;
 CREATE TABLE Sides (
   ID int(11) NOT NULL AUTO_INCREMENT,
   NAME varchar(255),
+  RECIPE_URL varchar(2055),
+  NOTES varchar(2055),
   DISABLED BOOLEAN DEFAULT 0,
   PRIMARY KEY (ID)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
@@ -75,6 +77,16 @@ INSERT INTO Sides (NAME) values
 ('Side 10'),
 ('Side 11'),
 ('Side 12');
+
+INSERT INTO Sides (NAME,RECIPE_URL,NOTES) values
+('Side 13','stephenky.com','This is a side note'),
+('Side 14','stephenky.com','This is a side note'),
+('Side 15','stephenky.com','This is a side note'),
+('Side 16','stephenky.com','This is a side note'),
+('Side 17','stephenky.com','This is a side note'),
+('Side 18','stephenky.com','This is a side note'),
+('Side 19','stephenky.com','This is a side note'),
+('Side 20','stephenky.com','This is a side note');
 
 DROP TABLE IF EXISTS MealSides;
 CREATE TABLE MealSides (
@@ -112,7 +124,10 @@ INSERT INTO MealSides(MEAL_ID,SIDE_ID) values
 (11,10),
 (12,11),
 (13,3),
-(13,4);
+(13,4),
+(14,2),
+(15,8),
+(15,4);
 
 DROP TABLE IF EXISTS SideIngredients;
 CREATE TABLE SideIngredients (
@@ -136,7 +151,12 @@ INSERT INTO SideIngredients (SIDE_ID,INGREDIENT_ID) values
 (9,5),
 (10,4),
 (11,4),
-(12,8);
+(12,8),
+(13,3),
+(13,4),
+(14,2),
+(15,8),
+(15,4);
 
 DROP TABLE IF EXISTS MealIngredients;
 CREATE TABLE MealIngredients (

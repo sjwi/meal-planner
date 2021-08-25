@@ -16,6 +16,12 @@
             <select class="form-select form-select-lg input-side-ingredients" data-width="100%" id="inputSideIngredients" name="inputSideIngredients" multiple="multiple">
             </select>
           </div>
+          <div class="input-group mb-3">
+            <textArea name="inputSideNotes" id="inputSideNotes" type="text" class="form-control input-meal-notes" placeholder="Notes" aria-label="Side notes"></textArea>
+          </div>
+          <div class="input-group mb-3">
+            <input id="inputSideRecipeUrl" name="inputSideRecipeUrl" type="text" class="form-control input-recipe-url" placeholder="Recipe URL" aria-label="Recipe URL">
+          </div>
         </form>
       </div>
       <div class="modal-footer">
@@ -56,6 +62,8 @@
     $('#createEditSideModal .modal-title').html("Edit " + $('#sideName_' + id).text());
     $('#inputSideName').val($('#sideName_' + id).text());
     $('#inputSideId').val(id);
+    $('#inputSideNotes').text($('#sideNotes_' + id).text());
+    $('#inputSideRecipeUrl').val($('#sideRecipeUrl_' + id).attr("href"));
     $('#createEditSideModal form').attr('action', contextpath + 'side/edit/' + id);
     
     //Ingredients
@@ -115,6 +123,8 @@
     $('#createEditSideModal .modal-title').html("");
     $('#inputSideName').val("");
     $('#inputSideId').val("0");
+    $('#inputSideNotes').text("");
+    $('#inputSideRecipeUrl').val("");
     $('#inputSideIngredients').find('option').remove().end()
   })
 </script>

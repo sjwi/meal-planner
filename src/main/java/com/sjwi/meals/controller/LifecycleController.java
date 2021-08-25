@@ -113,14 +113,15 @@ public class LifecycleController {
     @RequestMapping(value = "/side/edit/{id}", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void editSide(@PathVariable int id, @RequestParam String inputSideName,
-        @RequestParam(name="inputSideIngredients", defaultValue = "") Set<String> ingredients) {
-
+        @RequestParam(name="inputSideIngredients", defaultValue = "") Set<String> ingredients,
+        @RequestParam(name="inputSideNotes", required = false) String notes,
+        @RequestParam(name="inputSideRecipeUrl", required = false) String recipeUrl) {
       Side originalSide = mealDao.getSideById(id);
       Set<Integer> existingIngredients = mealService.getItemIngredientsIdsToAdd(ingredients);
       Set<Integer> originalSideIngredients = new HashSet<Ingredient>(originalSide.getIngredients()).stream().map(i -> i.getId()).collect(Collectors.toSet());
       Set<Integer> ingredientsToDelete = SetUtils.difference(originalSideIngredients, existingIngredients);
       Set<Integer> ingredientsToAdd = SetUtils.difference(existingIngredients, originalSideIngredients);
-      mealDao.editSide(id,inputSideName, ingredientsToAdd, ingredientsToDelete);
+      mealDao.editSide(id,inputSideName, notes, recipeUrl, ingredientsToAdd, ingredientsToDelete);
     }
 
     @RequestMapping(value = "/meal/edit/{id}", method = RequestMethod.POST)
@@ -128,7 +129,8 @@ public class LifecycleController {
     public ModelAndView editMeal(@PathVariable int id, @RequestParam String inputMealName, 
         @RequestParam(name="createEditFavorite", defaultValue = "false") Boolean favorite,
         @RequestParam(name="inputMealIngredients", defaultValue =  "") Set<String> ingredients, 
-        @RequestParam(name="inputMealTags", defaultValue = "") Set<String> tags, @RequestParam(name="inputMealNotes", required = false) String notes, 
+        @RequestParam(name="inputMealTags", defaultValue = "") Set<String> tags, 
+        @RequestParam(name="inputMealNotes", required = false) String notes, 
         @RequestParam(name="inputRecipeUrl", required = false) String recipeUrl) {
 
       Meal originalMeal = mealDao.getMealById(id);

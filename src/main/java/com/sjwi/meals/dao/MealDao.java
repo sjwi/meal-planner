@@ -302,8 +302,8 @@ public class MealDao {
     addTagsToMeal(tags, mealId);
   }
 
-  public void editSide(int sideId, String inputSideName, Set<Integer> ingredientsToAdd, Set<Integer> ingredientsToDelete) {
-    jdbcTemplate.update(queryStore.get("updateSide"), new Object[] {inputSideName,sideId});
+  public void editSide(int sideId, String inputSideName, String notes, String recipeUrl, Set<Integer> ingredientsToAdd, Set<Integer> ingredientsToDelete) {
+    jdbcTemplate.update(queryStore.get("updateSide"), new Object[] {inputSideName,notes,recipeUrl,sideId});
     removeIngredientsFromSide(ingredientsToDelete,sideId);
     addIngredientsToSide(ingredientsToAdd,sideId);
   }
@@ -413,9 +413,18 @@ public class MealDao {
     return jdbcTemplate.query(queryStore.get("getMealSides"), new Object[] {mealId, weekId}, r -> {
       List<Side> sides = new ArrayList<>();
       while (r.next())
-        sides.add(new Side(r.getInt("ID"),r.getString("NAME"),getIngredientsInSide(r.getInt("ID"))));
+        sides.add(buildSideFromResultSet(r));
       return sides;
     });
+  }
+
+  private Side buildSideFromResultSet(ResultSet r) throws SQLException {
+    return new Side(
+      r.getInt("ID"),
+      r.getString("NAME"),
+      r.getString("NOTES"),
+      r.getString("RECIPE_URL"),
+      getIngredientsInSide(r.getInt("ID")));
   }
 
   private Meal buildMealFromResultSet(ResultSet rs) throws SQLException {
@@ -479,7 +488,7 @@ public class MealDao {
     return jdbcTemplate.query(queryStore.get("getAllSides"), r -> {
       List<Side> sides = new ArrayList<>();
       while (r.next()) {
-        sides.add(new Side(r.getInt("ID"),r.getString("NAME"),getIngredientsInSide(r.getInt("ID"))));
+        sides.add(buildSideFromResultSet(r));
       }
       return sides;
     });
@@ -501,7 +510,7 @@ public class MealDao {
   public Side getSideById(int id) {
     return jdbcTemplate.query(queryStore.get("getSideById"), new Object[] {id}, r -> {
       r.next();
-      return new Side(r.getInt("ID"),r.getString("NAME"),getIngredientsInSide(r.getInt("ID")));
+      return buildSideFromResultSet(r);
     });
   }
 
