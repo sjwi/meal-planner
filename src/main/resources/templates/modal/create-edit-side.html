@@ -1,0 +1,120 @@
+<div class="modal fade" id="createEditSideModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title text-dark">Create Side</h5>
+        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="createEditSideForm" method="POST">
+          <input type="hidden" name="inputSideId" id="inputSideId" value="0">
+          <div class="input-group mb-3 has-validation">
+            <input name="inputSideName" id="inputSideName" type="text" class="form-control input-side-name col-12" placeholder="Side name*" aria-label="Side name" required>
+          </div>
+          <div class="form-group mb-3">
+            <label for="inputSideIngredients text-primary">Ingredients</label>
+            <select class="form-select form-select-lg input-side-ingredients" data-width="100%" id="inputSideIngredients" name="inputSideIngredients" multiple="multiple">
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" id="inputSideSubmitBtn" form="createEditSideForm" class="btn btn-lg btn-primary w-100"></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $('#createEditSideForm').on('submit',function(e){
+    var dataString = $(this).serialize();
+    e.preventDefault();
+    $.ajax({
+      url: $(this).attr("action"),
+      type: "POST",
+      method: "POST",
+      data: dataString,
+      beforeSend: function() {
+        $('#inputSideSubmitBtn').prop('disabled',true);
+      },
+      success: function () {
+        $('#createEditSideModal').modal('hide');
+        refreshMealList();
+        refreshWeekList();
+        refreshSideList();
+        refreshIngredients();
+        refreshTags();
+        refreshSides();
+      },
+      complete: function() {
+        $('#inputSideSubmitBtn').prop('disabled',false);
+      }
+    });
+  });
+  async function editSide(id) {
+    $('#inputSideSubmitBtn').text('Edit');
+    $('#createEditSideModal .modal-title').html("Edit " + $('#sideName_' + id).text());
+    $('#inputSideName').val($('#sideName_' + id).text());
+    $('#inputSideId').val(id);
+    $('#createEditSideModal form').attr('action', contextpath + 'side/edit/' + id);
+    
+    //Ingredients
+    let sideIngredients = $('#sideAccordion_' + id + ' .side-ingredient').map(function(){
+      return $(this).data('target');
+    }).get();
+    await ingredients.forEach(i => {
+      jQuery('<option/>', {
+            value: i.id,
+            html: i.name,
+            selected: sideIngredients.includes(i.id)
+            }).appendTo('#inputSideIngredients'); 
+    });
+    $('.input-side-ingredients').select2({
+      placeholder: 'Click to add',
+      tags: true
+    });
+    $('.input-side-ingredients').on('select2:unselecting', function(e){
+      unselecting = true;
+    });
+    $('.input-side-ingredients').on('select2:opening', function(e){
+      if (unselecting) {
+        unselecting = false;
+        return false;
+      }
+      return true;
+    });
+    $('#createEditSideModal').modal('show');
+  }
+  async function createSide() {
+    $('#inputSideSubmitBtn').text('Create Side');
+    $('#createEditSideModal .modal-title').html("Create a New Side");
+    $('#createEditSideModal').modal('show');
+    $('#createEditSideModal form').attr('action', contextpath + 'side/create');
+    await ingredients.forEach(i => {
+      jQuery('<option/>', {
+            value: i.id,
+            html: i.name,
+            }).appendTo('#inputSideIngredients'); 
+    });
+    $('.input-side-ingredients').select2({
+      placeholder: 'Click to add',
+      tags: true
+    });
+    $('.input-side-ingredients').on('select2:unselecting', function(e){
+      unselecting = true;
+    });
+    $('.input-side-ingredients').on('select2:opening', function(e){
+      if (unselecting) {
+        unselecting = false;
+        return false;
+      }
+      return true;
+    });
+  }
+  $('#createEditSideModal').on('hidden.bs.modal', function () {
+    $('#createEditSideModal .modal-title').html("");
+    $('#inputSideName').val("");
+    $('#inputSideId').val("0");
+    $('#inputSideIngredients').find('option').remove().end()
+  })
+</script>

@@ -13,9 +13,9 @@ public class Week {
     private int id;
     private Date start;
     private Date end;
-    private List<Meal> meals;
+    private List<WeekMeal> meals;
 
-    public Week(int id, Date start, Date end, List<Meal> meals) {
+    public Week(int id, Date start, Date end, List<WeekMeal> meals) {
         this.id = id;
         this.start = start;
         this.end = end;
@@ -55,7 +55,7 @@ public class Week {
     public Date getEnd() {
         return end;
     }
-    public List<Meal> getMeals() {
+    public List<WeekMeal> getMeals() {
         return meals;
     }
 }

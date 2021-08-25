@@ -50,6 +50,7 @@ public class HomeController {
     ModelAndView mv = new ModelAndView("home");
     List<Week> weeks = mealDao.getAllWeeks();
     mv.addObject("meals", mealDao.getAllMeals(preferences));
+    mv.addObject("sides", mealDao.getAllSides());
     mv.addObject("weeks", weeks);
     mv.addObject("weeksForSelect", WeekGenerator.getWeeksForSelect(weeks));
     return mv;
@@ -105,10 +106,19 @@ public class HomeController {
     return mv;
   }
 
+  @RequestMapping("/sides")
+  public ModelAndView sides() {
+    ModelAndView mv = new ModelAndView("home :: sideList");
+    mv.addObject("sides", mealDao.getAllSides());
+    return mv;
+  }
+
+
   @RequestMapping("/week/ingredients/{id}")
   public ModelAndView getIngredientsInWeek(@PathVariable int id) {
     Week week = mealDao.getWeekById(id);
-    List<String> ingredients = week.getMeals().stream().map(m -> m.getIngredients()).flatMap(List::stream)
+    List<String> ingredients = week.getMeals().stream().map(m -> m.getIngredientList())
+        .flatMap(List::stream)
         .map(i -> i.getName()).collect(Collectors.toList());
     Map<String, Integer> ingredientMap = new HashMap<>();
     for (String ingredient : ingredients) {

@@ -2,21 +2,22 @@
   <li th:id="${'accordion_' + meal.id}" class="pt-0 pb-0 px-2 bg-light container accordion-collapse collapse"
     th:attr="data-target=${meal.id}" data-parent="#mealTable">
     <h6 th:if="${#lists.size(meal.ingredients) > 0}" class="mt-2">Ingredients</h6>
-    <ul th:if="${#lists.size(meal.ingredients) > 0}"
-      class="list-group list-group-flush d-flex flex-row flex-wrap bg-secondary">
-      <li th:each="ingredient : ${meal.ingredients}" class="list-group-item border-bottom"
-        th:classappend="${#lists.size(meal.ingredients) == 1? 'w-100':'w-50'}">
-        <small class="meal-ingredient" th:text="${ingredient.name}"
-          th:attr="data-target=${ingredient.id}"></small>
-      </li>
-    </ul>
+    <div th:if="${#lists.size(meal.ingredients) > 0}"
+      class="row no-gutters">
+      <div class="col">
+          <span th:each="ingredient : ${meal.ingredients}" class="badge rounded-pill bg-dark px-2 py-2 mx-1 my-1 meal-ingredient"
+            th:attr="data-target=${ingredient.id}">
+            <small th:text="${ingredient.name}"></small>
+          </span>
+      </div>
+    </div>
     <h6 th:if="${#maps.size(meal.tags) > 0}" class="mt-2">Tags</h6>
     <div th:if="${#maps.size(meal.tags) > 0}" class="row no-gutters">
       <div class="col">
-        <small>
-          <span class="badge rounded-pill bg-secondary mx-1 my-1 meal-tag" th:each="tag : ${meal.tags}"
-            th:attr="data-target=${tag.key}" th:text="${tag.value}"></span>
-        </small>
+          <span class="badge rounded-pill bg-secondary px-2 py-2 mx-1 my-1 meal-tag" th:each="tag : ${meal.tags}"
+            th:attr="data-target=${tag.key}">
+            <small th:text="${tag.value}"></small>
+          </span>
       </div>
     </div>
     <h6 th:if="${meal.notes != null && meal.notes != ''}" class="mt-2">Notes</h6>
@@ -25,7 +26,7 @@
         <small th:id="${'mealNotes_' + meal.id}" th:text="${meal.notes}"></small>
       </div>
     </div>
-    <hr th:if="${#maps.size(meal.tags) > 0}" class="mt-1 mb-0">
+    <hr th:if="${#maps.size(meal.tags) > 0}" class="mt-2 mb-0">
     <div class="row">
       <div class="col-6 pt-2">
         <small class="mb-0 text-primary">Last time planned: </small>

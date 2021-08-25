@@ -60,12 +60,18 @@
       type: "POST",
       method: "POST",
       data: dataString,
+      beforeSend: function() {
+        $('#inputSubmitBtn').prop('disabled',true);
+      },
       success: function () {
+        $('#createEditModal').modal('hide');
         refreshMealList();
         refreshWeekList();
         refreshIngredients();
         refreshTags();
-        $('#createEditModal').modal('hide');
+      },
+      complete: function() {
+        $('#inputSubmitBtn').prop('disabled',false);
       }
     });
   });
@@ -121,8 +127,8 @@
     $('#createEditModal').modal('show');
   }
   async function createMeal() {
-    $('#inputSubmitBtn').text('Create a New Meal');
-    $('#createEditModal .modal-title').html("Create Meal");
+    $('#inputSubmitBtn').text('Create Meal');
+    $('#createEditModal .modal-title').html("Create a New Meal");
     $('#createEditModal').modal('show');
     $('#createEditModal form').attr('action', contextpath + 'meal/create');
     await ingredients.forEach(i => {
@@ -157,7 +163,7 @@
     $('#inputMealName').val("");
     $('#inputMealId').val("0");
     $('#createEditFavorite').prop('checked','false');
-    $('#inputMealNotes').text("");
+    $('#inputMealNotes').val("");
     $('#inputRecipeUrl').val("");
     $('#inputMealTags').find('option').remove().end()
     $('#inputMealIngredients').find('option').remove().end()

@@ -2,9 +2,9 @@
   <li th:id="${'weekAccordion_' + week.id}"
     class="pt-0 pb-0 px-0 bg-light container accordion-collapse collapse accordion-header clickable"
     th:classappend="${index == 0? 'show':''}" th:attr="data-target=${week.id}" data-parent="#weekTable">
-    <ul class="list-group list-group-flush item-list sub-meal-list" id="subMealList">
+    <ul class="list-group item-list sub-meal-list" id="subMealList">
       <th:block th:each="meal: ${week.meals}">
-        <li class="item list-group-item list-group-item-action my-0 bg-light"
+        <li class="item list-group-item list-group-item-action my-0 bg-light rounded"
           th:id="${'accordion_header_sub_' + meal.id + '_' + week.id}" th:attr="data-target=${'#weekAccordion_' + week.id + ' .accordion-sub-' + meal.id}"
           data-toggle="collapse">
           <button class="action edit bg-primary stop-prop" th:attr="onclick=${'editMeal('+meal.id+')'}">Edit</button>

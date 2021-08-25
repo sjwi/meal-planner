@@ -25,6 +25,13 @@
       </th:block>
     </ul>
   </div>
+  <div id="sidesContainer" class="container page-container collapse">
+    <ul class="list-group list-group-flush item-list" id="sideTable">
+      <th:block th:fragment="sideList" th:each="side:${sides}">
+        <th:block th:replace="dynamic/side :: side(${side})"></th:block>
+      </th:block>
+    </ul>
+  </div>
   <div id="weeksContainer" class="container page-container collapse">
     <ul class="list-group list-group-flush item-list" id="weekTable">
       <th:block th:fragment="weekList" th:each="week, stat :${weeks}">
@@ -38,8 +45,13 @@
     <i class="fas fa-plus"></i>
   </button>
 </div>
-<div class="alert alert-success py-2 add-meal text-center" role="alert">
-  <div class="col my-0 py-0 text-center" id="hideAddAlert">
+<div class="create-side">
+  <button onclick="createSide()" class="btn btn-success btn-lg shadow add">
+    <i class="fas fa-plus"></i>
+  </button>
+</div>
+<div class="alert alert-success pb-2 pt-0 add-meal text-center" role="alert">
+  <div class="col my-0 pb-0 pt-2 text-center" id="hideAddAlert">
     <i class="fa fa-angle-down" aria-hidden="true"></i>
     <i class="fa fa-angle-up collapse" aria-hidden="true"></i>
   </div>
@@ -63,10 +75,13 @@
 <script th:inline="javascript">
   let tags;
   let ingredients;
+  let sides;
+  let mealSidesMap = {};
   let unselecting = false;
   $(document).ready(function () {
     refreshIngredients();
     refreshTags();
+    refreshSides();
   });
 
   $(document).on('click', 'button.action', function () {
@@ -114,7 +129,9 @@
   $(document).on('change', 'input.meal-select:checkbox', function (e) {
     if ($(this).is(':checked')) {
       cachedCheckedMealIds.add($(this).data('target'));
+      $('#sideAlert_' + $(this).data('target')).addClass("show");
     } else {
+      $('#sideAlert_' + $(this).data('target')).removeClass("show");
       cachedCheckedMealIds.delete($(this).data('target'));
     }
     if (cachedCheckedMealIds.size > 0) {
@@ -127,34 +144,6 @@
   $('#searchBox').on('search',function(){
     search();
   });
-  function search() {
-    if($('#tagFilters .search-tag.active').length)
-      $('#searchFilterBtn').addClass('active');
-    let searchTerm = $('#searchBox').val();
-    let dateFilterBegin = $('#dateFilterBegin').val()
-    let dateFilterEnd = $('#dateFilterBegin').val()
-    let tags = $('#tagFilters .search-tag.active').map(function(){
-      return $(this).data('target');
-    }).get();
-    $.ajax({
-      url: contextpath + 'search/meals',
-      method: "GET",
-      data: {
-        searchTerm: searchTerm,
-        tags: tags
-      },
-      beforeSend: function() {
-        $('#mealTable').addClass('loading');
-      },
-      success: function (data) {
-        $('#mealTable').html(data);
-        $('#mealTable').removeClass('loading');
-        cachedCheckedMealIds.forEach((id) => {
-          $('#mealCheckbox_' + id).prop('checked',true);
-        });
-      }
-    });
-  }
   (function() {
     'use strict';
     window.addEventListener('load', function() {
@@ -174,183 +163,12 @@
   })();
 
   $('#mealTable').listSwipe();
+  $('#sideTable').listSwipe();
   $('#weekTable').listSwipe({
     leftAction: false,
     itemSelector: '> li.week-item'
   });
   $('.sub-meal-list').listSwipe();
-
-  function addSelectedMealsToWeek() {
-    let weekId = parseInt($('#addMealsWeekSelect').val());
-    let addIndex = $('#addMealsWeekSelect option:selected').data('add-index');
-    $('#addMealsToWeekButtonContainer').hide();
-    $('#addMealsToWeekCheckboxContainer').html($('#checkmarkAni').html());
-    $('#addMealsToWeekCheckboxContainer').show();
-    $('input.meal-select:checkbox').prop('checked', false);
-    setTimeout(function(){
-      $('.alert.add-meal').removeClass('display');
-      setTimeout(function(){
-        $('#addMealsToWeekCheckboxContainer').hide();
-        $('#addMealsToWeekButtonContainer').show();
-      },1000)
-    },2000)
-    $.ajax({
-      url: contextpath + 'week/add-meal',
-      method: "POST",
-      dataType: "json",
-      data: {
-        weekId: weekId,
-        meals: JSON.stringify(Array.from(cachedCheckedMealIds)),
-        addIndex: addIndex
-      },
-      success: function (data) {
-        refreshMealList();
-        refreshWeekList();
-        $('#addMealsWeekSelect option:selected').val(data.id);
-        cachedCheckedMealIds = new Set();
-      }
-    });
-  }
-
-  function removeMealFromWeek(mealId, weekId) {
-    $.ajax({
-      url: contextpath + 'meal/remove-from-week',
-      method: "DELETE",
-      data : {
-        mealId: mealId,
-        weekId: weekId
-      },
-      success: function (data) {
-        $('#weekAccordion_' + weekId + ' [id^=accordion_header_sub_' + mealId + ']').remove();
-        $('#weekAccordion_' + weekId + ' .accordion-sub-' + mealId).remove();
-        refreshMeal(mealId);
-      }
-    });
-  }
-
-  function deleteWeek(id) {
-    if (confirm('Are you sure you want to delete this week?')) {
-      $.ajax({
-        url: contextpath + 'week/delete/' + id,
-        method: "DELETE",
-        success: function (data) {
-          $('#weekAccordion_' + id).remove();
-          $('#weekAccordionHeader_' + id).remove();
-          $('#addMealsWeekSelect option[value="' + id + '"]').remove();
-        }
-      });
-    }
-  }
-
-  function deleteMeal(id) {
-    if (confirm('Are you sure you want to delete this meal?')) {
-      $.ajax({
-        url: contextpath + 'meal/delete/' + id,
-        method: "DELETE",
-        success: function (data) {
-          $('#accordionHeader_' + id).remove();
-          $('#accordion_' + id).remove();
-          $('[id^=accordion_header_sub_' + id + ']').remove();
-          $('.accordion-sub-' + id).remove();
-        }
-      });
-    }
-  }
-
-  function refreshMealList() {
-    search();
-  }
-
-  function refreshWeekList() {
-    $.ajax({
-      url: contextpath + 'weeks',
-      method: "GET",
-      beforeSend: function() {
-        $('#weekTable').addClass('loading');
-      },
-      success: function (data) {
-        $('#weekTable').removeClass('loading');
-        $('#weekTable').html(data);
-        $('.sub-meal-list').unbind();
-        $('.sub-meal-list').listSwipe();
-      }
-    });
-  }
-
-  function refreshMeal(id) {
-    refreshMealDetails(id);
-    refreshMealSubDetails(id);
-    refreshMealName(id);
-  }
-
-  function refreshMealDetails(mealId) {
-    $.ajax({
-      url: contextpath + 'meal/details/' + mealId + '?view=dynamic/meal-details',
-      method: "GET",
-      beforeSend: function() {
-        $('#accordion_' + mealId).addClass('loading');
-      },
-      success: function (data) {
-        $('#accordion_' + mealId).replaceWith(data);
-        $('#accordion_' + mealId).removeClass('loading');
-      }
-    });
-  }
-  function refreshMealSubDetails(mealId) {
-    $.ajax({
-      url: contextpath + 'meal/details/' + mealId + '?view=dynamic/meal-sub-details',
-      method: "GET",
-      beforeSend: function() {
-        $('.accordion-sub-' + mealId).addClass('loading');
-      },
-      success: function (data) {
-        $('.accordion-sub-' + mealId).replaceWith(data);
-        $('.accordion-sub-' + mealId).removeClass('loading');
-      }
-    });
-  }
-  function refreshMealName(mealId) {
-    $.ajax({
-      url: contextpath + 'json/meal/' + mealId,
-      method: "GET",
-      success: function (data) {
-        $('#mealName_' + mealId).html(data.name);
-        $('[id^=subMealName_' + mealId +']').html(data.name);
-      }
-    });
-  }
-  function refreshWeek(id) {
-    $.ajax({
-      url: contextpath + 'week/details/' + id + '?view=dynamic/week-details',
-      method: "GET",
-      success: function (data) {
-        $('#weekAccordion_' + id).replaceWith(data);
-        $('#weekAccordionHeader_' + id).click();
-        $('.sub-meal-list').unbind();
-        $('.sub-meal-list').listSwipe();
-      }
-    });
-  }
-
-  function refreshTags() {
-    $.ajax({
-      url: contextpath + 'json/tags',
-      method: "GET",
-      success: function (data) {
-        tags = new Map(Object.entries(data))
-      }
-    });
-  }
-
-  function refreshIngredients() {
-    $.ajax({
-      url: contextpath + 'json/ingredients',
-      method: "GET",
-      success: function (data) {
-        ingredients = data;
-      }
-    });
-  }
 
   const tab = new URLSearchParams(window.location.hash.substr(1)).get('tab');
   if (tab == 'weeks') {
@@ -358,6 +176,11 @@
     $('#weekNavLink').addClass('active');
     $('.page-container').hide();
     $("#weeksContainer").show();
+  } else if (tab == 'sides') {
+    $('.nav-item').removeClass('active');
+    $('#sideNavLink').addClass('active');
+    $('.page-container').hide();
+    $("#sidesContainer").show();
   }
 
 </script>

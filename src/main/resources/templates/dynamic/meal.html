@@ -15,6 +15,9 @@
         <i th:id="${'favoriteCheckbox_' + meal.id}" th:attr="data-target=${meal.id}" class="fa-heart stop-prop"
           th:classappend="${meal.favorite? 'fas' : 'far'}"></i>
       </div>
+      <div th:id="${'sideAlert_' + meal.id}" class="alert alert-warning add-side-alert py-0 px-0 stop-prop" role="alert">
+        <button class="btn btn-warning pulse" th:attr="onclick=${'addSide(' + meal.id + ')'}">Add Sides</button>
+      </div>
     </div>
     <button th:attr="onclick=${'deleteMeal(' + meal.id + ')'}" class="action delete bg-danger stop-prop">Delete</button>
   </li>

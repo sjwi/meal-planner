@@ -1,8 +1,10 @@
 package com.sjwi.meals.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -11,6 +13,7 @@ import com.google.gson.reflect.TypeToken;
 import com.sjwi.meals.dao.MealDao;
 import com.sjwi.meals.model.Ingredient;
 import com.sjwi.meals.model.Meal;
+import com.sjwi.meals.model.Side;
 import com.sjwi.meals.model.Week;
 import com.sjwi.meals.service.MealService;
 import com.sjwi.meals.util.WeekGenerator;
@@ -38,13 +41,16 @@ public class LifecycleController {
 
     @RequestMapping(value = "/week/add-meal", method = RequestMethod.POST)
     @ResponseBody
-    public Week addMealToWeek(@RequestParam Integer weekId, @RequestParam String meals, @RequestParam Integer addIndex) {
+    public Week addMealToWeek(@RequestParam Integer weekId, @RequestParam String meals, 
+      @RequestParam Integer addIndex, @RequestParam String mealSidesMap) {
         if (weekId == 0) {
             List<Week> weeks = WeekGenerator.getWeeksForSelect(mealDao.getAllWeeks());
             weekId = mealDao.createWeek(weeks.get(addIndex - 1).getStart(),weeks.get(addIndex - 1).getEnd());
         }
         List<Integer> mealIds = new Gson().fromJson(meals, new TypeToken<ArrayList<Integer>>() {}.getType());
+        Map<Integer,List<Integer>> sidesMap = new Gson().fromJson(mealSidesMap, new TypeToken<HashMap<Integer,List<Integer>>>() {}.getType());
         mealDao.addMealsToWeek(weekId,mealIds);
+        mealDao.addSidesToMeals(mealIds, sidesMap,weekId);
         return mealDao.getWeekById(weekId);
     }
     
@@ -60,32 +66,60 @@ public class LifecycleController {
       mealDao.deleteMeal(id);
     }
  
+    @RequestMapping(value = "/side/delete/{id}", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteSide(@PathVariable int id) {
+      mealDao.deleteSide(id);
+    }
+ 
     @RequestMapping(value = "/meal/favorite/{id}", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void deleteMeal(@RequestParam(name="toggle", required=false) boolean toggle, @PathVariable int id) {
       mealDao.toggleFavorite(id, toggle);
     }
  
-    @RequestMapping(value = "meal/remove-from-week", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/meal/remove-from-week", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void removeMealFromWeek(@RequestParam int mealId, @RequestParam int weekId) {
       mealDao.removeMealFromWeek(mealId, weekId);
     }
 
-    @RequestMapping(value = "meal/create", method = RequestMethod.POST)
+    @RequestMapping(value = "/meal/create", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void createMeal(@RequestParam String inputMealName, @RequestParam(name="createEditFavorite", defaultValue = "false") Boolean favorite,
         @RequestParam(name="inputMealIngredients", defaultValue = "") Set<String> ingredients, 
         @RequestParam(name="inputMealTags", defaultValue = "") Set<String> tags, @RequestParam(name="inputMealNotes", required = false) String notes, 
         @RequestParam(name="inputRecipeUrl", required = false) String recipeUrl) {
 
-      Set<Integer> createdIngredients = mealService.getMealIngredientIdsToAdd(ingredients);
+      Set<Integer> createdIngredients = mealService.getItemIngredientsIdsToAdd(ingredients);
       Set<Integer> createdTags = mealService.getMealTagIdsToAdd(tags);
 
       mealDao.createMeal(inputMealName, favorite, createdIngredients, createdTags, notes, recipeUrl);
     }
 
-    @RequestMapping(value = "meal/edit/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/side/create", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public void createSide(@RequestParam String inputSideName,
+        @RequestParam(name="inputSideIngredients", defaultValue = "") Set<String> ingredients) {
+
+      Set<Integer> createdIngredients = mealService.getItemIngredientsIdsToAdd(ingredients);
+      mealDao.createSide(inputSideName, createdIngredients);
+    }
+
+    @RequestMapping(value = "/side/edit/{id}", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public void editSide(@PathVariable int id, @RequestParam String inputSideName,
+        @RequestParam(name="inputSideIngredients", defaultValue = "") Set<String> ingredients) {
+
+      Side originalSide = mealDao.getSideById(id);
+      Set<Integer> existingIngredients = mealService.getItemIngredientsIdsToAdd(ingredients);
+      Set<Integer> originalSideIngredients = new HashSet<Ingredient>(originalSide.getIngredients()).stream().map(i -> i.getId()).collect(Collectors.toSet());
+      Set<Integer> ingredientsToDelete = SetUtils.difference(originalSideIngredients, existingIngredients);
+      Set<Integer> ingredientsToAdd = SetUtils.difference(existingIngredients, originalSideIngredients);
+      mealDao.editSide(id,inputSideName, ingredientsToAdd, ingredientsToDelete);
+    }
+
+    @RequestMapping(value = "/meal/edit/{id}", method = RequestMethod.POST)
     @ResponseBody
     public ModelAndView editMeal(@PathVariable int id, @RequestParam String inputMealName, 
         @RequestParam(name="createEditFavorite", defaultValue = "false") Boolean favorite,
@@ -95,7 +129,7 @@ public class LifecycleController {
 
       Meal originalMeal = mealDao.getMealById(id);
 
-      Set<Integer> existingIngredients = mealService.getMealIngredientIdsToAdd(ingredients);
+      Set<Integer> existingIngredients = mealService.getItemIngredientsIdsToAdd(ingredients);
       Set<Integer> existingTags = mealService.getMealTagIdsToAdd(tags);
 
       Set<Integer> originalIngredients = new HashSet<Ingredient>(originalMeal.getIngredients()).stream().map(i -> i.getId()).collect(Collectors.toSet());

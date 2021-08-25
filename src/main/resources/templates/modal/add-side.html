@@ -1,0 +1,66 @@
+<div class="modal fade" id="addSideModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h6 class="modal-title text-dark">Create Meal</h6>
+        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body pt-0">
+        <form id="addSideForm" th:action="@{/meal/add-sides}" method="POST">
+          <input type="hidden" name="addSideMealId" id="addSideMealId" value="0">
+          <div class="scroll container border-top border-bottom">
+            <ul class="list-group list-group-flush" id="addSideList">
+            </ul>
+          </div>
+          <button type="submit" id="addSideSubmitBtn" form="addSideForm" class="btn btn-lg btn-primary w-100 mt-3">Add side(s)</button>
+        </form>
+      </div>
+      <div class="collapse" id="sideRowTemplate">
+        <li class="list-group-item">
+          <div class="row py-2">
+            <div class="col-1 round">
+              <input type="checkbox" class="form-check-input add-side-checkbox"/>
+              <label class="add-side-checkbox-label"></label>
+            </div>
+            <div class="col-11 ps-3">
+              <label class="add-side-label w-100"></label>
+            </div>
+          </div>
+        </li>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $('#addSideForm').on('submit',function(e){
+    e.preventDefault();
+    let mealId = $('#addSideMealId').val();
+    let sidesToAdd = $('#addSideList .add-side-checkbox:checked').map(function(){
+      return $(this).val();
+    }).get();
+    mealSidesMap[mealId] = sidesToAdd;
+    $('#addSideModal').modal('hide');
+  });
+  async function addSide(id) {
+    $('.alert.add-meal').addClass('slide-down');
+    $('#addSideMealId').val(id);
+    $('#addSideModal .modal-title').html("Choose your sides for " + $('#mealName_' + id).text());
+    await sides.forEach((s) => {
+      var newLineItem = $('#sideRowTemplate li').clone()
+      $(newLineItem).find('.add-side-checkbox').val(s.id);
+      $(newLineItem).find('.add-side-checkbox').attr('id','mealSide_' + s.id);
+      $(newLineItem).find('.add-side-checkbox-label').attr('for','mealSide_' + s.id);
+      $(newLineItem).find('.add-side-label').text(s.name);
+      $(newLineItem).find('.add-side-label').attr('for','mealSide_' + s.id);
+      $(newLineItem).appendTo('#addSideList'); 
+    });
+    $('#addSideModal').modal('show');
+  }
+  $('#addSideModal').on('hide.bs.modal', function () {
+    $('.alert.add-meal').removeClass('slide-down');
+  })
+  $('#addSideModal').on('hidden.bs.modal', function () {
+    $('#addSideList').html("");
+  })
+</script>

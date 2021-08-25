@@ -24,7 +24,7 @@ public class MealService {
   @Autowired
   UserService userService;
 
-  public Set<Integer> getMealIngredientIdsToAdd(Set<String> rawIngredients) {
+  public Set<Integer> getItemIngredientsIdsToAdd(Set<String> rawIngredients) {
     List<String> ingredientsToCreate = new ArrayList<>();
     Set<Integer> existingIngredients = new HashSet<>();
     rawIngredients.forEach(i -> {

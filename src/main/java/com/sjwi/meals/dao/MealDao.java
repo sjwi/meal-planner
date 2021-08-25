@@ -14,12 +14,15 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.sjwi.meals.model.Ingredient;
 import com.sjwi.meals.model.Meal;
 import com.sjwi.meals.model.MealsUser;
+import com.sjwi.meals.model.Side;
 import com.sjwi.meals.model.SqlQueryStore;
 import com.sjwi.meals.model.Week;
+import com.sjwi.meals.model.WeekMeal;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -74,7 +77,7 @@ public class MealDao {
     return jdbcTemplate.query(queryStore.get("getAllWeeks"), r -> {
       List<Week> weeks = new ArrayList<>();
       while (r.next()) {
-        List<Meal> meals = getMealsInWeek(r.getInt("ID"));
+        List<WeekMeal> meals = getMealsInWeek(r.getInt("ID"));
         weeks.add(new Week(r.getInt("ID"), r.getDate("DATE_BEGIN"), r.getDate("DATE_END"), meals));
       }
       return weeks;
@@ -155,7 +158,7 @@ public class MealDao {
   public Week getWeekById(int id) {
     return jdbcTemplate.query(queryStore.get("getWeekById"), new Object[] { id }, r -> {
       r.next();
-      List<Meal> meals = getMealsInWeek(r.getInt("ID"));
+      List<WeekMeal> meals = getMealsInWeek(r.getInt("ID"));
       return new Week(r.getInt("ID"), r.getDate("DATE_BEGIN"), r.getDate("DATE_END"), meals);
     });
   }
@@ -182,6 +185,32 @@ public class MealDao {
         return mealIds.size();
       }
     });
+  }
+
+  private List<Integer> getNMostRecentWeekMeals(int size) {
+    return jdbcTemplate.query(queryStore.get("getNMostRecentWeekMeals"), new Object[] {size}, r -> {
+      List<Integer> weekMealIds = new ArrayList<>();
+      while (r.next())
+        weekMealIds.add(r.getInt("ID"));
+      return weekMealIds;
+    });
+  }
+
+  public void removeIngredientsFromSide(Set<Integer> ingredientsToDelete, Integer sideId) {
+    if (ingredientsToDelete.size() > 0) {
+      List<Integer> ingredientsToDeleteList = new ArrayList<>(ingredientsToDelete);
+      jdbcTemplate.batchUpdate(queryStore.get("deleteIngredientsInSide"), new BatchPreparedStatementSetter() {
+        @Override
+        public void setValues(PreparedStatement ps, int i) throws SQLException {
+          ps.setInt(1, ingredientsToDeleteList.get(i));
+          ps.setInt(2, sideId);
+        }
+        @Override
+        public int getBatchSize() {
+          return ingredientsToDeleteList.size();
+        }
+      });
+    }
   }
 
   public void removeIngredientsFromMeal(Set<Integer> ingredientsToDelete, Integer mealId) {
@@ -215,6 +244,21 @@ public class MealDao {
         }
       });
     }
+  }
+
+  public void addIngredientsToSide(Set<Integer> ingredients, int sideId) {
+    List<Integer> ingredientsToAdd = new ArrayList<>(ingredients);
+    jdbcTemplate.batchUpdate(queryStore.get("insertSideIngredients"), new BatchPreparedStatementSetter() {
+      @Override
+      public void setValues(PreparedStatement ps, int i) throws SQLException {
+        ps.setInt(1, ingredientsToAdd.get(i));
+        ps.setInt(2, sideId);
+      }
+      @Override
+      public int getBatchSize() {
+        return ingredientsToAdd.size();
+      }
+    });
   }
 
   public void addIngredientsToMeal(Set<Integer> ingredients, int mealId) {
@@ -256,6 +300,12 @@ public class MealDao {
     removeTagsFromMeal(tagsToDelete, mealId);
     addIngredientsToMeal(ingredients, mealId);
     addTagsToMeal(tags, mealId);
+  }
+
+  public void editSide(int sideId, String inputSideName, Set<Integer> ingredientsToAdd, Set<Integer> ingredientsToDelete) {
+    jdbcTemplate.update(queryStore.get("updateSide"), new Object[] {inputSideName,sideId});
+    removeIngredientsFromSide(ingredientsToDelete,sideId);
+    addIngredientsToSide(ingredientsToAdd,sideId);
   }
 
   public Set<Integer> createIngredients(List<String> ingredientsToCreate) {
@@ -333,17 +383,38 @@ public class MealDao {
     });
   }
 
-  private List<Meal> getMealsInWeek(int weekId) {
+  private List<WeekMeal> getMealsInWeek(int weekId) {
     return jdbcTemplate.query(queryStore.get("getAllMealsInWeek"), new Object[] { weekId }, r -> {
-      List<Meal> meals = new ArrayList<>();
+      List<WeekMeal> meals = new ArrayList<>();
       while (r.next()) {
         List<Ingredient> ingredients = getIngredientsInMeal(r.getInt("ID"));
-        Date lastEaten = getMealLastEaten(r.getInt("ID"));
         Map<Integer, String> tags = getMealTags(r.getInt("ID"));
-        meals.add(new Meal(r.getInt("ID"), r.getString("NAME"), 0, lastEaten, false, r.getString("RECIPE_URL"),
-            r.getString("NOTES"), ingredients, tags));
+        List<Side> sides = getMealSides(r.getInt("ID"), weekId);
+        List<Ingredient> combinedIngredients = sides.stream()
+          .map(s -> s.getIngredients())
+          .flatMap(List::stream)
+          .collect(Collectors.toList());
+        combinedIngredients.addAll(ingredients);
+        Map<Ingredient,Integer> ingredientMap = new HashMap<>();
+        combinedIngredients.forEach(i -> {
+          if (ingredientMap.containsKey(i))
+            ingredientMap.put(i,ingredientMap.get(i) + 1);
+          else
+            ingredientMap.put(i, 1);
+        });
+        meals.add(new WeekMeal(r.getInt("ID"), r.getString("NAME"),r.getString("RECIPE_URL"),
+            r.getString("NOTES"), ingredientMap, tags, sides));
       }
       return meals;
+    });
+  }
+
+  private List<Side> getMealSides(int mealId, int weekId) {
+    return jdbcTemplate.query(queryStore.get("getMealSides"), new Object[] {mealId, weekId}, r -> {
+      List<Side> sides = new ArrayList<>();
+      while (r.next())
+        sides.add(new Side(r.getInt("ID"),r.getString("NAME"),getIngredientsInSide(r.getInt("ID"))));
+      return sides;
     });
   }
 
@@ -372,6 +443,15 @@ public class MealDao {
     });
   }
 
+  private List<Ingredient> getIngredientsInSide(int sideId) {
+    return jdbcTemplate.query(queryStore.get("getIngredientsInSide"), new Object[] { sideId }, r -> {
+      List<Ingredient> ingredients = new ArrayList<>();
+      while (r.next())
+        ingredients.add(new Ingredient(r.getInt("ID"), r.getString("NAME")));
+      return ingredients;
+    });
+  }
+
   private List<Ingredient> getIngredientsInMeal(int mealId) {
     return jdbcTemplate.query(queryStore.get("getIngredientsInMeal"), new Object[] { mealId }, r -> {
       List<Ingredient> ingredients = new ArrayList<>();
@@ -393,6 +473,61 @@ public class MealDao {
 
   public void updatePreferences(boolean pinFavorites, String sortBy, String sortOrder, String username) {
     jdbcTemplate.update(queryStore.get("updateUserPreferences"), new Object[] {pinFavorites, sortBy, sortOrder, username});
+  }
+
+  public List<Side> getAllSides() {
+    return jdbcTemplate.query(queryStore.get("getAllSides"), r -> {
+      List<Side> sides = new ArrayList<>();
+      while (r.next()) {
+        sides.add(new Side(r.getInt("ID"),r.getString("NAME"),getIngredientsInSide(r.getInt("ID"))));
+      }
+      return sides;
+    });
+  }
+
+  public void createSide(String inputSideName, Set<Integer> createdIngredients) {
+    jdbcTemplate.update(queryStore.get("createSide"),new Object[] {inputSideName});
+    int sideId = getLatestSideId();
+    addIngredientsToSide(createdIngredients, sideId);
+  }
+
+  private int getLatestSideId() {
+    return jdbcTemplate.query(queryStore.get("getLatestSideId"), r -> {
+      r.next();
+      return r.getInt("ID");
+    });
+  }
+
+  public Side getSideById(int id) {
+    return jdbcTemplate.query(queryStore.get("getSideById"), new Object[] {id}, r -> {
+      r.next();
+      return new Side(r.getInt("ID"),r.getString("NAME"),getIngredientsInSide(r.getInt("ID")));
+    });
+  }
+
+  public void deleteSide(int sideId) {
+    jdbcTemplate.update(queryStore.get("deleteSide"), new Object[] { sideId });
+  }
+
+  public void addSidesToMeals(List<Integer> mealIds, Map<Integer, List<Integer>> sidesMap, Integer weekId) {
+    for (Integer mealId: mealIds)
+      if (sidesMap.containsKey(mealId))
+        addSidesToMeal(mealId,weekId,sidesMap.get(mealId));
+  }
+
+  private void addSidesToMeal(Integer mealId, Integer weekId, List<Integer> sideList) {
+    jdbcTemplate.batchUpdate(queryStore.get("addSideToMeal"), new BatchPreparedStatementSetter() {
+      @Override
+      public void setValues(PreparedStatement ps, int i) throws SQLException {
+        ps.setInt(1, mealId);
+        ps.setInt(2, weekId);
+        ps.setObject(3, sideList.get(i));
+      }
+      @Override
+      public int getBatchSize() {
+        return sideList.size();
+      }
+    });
   }
 }
  

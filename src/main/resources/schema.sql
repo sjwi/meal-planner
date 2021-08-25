@@ -54,6 +54,89 @@ INSERT INTO Ingredients (NAME) values
 ('Ingredient 9'),
 ('Ingredient 10');
 
+DROP TABLE IF EXISTS Sides;
+CREATE TABLE Sides (
+  ID int(11) NOT NULL AUTO_INCREMENT,
+  NAME varchar(255),
+  DISABLED BOOLEAN DEFAULT 0,
+  PRIMARY KEY (ID)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
+INSERT INTO Sides (NAME) values
+('Side 1'),
+('Side 2'),
+('Side 3'),
+('Side 4'),
+('Side 5'),
+('Side 6'),
+('Side 7'),
+('Side 8'),
+('Side 9'),
+('Side 10'),
+('Side 11'),
+('Side 12');
+
+DROP TABLE IF EXISTS MealSides;
+CREATE TABLE MealSides (
+  ID int(11) NOT NULL AUTO_INCREMENT,
+  MEAL_ID int(11),
+  SIDE_ID int(11),
+  DISABLED BOOLEAN DEFAULT 0,
+  PRIMARY KEY (ID)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
+INSERT INTO MealSides(MEAL_ID,SIDE_ID) values
+(1,1),
+(1,5),
+(1,9),
+(2,2),
+(2,6),
+(3,10),
+(3,3),
+(3,7),
+(3,2),
+(3,4),
+(3,5),
+(4,4),
+(4,4),
+(4,8),
+(4,9),
+(5,2),
+(6,3),
+(7,3),
+(7,4),
+(8,4),
+(9,5),
+(9,4),
+(10,12),
+(11,10),
+(12,11),
+(13,3),
+(13,4);
+
+DROP TABLE IF EXISTS SideIngredients;
+CREATE TABLE SideIngredients (
+  ID int(11) NOT NULL AUTO_INCREMENT,
+  SIDE_ID int(11),
+  INGREDIENT_ID int(11),
+  DISABLED BOOLEAN DEFAULT 0,
+  PRIMARY KEY (ID)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
+INSERT INTO SideIngredients (SIDE_ID,INGREDIENT_ID) values
+(1,1),
+(2,5),
+(2,9),
+(2,2),
+(4,10),
+(5,3),
+(6,7),
+(7,2),
+(8,4),
+(9,5),
+(10,4),
+(11,4),
+(12,8);
 
 DROP TABLE IF EXISTS MealIngredients;
 CREATE TABLE MealIngredients (
@@ -206,7 +289,7 @@ CREATE TABLE users (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO users (username,firstname,lastname,password,email,enabled,pinFavorites,sort,sortDirection) VALUES 
-('admin','Stephen','Williams','$2a$10$KnRdXb09WIgf1gYwYAj/pO7mB7Rp0i0xejpncp2ZZnlqZW9sj4h/m','stephenjw@fastmail.com',1,1,'CNT','DESC');
+('admin','Demo','User','$2a$10$KnRdXb09WIgf1gYwYAj/pO7mB7Rp0i0xejpncp2ZZnlqZW9sj4h/m','stephenjw@fastmail.com',1,1,'CNT','DESC');
 
 DROP TABLE IF EXISTS authorities;
 CREATE TABLE authorities (

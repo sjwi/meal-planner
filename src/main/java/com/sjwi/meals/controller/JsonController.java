@@ -6,6 +6,7 @@ import java.util.Map;
 import com.sjwi.meals.dao.MealDao;
 import com.sjwi.meals.model.Ingredient;
 import com.sjwi.meals.model.Meal;
+import com.sjwi.meals.model.Side;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +35,12 @@ public class JsonController {
   @ResponseBody
   public List<Ingredient> getAllIngredients() {
     return mealDao.getAllIngredients();
+  }
+
+  @RequestMapping("/json/sides")
+  @ResponseBody
+  public List<Side> getAllSides() {
+    return mealDao.getAllSides();
   }
 
 }
