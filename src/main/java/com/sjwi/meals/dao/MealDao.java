@@ -84,6 +84,17 @@ public class MealDao {
     });
   }
 
+  public List<Week> getNNumberOfWeeks(int n) {
+    return jdbcTemplate.query(queryStore.get("getNNumberOfWeeks"), new Object[] {n}, r -> {
+      List<Week> weeks = new ArrayList<>();
+      while (r.next()) {
+        List<WeekMeal> meals = getMealsInWeek(r.getInt("ID"));
+        weeks.add(new Week(r.getInt("ID"), r.getDate("DATE_BEGIN"), r.getDate("DATE_END"), meals));
+      }
+      return weeks;
+    });
+  }
+
   public Map<Integer, String> getAllTags() {
     return jdbcTemplate.query(queryStore.get("getAllTags"), r -> {
       Map<Integer, String> tags = new HashMap<>();

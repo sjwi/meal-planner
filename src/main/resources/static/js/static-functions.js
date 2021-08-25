@@ -150,7 +150,7 @@ function refreshMealList() {
 
 function refreshWeekList(callback) {
   $.ajax({
-    url: contextpath + 'weeks',
+    url: contextpath + 'weeks?showAll=' + showAllWeeks,
     method: "GET",
     beforeSend: function() {
       $('#weekTable').addClass('loading');

@@ -12,6 +12,9 @@ searchMeals: >
 getAllWeeks: >
   select * from WeeklySchedule where DISABLED = 0 ORDER BY DATE_BEGIN DESC
 
+getNNumberOfWeeks: >
+  select * from WeeklySchedule where DISABLED = 0 ORDER BY DATE_BEGIN DESC LIMIT ?
+
 createWeek: >
   INSERT INTO WeeklySchedule (DATE_BEGIN,DATE_END) values (?,?)
 

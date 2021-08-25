@@ -38,6 +38,11 @@
         <th:block th:replace="dynamic/week :: week(${week},${stat})"></th:block>
       </th:block>
     </ul>
+    <div id="loadAllWeeks" class="row my-2">
+      <div class="col text-center">
+        <button class="btn btn-sm btn-outline-primary">Load all weeks...</button>
+      </div>
+    </div>
   </div>
 </body>
 <div class="create-meal">
@@ -78,6 +83,7 @@
   let sides;
   let mealSidesMap = {};
   let unselecting = false;
+  let showAllWeeks = false;
   $(document).ready(function () {
     refreshIngredients();
     refreshTags();
@@ -88,6 +94,12 @@
     $(this).closest('li').animate({
       left: 0 + 'px'
     }, 200);
+  });
+  $(document).on('click', '#loadAllWeeks', function () {
+    if (confirm('Warning: loading all planned weeks degrades the performance of this page. Are you sure you want to load all weeks?')) {
+      showAllWeeks = true;
+      refreshWeekList(() => $('#loadAllWeeks').hide());
+    }
   });
   $(document).on('click', '.meal-list-fav .far.fa-heart', function () {
     $(this).removeClass('far');
