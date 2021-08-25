@@ -142,7 +142,7 @@ getNMostRecentWeekMeals: >
   SELECT * FROM PlannedMeals order by ID desc LIMIT ?
 
 getMealSides: >
-  SELECT * FROM Sides s JOIN MealSides ms on s.ID = ms.SIDE_ID JOIN PlannedMeals pm on ms.MEAL_ID = pm.ID where pm.MEAL_ID = ? and pm.SCHEDULE_ID = ?
+  SELECT * FROM Sides s JOIN MealSides ms on s.ID = ms.SIDE_ID JOIN PlannedMeals pm on ms.MEAL_ID = pm.ID where pm.MEAL_ID = ? and pm.SCHEDULE_ID = ? where s.DISABLED = 0
 
 addSideToMeal: >
   INSERT INTO MealSides (MEAL_ID,SIDE_ID) values ((select ID From PlannedMeals where MEAL_ID = ? and SCHEDULE_ID = ? ORDER BY ID DESC LIMIT 1),?)
