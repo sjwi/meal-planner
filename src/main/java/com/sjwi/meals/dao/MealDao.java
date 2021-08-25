@@ -387,23 +387,7 @@ public class MealDao {
     return jdbcTemplate.query(queryStore.get("getAllMealsInWeek"), new Object[] { weekId }, r -> {
       List<WeekMeal> meals = new ArrayList<>();
       while (r.next()) {
-        List<Ingredient> ingredients = getIngredientsInMeal(r.getInt("ID"));
-        Map<Integer, String> tags = getMealTags(r.getInt("ID"));
-        List<Side> sides = getMealSides(r.getInt("ID"), weekId);
-        List<Ingredient> combinedIngredients = sides.stream()
-          .map(s -> s.getIngredients())
-          .flatMap(List::stream)
-          .collect(Collectors.toList());
-        combinedIngredients.addAll(ingredients);
-        Map<Ingredient,Integer> ingredientMap = new HashMap<>();
-        combinedIngredients.forEach(i -> {
-          if (ingredientMap.containsKey(i))
-            ingredientMap.put(i,ingredientMap.get(i) + 1);
-          else
-            ingredientMap.put(i, 1);
-        });
-        meals.add(new WeekMeal(r.getInt("ID"), r.getString("NAME"),r.getString("RECIPE_URL"),
-            r.getString("NOTES"), ingredientMap, tags, sides));
+        meals.add(buildWeekMealFromResultSet(r, weekId));
       }
       return meals;
     });
@@ -524,7 +508,7 @@ public class MealDao {
         addSidesToMeal(mealId,weekId,sidesMap.get(mealId));
   }
 
-  private void addSidesToMeal(Integer mealId, Integer weekId, List<Integer> sideList) {
+  public void addSidesToMeal(Integer mealId, Integer weekId, List<Integer> sideList) {
     jdbcTemplate.batchUpdate(queryStore.get("addSideToMeal"), new BatchPreparedStatementSetter() {
       @Override
       public void setValues(PreparedStatement ps, int i) throws SQLException {
@@ -537,6 +521,36 @@ public class MealDao {
         return sideList.size();
       }
     });
+  }
+
+  public WeekMeal getWeekMealById(int id, int weekId) {
+    return jdbcTemplate.query(queryStore.get("getWeekMealById"), new Object[] {id, weekId}, r -> {
+      r.next();
+      return buildWeekMealFromResultSet(r, weekId);
+    });
+  }
+  private WeekMeal buildWeekMealFromResultSet(ResultSet r, int weekId) throws SQLException {
+    List<Ingredient> ingredients = getIngredientsInMeal(r.getInt("ID"));
+    Map<Integer, String> tags = getMealTags(r.getInt("ID"));
+    List<Side> sides = getMealSides(r.getInt("ID"), weekId);
+    List<Ingredient> combinedIngredients = sides.stream()
+      .map(s -> s.getIngredients())
+      .flatMap(List::stream)
+      .collect(Collectors.toList());
+    combinedIngredients.addAll(ingredients);
+    Map<Ingredient,Integer> ingredientMap = new HashMap<>();
+    combinedIngredients.forEach(i -> {
+      if (ingredientMap.containsKey(i))
+        ingredientMap.put(i,ingredientMap.get(i) + 1);
+      else
+        ingredientMap.put(i, 1);
+    });
+    return new WeekMeal(r.getInt("ID"), r.getString("NAME"),r.getString("RECIPE_URL"),
+      r.getString("NOTES"), ingredientMap, tags, sides);
+  }
+
+  public void removeSideFromWeekMeal(int sideId, int mealId, int weekId) {
+    jdbcTemplate.update(queryStore.get("removeSideFromWeekMeal"),new Object[] {mealId, weekId, sideId});
   }
 }
  

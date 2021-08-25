@@ -62,6 +62,25 @@ function addSelectedMealsToWeek() {
   });
 }
 
+function removeSideFromWeekMeal(sideId,mealId,weekId) {
+  $.ajax({
+    url: contextpath + 'week-meal/remove-side-from-meal',
+    method: "DELETE",
+    data : {
+      sideId: sideId,
+      mealId: mealId,
+      weekId: weekId
+    },
+    success: function () {
+      refreshWeekList(() => focusWeekMeal(weekId, mealId));
+    }
+  });
+}
+function focusWeekMeal(weekId, mealId) {
+  if (weekId != 1)
+    $('#weekAccordionHeader_' + weekId).click();
+  $('#accordion_header_sub_' + mealId + '_' + weekId).click()
+}
 function removeMealFromWeek(mealId, weekId) {
   $.ajax({
     url: contextpath + 'meal/remove-from-week',
@@ -74,6 +93,7 @@ function removeMealFromWeek(mealId, weekId) {
       $('#weekAccordion_' + weekId + ' [id^=accordion_header_sub_' + mealId + ']').remove();
       $('#weekAccordion_' + weekId + ' .accordion-sub-' + mealId).remove();
       refreshMeal(mealId);
+      refreshWeekList();
     }
   });
 }
@@ -101,6 +121,7 @@ function deleteSide(id) {
         refreshSides();
         $('#sideAccordionHeader_' + id).remove();
         $('#sideAccordion_' + id).remove();
+        refreshWeekList();
         // $('[id^=accordion_header_sub_' + id + ']').remove();
         // $('.accordion-sub-' + id).remove();
       }
@@ -127,7 +148,7 @@ function refreshMealList() {
   search();
 }
 
-function refreshWeekList() {
+function refreshWeekList(callback) {
   $.ajax({
     url: contextpath + 'weeks',
     method: "GET",
@@ -138,7 +159,12 @@ function refreshWeekList() {
       $('#weekTable').removeClass('loading');
       $('#weekTable').html(data);
       $('.sub-meal-list').unbind();
-      $('.sub-meal-list').listSwipe();
+      $('.sub-meal-list').listSwipe({
+        itemSelector: '> li.week-meal-item'
+      });
+      $('.week-meal-sides').unbind();
+      $('.week-meal-sides').listSwipe();
+      typeof callback === 'function' && callback();
     }
   });
 }
@@ -159,7 +185,6 @@ function refreshSideList() {
 
 function refreshMeal(id) {
   refreshMealDetails(id);
-  refreshMealSubDetails(id);
   refreshMealName(id);
 }
 
@@ -173,19 +198,6 @@ function refreshMealDetails(mealId) {
     success: function (data) {
       $('#accordion_' + mealId).replaceWith(data);
       $('#accordion_' + mealId).removeClass('loading');
-    }
-  });
-}
-function refreshMealSubDetails(mealId) {
-  $.ajax({
-    url: contextpath + 'meal/details/' + mealId + '?view=dynamic/meal-sub-details',
-    method: "GET",
-    beforeSend: function() {
-      $('.accordion-sub-' + mealId).addClass('loading');
-    },
-    success: function (data) {
-      $('.accordion-sub-' + mealId).replaceWith(data);
-      $('.accordion-sub-' + mealId).removeClass('loading');
     }
   });
 }

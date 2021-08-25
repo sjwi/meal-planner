@@ -8,6 +8,8 @@
       <div class="modal-body pt-0">
         <form id="addSideForm" th:action="@{/meal/add-sides}" method="POST">
           <input type="hidden" name="addSideMealId" id="addSideMealId" value="0">
+          <input type="hidden" name="addSidePostUpdates" id="addSidePostUpdates" value="false">
+          <input type="hidden" name="addSideWeekId" id="addSideWeekId" value="0">
           <div class="scroll container border-top border-bottom">
             <ul class="list-group list-group-flush" id="addSideList">
             </ul>
@@ -19,7 +21,7 @@
         <li class="list-group-item">
           <div class="row py-2">
             <div class="col-1 round">
-              <input type="checkbox" class="form-check-input add-side-checkbox"/>
+              <input type="checkbox" class="form-check-input add-side-checkbox" name="sidesToAdd"/>
               <label class="add-side-checkbox-label"></label>
             </div>
             <div class="col-11 ps-3">
@@ -35,17 +37,37 @@
 <script>
   $('#addSideForm').on('submit',function(e){
     e.preventDefault();
-    let mealId = $('#addSideMealId').val();
-    let sidesToAdd = $('#addSideList .add-side-checkbox:checked').map(function(){
-      return $(this).val();
-    }).get();
-    mealSidesMap[mealId] = sidesToAdd;
-    $('#addSideModal').modal('hide');
+    if ($('#addSidePostUpdates').val() == "true") {
+      var dataString = $(this).serialize();
+      $.ajax({
+        url: $(this).attr("action"),
+        type: "POST",
+        method: "POST",
+        data: dataString,
+        beforeSend: function() {
+          $('#addSideSubmitBtn').prop('disabled',true);
+        },
+        success: function () {
+          refreshWeekList(() => focusWeekMeal($('#addSideWeekId').val(), $('#addSideMealId').val()));
+        },
+        complete: function() {
+          $('#addSideSubmitBtn').prop('disabled',false);
+          $('#addSideModal').modal('hide');
+        }
+      });
+    } else {
+      let mealId = $('#addSideMealId').val();
+      let sidesToAdd = $('#addSideList .add-side-checkbox:checked').map(function(){
+        return $(this).val();
+      }).get();
+      mealSidesMap[mealId] = sidesToAdd;
+      $('#addSideModal').modal('hide');
+    }
   });
-  async function addSide(id) {
+  async function addSide(mealId, weekId) {
     $('.alert.add-meal').addClass('slide-down');
-    $('#addSideMealId').val(id);
-    $('#addSideModal .modal-title').html("Choose your sides for " + $('#mealName_' + id).text());
+    $('#addSideMealId').val(mealId);
+    $('#addSideModal .modal-title').html("Choose your sides for " + $('#mealName_' + mealId).text());
     await sides.forEach((s) => {
       var newLineItem = $('#sideRowTemplate li').clone()
       $(newLineItem).find('.add-side-checkbox').val(s.id);
@@ -55,6 +77,13 @@
       $(newLineItem).find('.add-side-label').attr('for','mealSide_' + s.id);
       $(newLineItem).appendTo('#addSideList'); 
     });
+    if (weekId) {
+      $('#addSidePostUpdates').val(true);
+      $('#addSideWeekId').val(weekId);
+      $('#weekMealSideList_' + weekId + '_' + mealId + ' li').each(function(){
+        $('#addSideList #mealSide_' + $(this).data('target')).prop('checked',true);
+      })
+    }
     $('#addSideModal').modal('show');
   }
   $('#addSideModal').on('hide.bs.modal', function () {
@@ -62,5 +91,6 @@
   })
   $('#addSideModal').on('hidden.bs.modal', function () {
     $('#addSideList').html("");
+    $('#addSidePostUpdates').val("false");
   })
 </script>

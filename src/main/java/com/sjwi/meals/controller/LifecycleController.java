@@ -58,6 +58,22 @@ public class LifecycleController {
         return mealDao.getWeekById(weekId);
     }
     
+    @RequestMapping(value = "/meal/add-sides", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.OK)
+    public void addSidesToMeal(@RequestParam Integer addSideWeekId, @RequestParam Integer addSideMealId, 
+      @RequestParam(name = "sidesToAdd", defaultValue = "") List<Integer> sidesToAdd) {
+        System.out.println(sidesToAdd);
+        List<Integer> existingSideIds = mealDao.getWeekById(addSideWeekId).getMeals().stream()
+          .filter(m -> m.getId() == addSideMealId)
+          .findFirst().get().getSides().stream()
+          .map(s -> s.getId())
+          .collect(Collectors.toList());
+        List<Integer> sidesToRemove = new ArrayList<>(existingSideIds);
+        sidesToRemove.removeAll(sidesToAdd);
+        sidesToAdd.removeAll(existingSideIds);
+        sidesToRemove.forEach(sId -> mealDao.removeSideFromWeekMeal(sId,addSideMealId,addSideWeekId));
+        mealDao.addSidesToMeal(addSideMealId,addSideWeekId, sidesToAdd);
+    }
     @RequestMapping(value = "/week/delete/{id}", method = RequestMethod.DELETE)
     @ResponseStatus(HttpStatus.OK)
     public void deleteWeek(@PathVariable int id) {
@@ -86,6 +102,12 @@ public class LifecycleController {
     @ResponseStatus(HttpStatus.OK)
     public void removeMealFromWeek(@RequestParam int mealId, @RequestParam int weekId) {
       mealDao.removeMealFromWeek(mealId, weekId);
+    }
+
+    @RequestMapping(value = "week-meal/remove-side-from-meal", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.OK)
+    public void removeSideFromWeekMeal(@RequestParam int sideId,@RequestParam int mealId, @RequestParam int weekId) {
+      mealDao.removeSideFromWeekMeal(sideId,mealId, weekId);
     }
 
     @RequestMapping(value = "/meal/create", method = RequestMethod.POST)

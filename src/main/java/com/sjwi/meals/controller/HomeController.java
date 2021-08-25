@@ -147,4 +147,11 @@ public class HomeController {
     mv.addObject("meal", mealDao.getMealById(id));
     return mv;
   }
+
+  @RequestMapping("/week-meal/details/{id}")
+  public ModelAndView getWeekMealDetails(@PathVariable int id, @RequestParam String view, @RequestParam int weekId) {
+    ModelAndView mv = new ModelAndView(view);
+    mv.addObject("meal", mealDao.getWeekMealById(id,weekId));
+    return mv;
+  }
 }

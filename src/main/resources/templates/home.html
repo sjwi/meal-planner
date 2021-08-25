@@ -168,7 +168,10 @@
     leftAction: false,
     itemSelector: '> li.week-item'
   });
-  $('.sub-meal-list').listSwipe();
+  $('.sub-meal-list').listSwipe({
+    itemSelector: '> li.week-meal-item'
+  });
+  $('.week-meal-sides').listSwipe();
 
   const tab = new URLSearchParams(window.location.hash.substr(1)).get('tab');
   if (tab == 'weeks') {
