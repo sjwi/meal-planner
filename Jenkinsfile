@@ -24,7 +24,7 @@ pipeline {
       steps {
         sh '''
           git fetch
-          git checkout origin/demo -- src/main/java/com/sjwi/meals/config/LandingPageSEssionInitializer.java
+          git checkout origin/demo -- src/main/java/com/sjwi/meals/config/LandingPageSessionInitializer.java
           git checkout origin/demo -- src/main/resources/application.properties
         '''
       }
