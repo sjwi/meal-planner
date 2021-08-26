@@ -58,12 +58,7 @@ public class OAuthManager {
     parameterMap.put("grant_type", "authorization_code");
     parameterMap.put("redirect_uri", redirectUri);
     parameterMap.put("client_id", clientId);
-    String access_token_url = tokenUrl;
-    try {
-      access_token_url += ParameterStringBuilder.getParamsString(parameterMap);
-    } catch (Exception e) {
-      System.out.println("uh oh");
-    }
+    String access_token_url = tokenUrl + ParameterStringBuilder.getParamsString(parameterMap);
     response = restTemplate.exchange(access_token_url, HttpMethod.POST, request, String.class);
     return response.getBody();
   }

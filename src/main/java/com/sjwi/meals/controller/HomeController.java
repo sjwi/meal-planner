@@ -98,7 +98,7 @@ public class HomeController {
   }
 
   @RequestMapping(value = "/oauth2/login", method = RequestMethod.GET)
-  public ModelAndView krogerLogin(@RequestParam String code) throws ServletException {
+  public ModelAndView krogerLogin(@RequestParam String code) throws Exception {
 
     String response = oauthManager.getOAuthToken(code);
 
