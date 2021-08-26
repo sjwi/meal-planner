@@ -1,9 +1,9 @@
 package com.sjwi.meals.service.security;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
+import com.google.gson.Gson;
+import com.sjwi.meals.model.TokenRequest;
 import com.sjwi.meals.service.ParameterStringBuilder;
 
 import org.apache.commons.codec.binary.Base64;
@@ -49,17 +49,15 @@ public class OAuthManager {
 
     HttpHeaders headers = new HttpHeaders();
     headers.setAccept(Arrays.asList(MediaType.ALL));
+    headers.setContentType(MediaType.APPLICATION_JSON);
     headers.add("Authorization", "Basic " + encodedCredentials);
 
-    HttpEntity<String> request = new HttpEntity<String>(headers);
 
-    Map<String, String> parameterMap = new HashMap<>();
-    parameterMap.put("code", code);
-    parameterMap.put("grant_type", "authorization_code");
-    parameterMap.put("redirect_uri", redirectUri);
-    parameterMap.put("client_id", clientId);
-    String access_token_url = tokenUrl + "?" + ParameterStringBuilder.getParamsString(parameterMap);
-    response = restTemplate.exchange(access_token_url, HttpMethod.POST, request, String.class);
+    TokenRequest payload = new TokenRequest(code,clientId,redirectUri);
+    new Gson().toJson(payload);
+
+    HttpEntity<String> request = new HttpEntity<String>(new Gson().toJson(payload),headers);
+    response = restTemplate.exchange(tokenUrl, HttpMethod.POST, request, String.class);
     return response.getBody();
   }
 
