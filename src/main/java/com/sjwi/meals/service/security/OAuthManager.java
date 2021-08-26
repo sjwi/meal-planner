@@ -1,7 +1,20 @@
 package com.sjwi.meals.service.security;
 
+import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.apache.commons.codec.binary.Base64;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.ModelAndView;
 
 @Component
 public class OAuthManager {
@@ -23,10 +36,6 @@ public class OAuthManager {
 
   @Value("${meals.auth.scopes}")
   String scopes;
-
-  public String getAuthCode() {
-    return null;
-  }
 
   public String getOAuthToken(String code) {
     ResponseEntity<String> response = null;
