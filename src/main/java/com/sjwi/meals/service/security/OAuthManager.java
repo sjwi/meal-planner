@@ -57,7 +57,7 @@ public class OAuthManager {
     new Gson().toJson(payload);
 
     HttpEntity<String> request = new HttpEntity<String>(new Gson().toJson(payload),headers);
-    response = restTemplate.exchange(tokenUrl, HttpMethod.POST, request, String.class);
+    response = restTemplate.postForEntity(tokenUrl, request, String.class);
     return response.getBody();
   }
 
