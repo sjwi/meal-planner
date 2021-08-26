@@ -49,7 +49,7 @@ public class OAuthManager {
 
     HttpHeaders headers = new HttpHeaders();
     headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-    headers.add("Authorization", "Bearer " + encodedCredentials);
+    headers.add("Authorization", "Basic " + encodedCredentials);
 
     HttpEntity<String> request = new HttpEntity<String>(headers);
 
@@ -57,6 +57,7 @@ public class OAuthManager {
     access_token_url += "?code=" + code;
     access_token_url += "&grant_type=authorization_code";
     access_token_url += "&redirect_uri=" + redirectUri;
+    access_token_url += "&client_id=" + clientId;
     response = restTemplate.exchange(access_token_url, HttpMethod.POST, request, String.class);
     return response.getBody();
   }
