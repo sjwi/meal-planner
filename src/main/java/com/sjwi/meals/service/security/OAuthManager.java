@@ -52,10 +52,10 @@ public class OAuthManager {
 
     HttpEntity<String> request = new HttpEntity<String>(headers);
 
-    String access_token_url = "http://localhost:8080/oauth/token";
+    String access_token_url = tokenUrl;
     access_token_url += "?code=" + code;
     access_token_url += "&grant_type=authorization_code";
-    access_token_url += "&redirect_uri=http://localhost:8090/showEmployees";
+    access_token_url += "&redirect_uri=" + redirectUri;
     response = restTemplate.exchange(access_token_url, HttpMethod.POST, request, String.class);
     return response.getBody();
   }
