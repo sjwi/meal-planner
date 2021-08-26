@@ -43,12 +43,14 @@ public class HomeController {
   @Autowired
   AuthenticationService authenticationService;
 
+  private static final int DEFAULT_NUMBER_OF_WEEKS = 25;
+
   @RequestMapping("/")
   public ModelAndView homeController(Authentication auth) {
     Map<String, String> preferences  = ((MealsUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPreferences();
     // Map<String, String> preferences = ((MealsUser) auth.getPrincipal()).getPreferences();
     ModelAndView mv = new ModelAndView("home");
-    List<Week> weeks = mealDao.getAllWeeks();
+    List<Week> weeks = mealDao.getNNumberOfWeeks(DEFAULT_NUMBER_OF_WEEKS);
     mv.addObject("meals", mealDao.getAllMeals(preferences));
     mv.addObject("sides", mealDao.getAllSides());
     mv.addObject("weeks", weeks);
@@ -100,16 +102,22 @@ public class HomeController {
   }
 
   @RequestMapping("/weeks")
-  public ModelAndView weeks() {
+  public ModelAndView weeks(@RequestParam boolean showAll) {
     ModelAndView mv = new ModelAndView("home :: weekList");
-    mv.addObject("weeks", mealDao.getAllWeeks());
+    if (showAll)
+      mv.addObject("weeks", mealDao.getAllWeeks());
+    else 
+      mv.addObject("weeks", mealDao.getNNumberOfWeeks(DEFAULT_NUMBER_OF_WEEKS));
     return mv;
   }
 
   @RequestMapping("/sides")
-  public ModelAndView sides() {
+  public ModelAndView sides(@RequestParam(required=false) String searchTerm) {
     ModelAndView mv = new ModelAndView("home :: sideList");
-    mv.addObject("sides", mealDao.getAllSides());
+    if (searchTerm != null && !searchTerm.trim().isEmpty())
+      mv.addObject("sides", mealDao.searchSides(searchTerm));
+    else
+      mv.addObject("sides", mealDao.getAllSides());
     return mv;
   }
 

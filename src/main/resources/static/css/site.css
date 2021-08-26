@@ -3,8 +3,37 @@
   margin-left: 0 !important;
   margin-right: 0 !important;
 }
+.navbar {
+  position: fixed !important;
+  display: block;
+  width: 100%;
+  transition: top 0.3s;
+  z-index: 50;
+}
 .nav-link {
   font-size: 1.5rem;
+}
+.dataTables_scrollBody{
+  overflow-x:hidden !important;
+  border-bottom: 0 !important;
+}
+.dataTables_filter {
+  text-align: right !important;
+}
+.dataTables_scrollHead {
+  display:none !important;
+}
+.dataTables_scrollBody::-webkit-scrollbar {
+  display: none;
+}
+.page-container, .search-row {
+  padding-top: 111px;
+}
+.search-row {
+  position: fixed;
+  z-index: 1;
+  width: 100%;
+  transition: top 0.3s;
 }
 .alert.add-meal {
   transition-duration: .5s;
@@ -35,9 +64,11 @@
   right:-200px;
   z-index:1040;
   bottom:-.25rem;
+  opacity:0;
 }
 .add-side-alert.show {
   right:0px;
+  opacity:1;
 }
 .create-meal, .create-side {
   transition-duration: .5s;

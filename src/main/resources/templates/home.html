@@ -23,12 +23,38 @@
       <th:block th:fragment="mealList" th:each="meal:${meals}">
         <th:block th:replace="dynamic/meal :: meal(${meal})"></th:block>
       </th:block>
+      <th:block th:if="${#lists.size(meals) == 0}">
+        <div class="row my-3" id="noMealsMessage">
+          <div class="col text-center">
+            <h4 class="text-dark">You don't have any entr&eacute;es yet!</h4>
+            <h6 class="text-dark">Click the blue button on the bottom right to create a new entr&eacute;e.</h6>
+          </div>
+        </div>
+      </th:block>
     </ul>
   </div>
   <div id="sidesContainer" class="container page-container collapse">
+    <div class="row">
+      <div class="col-12 mt-1 mb-0">
+        <div class="input-group">
+          <input id="sideSearchBox" type="search" class="form-control" placeholder="Search" aria-label="Search"/>
+          <button id="sideSearchBtn" type="submit" class="input-group-text border-1" data-toggle="modal" data-title="Filter results">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </div>
     <ul class="list-group list-group-flush item-list" id="sideTable">
       <th:block th:fragment="sideList" th:each="side:${sides}">
         <th:block th:replace="dynamic/side :: side(${side})"></th:block>
+      </th:block>
+      <th:block th:if="${#lists.size(sides) == 0}">
+        <div class="row my-3" id="noSidesMessage">
+          <div class="col text-center">
+            <h4 class="text-dark">You don't have any sides yet!</h4>
+            <h6 class="text-dark">Click the green button on the bottom right to create a new side.</h6>
+          </div>
+        </div>
       </th:block>
     </ul>
   </div>
@@ -38,6 +64,19 @@
         <th:block th:replace="dynamic/week :: week(${week},${stat})"></th:block>
       </th:block>
     </ul>
+    <div th:if="${#lists.size(weeks) > 14}" id="loadAllWeeks" class="row my-2">
+      <div class="col text-center">
+        <button class="btn btn-sm btn-outline-primary">Load all weeks...</button>
+      </div>
+    </div>
+    <th:block th:if="${#lists.size(weeks) == 0}">
+      <div class="row my-3" id="noWeeksMessage">
+        <div class="col text-center">
+          <h4 class="text-dark">You haven't planned any weeks yet!</h4>
+          <h6 class="text-dark">Go to the <a href="#tab=meals" id="mealsTabDirect">Entr&eacute;es tab</a> to begin planning a week.</h6>
+        </div>
+      </div>
+    </th:block>
   </div>
 </body>
 <div class="create-meal">
@@ -78,16 +117,25 @@
   let sides;
   let mealSidesMap = {};
   let unselecting = false;
+  let showAllWeeks = false;
   $(document).ready(function () {
     refreshIngredients();
     refreshTags();
     refreshSides();
+    addScrollListener(-111, 111);
   });
 
+  $(document).on('click', '#mealsTabDirect', function () {
+    $('#mealNavLink').click();
+  });
   $(document).on('click', 'button.action', function () {
     $(this).closest('li').animate({
       left: 0 + 'px'
     }, 200);
+  });
+  $(document).on('click', '#loadAllWeeks', function () {
+    showAllWeeks = true;
+    refreshWeekList(() => $('#loadAllWeeks').hide());
   });
   $(document).on('click', '.meal-list-fav .far.fa-heart', function () {
     $(this).removeClass('far');
@@ -140,6 +188,12 @@
     } else {
       $('.alert.add-meal').removeClass('display');
     }
+  });
+  $('#sideSearchBtn').on('click',function(){
+    $('#sideSearchBox').trigger('search');
+  })
+  $('#sideSearchBox').on('search',function(){
+    refreshSideList();
   });
   $('#searchBox').on('search',function(){
     search();

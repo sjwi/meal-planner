@@ -1,6 +1,6 @@
 <th:block th:fragment="mealSubDetails(meal)">
   <li th:classappend="${'accordion-sub-' + meal.id}" th:attr="data-parent=${'#subMealList_' + week.id}"
-    class="container px-4 bg-secondary accordion-collapse collapse pb-2">
+    class="container px-4 bg-secondary accordion-collapse collapse">
     <h6 th:if="${#lists.size(meal.sides) > 0}" class="mt-2">Sides</h6>
     <div th:if="${#lists.size(meal.sides) > 0}" class="row no-gutters">
       <div class="col">
@@ -14,9 +14,9 @@
         </ul>
       </div>
     </div>
-    <h6 th:if="${#maps.size(meal.ingredients) > 0}" class="mt-2">Ingredients</h6>
+    <h6 th:if="${#maps.size(meal.ingredients) > 0}" class="my-2">Ingredients</h6>
     <div th:if="${#maps.size(meal.ingredients) > 0}"
-      class="row no-gutters">
+      class="row no-gutters my-2">
       <div class="col">
         <span th:each="ingredient : ${meal.ingredients}" class="badge rounded-pill bg-dark px-2 py-2 mx-1 my-1 meal-ingredient position-relative"
           th:attr="data-target=${ingredient.key.id}">
@@ -25,15 +25,15 @@
         </span>
       </div>
     </div>
-    <h6 th:if="${#maps.size(meal.tags) > 0}" class="mt-2">Tags</h6>
-    <div th:if="${#maps.size(meal.tags) > 0}" class="row no-gutters">
+    <h6 th:if="${#maps.size(meal.tags) > 0}" class="my-2">Tags</h6>
+    <div th:if="${#maps.size(meal.tags) > 0}" class="row no-gutters my-2">
       <div class="col">
           <span class="badge rounded-pill bg-info px-2 py-2 mx-1 my-1 meal-tag" th:each="tag : ${meal.tags}"
             th:attr="data-target=${tag.key}" th:text="${tag.value}"></span>
       </div>
     </div>
-    <h6 th:if="${meal.notes != null && meal.notes != ''}" class="mt-2">Notes</h6>
-    <div th:if="${meal.notes != null}" class="row no-gutters">
+    <h6 th:if="${meal.notes != null && meal.notes != ''}" class="my-2">Notes</h6>
+    <div th:if="${meal.notes != null}" class="row no-gutters my-2">
       <div class="col px-4">
           <p th:id="${'mealNotes_' + meal.id}" th:text="${meal.notes}" class="text-prewrap text-small mb-0"></p>
       </div>
