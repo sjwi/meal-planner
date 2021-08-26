@@ -44,6 +44,7 @@ public class OAuthManager {
     RestTemplate restTemplate = new RestTemplate();
 
     String credentials = clientId +  ":" + clientSecret;
+    System.out.println(credentials);
     String encodedCredentials = new String(Base64.encodeBase64(credentials.getBytes()));
 
     HttpHeaders headers = new HttpHeaders();
