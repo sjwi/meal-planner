@@ -1,6 +1,7 @@
 package com.sjwi.meals.service.security;
 
 import java.util.Arrays;
+import java.net.URLEncoder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.apache.commons.codec.binary.Base64;
@@ -37,7 +38,7 @@ public class OAuthManager {
   @Value("${meals.auth.scopes}")
   String scopes;
 
-  public String getOAuthToken(String code) {
+  public String getOAuthToken(String code) throws java.io.UnsupportedEncodingException {
     ResponseEntity<String> response = null;
     System.out.println("Authorization Code------" + code);
 
@@ -56,7 +57,7 @@ public class OAuthManager {
     String access_token_url = tokenUrl;
     access_token_url += "?code=" + code;
     access_token_url += "&grant_type=authorization_code";
-    access_token_url += "&redirect_uri=" + redirectUri;
+    access_token_url += "&redirect_uri=" + URLEncoder.encode(redirectUri, "UTF-8");
     access_token_url += "&client_id=" + clientId;
     response = restTemplate.exchange(access_token_url, HttpMethod.POST, request, String.class);
     return response.getBody();
