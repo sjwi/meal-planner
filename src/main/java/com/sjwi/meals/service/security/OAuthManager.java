@@ -48,7 +48,7 @@ public class OAuthManager {
     String encodedCredentials = new String(Base64.encodeBase64(credentials.getBytes()));
 
     HttpHeaders headers = new HttpHeaders();
-    headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+    headers.setAccept(Arrays.asList(MediaType.ALL));
     headers.add("Authorization", "Basic " + encodedCredentials);
 
     HttpEntity<String> request = new HttpEntity<String>(headers);
