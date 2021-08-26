@@ -1,21 +1,18 @@
 package com.sjwi.meals.service.security;
 
-import java.util.Arrays;
 import java.net.URLEncoder;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import java.util.Arrays;
+
 import org.apache.commons.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Value;
+import java.io.UnsupportedEncodingException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.ModelAndView;
 
 @Component
 public class OAuthManager {
@@ -38,7 +35,7 @@ public class OAuthManager {
   @Value("${meals.auth.scopes}")
   String scopes;
 
-  public String getOAuthToken(String code) throws java.io.UnsupportedEncodingException {
+  public String getOAuthToken(String code) throws UnsupportedEncodingException{
     ResponseEntity<String> response = null;
     System.out.println("Authorization Code------" + code);
 
