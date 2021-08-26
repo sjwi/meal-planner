@@ -14,8 +14,9 @@ import com.sjwi.meals.dao.MealDao;
 import com.sjwi.meals.model.Ingredient;
 import com.sjwi.meals.model.MealsUser;
 import com.sjwi.meals.model.Week;
-import com.sjwi.meals.service.AuthenticationService;
 import com.sjwi.meals.service.MealService;
+import com.sjwi.meals.service.security.AuthenticationService;
+import com.sjwi.meals.service.security.OAuthManager;
 import com.sjwi.meals.util.WeekGenerator;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,9 @@ public class HomeController {
 
   @Autowired
   MealService mealService;
+
+  @Autowired
+  OAuthManager oauthManager;
 
   @Autowired
   AuthenticationService authenticationService;
@@ -90,6 +94,15 @@ public class HomeController {
       @RequestParam(name = "password", required = true) String password) throws ServletException {
     request.login(username, password);
     authenticationService.generateCookieToken(request, response, username);
+    return new ModelAndView("redirect:/");
+  }
+
+  @RequestMapping(value = "/oauth2/login", method = RequestMethod.GET)
+  public ModelAndView krogerLogin(@RequestParam String code) throws ServletException {
+
+    String response = oauthManager.getOAuthToken(code);
+
+    System.out.println("Access Token Response ---------" + response);
     return new ModelAndView("redirect:/");
   }
 

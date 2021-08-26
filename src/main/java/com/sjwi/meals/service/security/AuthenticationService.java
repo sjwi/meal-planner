@@ -1,4 +1,4 @@
-package com.sjwi.meals.service;
+package com.sjwi.meals.service.security;
 
 import java.util.Arrays;
 import java.util.Random;
