@@ -34,7 +34,7 @@ public class LandingPageSessionInitializer {
 				return;
     }
     if (request.getCookies() != null) {
-      Optional<Cookie> cookie = Arrays.stream(request.getCookies()).filter(c -> com.sjwi.meals.service.AuthenticationService.STORED_COOKIE_TOKEN_KEY.equals(c.getName())).findFirst();
+      Optional<Cookie> cookie = Arrays.stream(request.getCookies()).filter(c -> com.sjwi.meals.service.security.AuthenticationService.STORED_COOKIE_TOKEN_KEY.equals(c.getName())).findFirst();
       if (cookie.isPresent()) {
         AbstractMap.SimpleEntry<String,String> token = mealDao.getStoredCookieToken(cookie.get().getValue());
         if (token.getValue() != null) {

@@ -7,6 +7,13 @@
       <a class="dropdown-toggle user-toggle text-white text-decoration-none" data-toggle="dropdown" style="font-size:.7rem; line-height:1" sec:authentication="principal.fullName"></a>
       <ul class="dropdown-menu dropdown-menu-right nav-dropdown-menu py-1">
         <li><a class="dropdown-item logout" href="javascript:void(0)" onclick="$('#logoutForm').submit()">Logout</a></li>
+        <li>
+          <a th:href="${@environment.getProperty('meals.auth.auth_url') +
+            '?response_type=code&client_id=' + @environment.getProperty('meals.auth.client_id') +
+            '&redirect_uri=' + @environment.getProperty('meals.auth.redirect_uri') +
+            '&scope=' +  #strings.replace(@environment.getProperty('meals.auth.scopes'),'&',' ') +
+            '&state=STATE'}" class="btn btn-primary w-100">Kroger Login</a>
+        </li>
       </ul>
       <form id="logoutForm" th:attr="action=@{/logout}" method="POST"></form>
     </div>
