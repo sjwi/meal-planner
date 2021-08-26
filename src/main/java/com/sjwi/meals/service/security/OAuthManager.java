@@ -49,7 +49,7 @@ public class OAuthManager {
 
     HttpHeaders headers = new HttpHeaders();
     headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-    headers.add("Authorization", "Basic " + encodedCredentials);
+    headers.add("Authorization", "Bearer " + encodedCredentials);
 
     HttpEntity<String> request = new HttpEntity<String>(headers);
 
