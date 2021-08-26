@@ -3,8 +3,24 @@
   margin-left: 0 !important;
   margin-right: 0 !important;
 }
+.navbar {
+  position: fixed !important;
+  display: block;
+  width: 100%;
+  transition: top 0.3s;
+  z-index: 1;
+}
 .nav-link {
   font-size: 1.5rem;
+}
+.page-container, .search-row {
+  padding-top: 111px;
+}
+.search-row {
+  position: fixed;
+  z-index: 1;
+  width: 100%;
+  transition: top 0.3s;
 }
 .alert.add-meal {
   transition-duration: .5s;

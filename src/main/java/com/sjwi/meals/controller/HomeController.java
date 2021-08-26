@@ -112,9 +112,12 @@ public class HomeController {
   }
 
   @RequestMapping("/sides")
-  public ModelAndView sides() {
+  public ModelAndView sides(@RequestParam(required=false) String searchTerm) {
     ModelAndView mv = new ModelAndView("home :: sideList");
-    mv.addObject("sides", mealDao.getAllSides());
+    if (searchTerm != null && !searchTerm.trim().isEmpty())
+      mv.addObject("sides", mealDao.searchSides(searchTerm));
+    else
+      mv.addObject("sides", mealDao.getAllSides());
     return mv;
   }
 

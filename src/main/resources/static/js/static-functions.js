@@ -78,7 +78,7 @@ function removeSideFromWeekMeal(sideId,mealId,weekId) {
   });
 }
 function focusWeekMeal(weekId, mealId) {
-  if (weekId != 1)
+  if (!$('#weekAccordion_' + weekId).is(":visible"))
     $('#weekAccordionHeader_' + weekId).click();
   $('#accordion_header_sub_' + mealId + '_' + weekId).click()
 }
@@ -172,7 +172,7 @@ function refreshWeekList(callback) {
 
 function refreshSideList() {
   $.ajax({
-    url: contextpath + 'sides',
+    url: contextpath + 'sides?searchTerm=' + $('#sideSearchBox').val(),
     method: "GET",
     beforeSend: function() {
       $('#sideTable').addClass('loading');
@@ -253,4 +253,27 @@ function refreshIngredients() {
       ingredients = data;
     }
   });
+}
+
+function addScrollListener(size, delay){
+	if (!size){
+		size = '-111px';
+	} else {
+		size = size.toString() + 'px';
+	}
+	if (!delay){
+		delay = 0;
+	}
+	var prevScrollpos = window.pageYOffset;
+	$(document).ready(function(){
+		$(window).on('scroll',function(e){
+			var currentScrollPos = window.pageYOffset;
+			if (prevScrollpos > currentScrollPos || $(window).scrollTop() <= delay) {
+				$('.navbar').css('top','0');
+			} else {
+				$('.navbar').css('top',size);
+			}
+			prevScrollpos = currentScrollPos;	
+		});
+	})
 }

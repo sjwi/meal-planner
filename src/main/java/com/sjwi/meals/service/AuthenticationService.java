@@ -47,5 +47,10 @@ public class AuthenticationService {
 		cookie.setDomain(host);
 		return cookie;
 	}
-  
+
+  public void deleteCookieToken(Cookie cookieToken) {
+    if (cookieToken != null) {
+			mealDao.deleteCookieToken(cookieToken.getValue());
+		}
+  }
 }

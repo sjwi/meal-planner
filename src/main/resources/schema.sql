@@ -25,15 +25,26 @@ INSERT INTO Meals (NAME, FAVORITE, USER) values
 ('Meal 12',0,'admin'),
 ('Meal 13',0,'admin');
 INSERT INTO Meals (NAME, FAVORITE, RECIPE_URL, NOTES,USER) values 
-('Meal 14',0,'https://stephenky.com','Notes about this meal','USER'),
-('Meal 15',0,'https://stephenky.com','Notes about this meal','USER'),
-('Meal 16',0,'https://stephenky.com','Notes about this meal','USER'),
-('Meal 17',0,'https://stephenky.com','Notes about this meal','USER'),
-('Meal 18',0,'https://stephenky.com','Notes about this meal','USER'),
-('Meal 19',0,'https://stephenky.com','Notes about this meal','USER'),
-('Meal 20',0,'https://stephenky.com','Notes about this meal','USER'),
-('Meal 21',0,'https://stephenky.com','Notes about this meal','USER'),
-('Meal 22',0,'https://stephenky.com','Notes about this meal','USER');
+('Meal 23',1,'https://stephenky.com','Notes about this meal','admin'),
+('Meal 24',1,'https://stephenky.com','Notes about this meal','admin'),
+('Meal 25',0,'https://stephenky.com','Notes about this meal','admin'),
+('Meal 26',0,'https://stephenky.com','Notes about this meal','admin'),
+('Meal 27',1,'https://stephenky.com','Notes about this meal','admin'),
+('Meal 28',0,'https://stephenky.com','Notes about this meal','admin'),
+('Meal 29',1,'https://stephenky.com','Notes about this meal','admin'),
+('Meal 30',0,'https://stephenky.com','Notes about this meal','admin'),
+('Meal 31',0,'https://stephenky.com','Notes about this meal','admin');
+
+INSERT INTO Meals (NAME, FAVORITE, RECIPE_URL, NOTES,USER) values 
+('Meal 14',0,'https://stephenky.com','Notes about this meal','admin'),
+('Meal 15',0,'https://stephenky.com','Notes about this meal','admin'),
+('Meal 16',0,'https://stephenky.com','Notes about this meal','admin'),
+('Meal 17',0,'https://stephenky.com','Notes about this meal','admin'),
+('Meal 18',0,'https://stephenky.com','Notes about this meal','admin'),
+('Meal 19',0,'https://stephenky.com','Notes about this meal','admin'),
+('Meal 20',0,'https://stephenky.com','Notes about this meal','admin'),
+('Meal 21',0,'https://stephenky.com','Notes about this meal','admin'),
+('Meal 22',0,'https://stephenky.com','Notes about this meal','admin');
 
 DROP TABLE IF EXISTS Ingredients;
 CREATE TABLE Ingredients (
@@ -82,14 +93,14 @@ INSERT INTO Sides (NAME, USER) values
 ('Side 12','admin');
 
 INSERT INTO Sides (NAME,RECIPE_URL,NOTES,USER) values
-('Side 13','stephenky.com','This is a side note','admin'),
-('Side 14','stephenky.com','This is a side note','admin'),
-('Side 15','stephenky.com','This is a side note','admin'),
-('Side 16','stephenky.com','This is a side note','admin'),
-('Side 17','stephenky.com','This is a side note','admin'),
-('Side 18','stephenky.com','This is a side note','admin'),
-('Side 19','stephenky.com','This is a side note','admin'),
-('Side 20','stephenky.com','This is a side note','admin');
+('Side 13','https://stephenky.com','This is a side note','admin'),
+('Side 14','https://stephenky.com','This is a side note','admin'),
+('Side 15','https://stephenky.com','This is a side note','admin'),
+('Side 16','https://stephenky.com','This is a side note','admin'),
+('Side 17','https://stephenky.com','This is a side note','admin'),
+('Side 18','https://stephenky.com','This is a side note','admin'),
+('Side 19','https://stephenky.com','This is a side note','admin'),
+('Side 20','https://stephenky.com','This is a side note','admin');
 
 DROP TABLE IF EXISTS MealSides;
 CREATE TABLE MealSides (

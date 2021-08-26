@@ -563,5 +563,21 @@ public class MealDao {
   private String getUsername(){
     return SecurityContextHolder.getContext().getAuthentication().getName();
   }
+
+  public void deleteCookieToken(String token) {
+    jdbcTemplate.update(queryStore.get("deleteCookieToken"), new Object[] {token});
+  }
+
+  public List<Side> searchSides(String searchTerm) {
+		Map<String, Object> parameters = new HashMap<>();
+		parameters.put("term","%" + searchTerm + "%");
+		parameters.put("user",getUsername());
+    return namedParameterJdbcTemplate.query(queryStore.get("searchSides"), parameters, r -> {
+      List<Side> sides = new ArrayList<>();
+      while (r.next())
+        sides.add(buildSideFromResultSet(r));
+      return sides;
+    });
+  }
 }
  

@@ -5,7 +5,7 @@ getAllMeals: >
 searchMeals: >
   select DISTINCT m.ID from Meals m LEFT JOIN MealTags mt on m.ID = mt.MEAL_ID where LOWER(NAME) like LOWER(:term) and DISABLED = 0 AND m.USER = :user {{ADDITIONAL_PARAMS}}
   UNION
-  select DISTINCT m.ID from Meals m LEFT JOIN MealIngredients mi on m.ID = mi.MEAL_ID LEFT JOIN Ingredients i on mi.INGREDIENT_ID = i.ID LEFT JOIN MealTags mt on m.ID = mt.MEAL_ID where m.DISABLED = 0 AND m.USER = :user AND LOWER(i.NAME) like LOWER(:term) {{ADDITIONAL_PARAMS}}
+  select DISTINCT m.ID from Meals m LEFT JOIN MealIngredients mi on m.ID = mi.MEAL_ID LEFT JOIN Ingredients i on mi.INGREDIENT_ID = i.ID where m.DISABLED = 0 AND m.USER = :user AND LOWER(i.NAME) like LOWER(:term) {{ADDITIONAL_PARAMS}}
   UNION
   select DISTINCT m.ID from Meals m LEFT JOIN MealTags mt on m.ID = mt.MEAL_ID where LOWER(NOTES) like LOWER(:term) and DISABLED = 0 AND m.USER = :user {{ADDITIONAL_PARAMS}}
 
@@ -93,6 +93,16 @@ getAllTags: >
 getAllSides: >
   select * from Sides where DISABLED = 0 AND USER = ? ORDER BY NAME ASC
 
+searchSides: >
+  select * from (
+    select DISTINCT ID, NAME, NOTES, RECIPE_URL from Sides where DISABLED = 0 AND USER = :user AND LOWER(NAME) like LOWER(:term)
+    union
+    select DISTINCT s.ID, s.NAME, s.NOTES, s.RECIPE_URL from Sides s LEFT JOIN SideIngredients si on s.ID = si.SIDE_ID LEFT JOIN Ingredients i on si.INGREDIENT_ID = i.ID where s.DISABLED = 0 AND s.USER = :user AND LOWER(i.NAME) like LOWER(:term)
+  ) as a
+  ORDER BY NAME ASC
+
+
+
 getAllIngredients: >
   select DISTINCT i.ID, i.NAME, i.DISABLED from Ingredients i INNER JOIN MealIngredients mi on i.ID = mi.INGREDIENT_ID WHERE i.USER = :user
   union
@@ -135,6 +145,9 @@ storeCookieToken: >
 
 getUserCookieToken: >
   SELECT * FROM StoredLogins where LOGIN_COOKIE = ?
+
+deleteCookieToken: >
+  delete from StoredLogins where LOGIN_COOKIE = ?
 
 updateUserPreferences: >
   UPDATE users set pinFavorites = ?, sort = ?, sortDirection = ? where username = ?
