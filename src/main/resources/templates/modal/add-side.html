@@ -10,25 +10,31 @@
           <input type="hidden" name="addSideMealId" id="addSideMealId" value="0">
           <input type="hidden" name="addSidePostUpdates" id="addSidePostUpdates" value="false">
           <input type="hidden" name="addSideWeekId" id="addSideWeekId" value="0">
-          <div class="scroll container border-top border-bottom">
-            <ul class="list-group list-group-flush" id="addSideList">
-            </ul>
+          <div class="container pt-2 border-bottom">
+            <table class="table mb-0" id="sideDataTable">
+              <thead>
+                <tr>
+                  <th class="border-0"></th>
+                </tr>
+              </thead>
+              <tbody id="addSideList">
+
+              </tbody>
+            </table>
           </div>
           <button type="submit" id="addSideSubmitBtn" form="addSideForm" class="btn btn-lg btn-primary w-100 mt-3">Add side(s)</button>
         </form>
       </div>
       <div class="collapse" id="sideRowTemplate">
-        <li class="list-group-item">
-          <div class="row py-2">
-            <div class="col-1 round">
-              <input type="checkbox" class="form-check-input add-side-checkbox" name="sidesToAdd"/>
-              <label class="add-side-checkbox-label"></label>
-            </div>
-            <div class="col-11 ps-3">
-              <label class="add-side-label w-100"></label>
-            </div>
+        <div class="row no-gutters px-2">
+          <div class="col-1 round mb-2">
+            <input type="checkbox" class="form-check-input add-side-checkbox" name="sidesToAdd"/>
+            <label class="add-side-checkbox-label"></label>
           </div>
-        </li>
+          <div class="col-11 ps-3">
+            <label class="add-side-label w-100 my-1"></label>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -69,13 +75,14 @@
     $('#addSideMealId').val(mealId);
     $('#addSideModal .modal-title').html("Choose your sides for " + $('#mealName_' + mealId).text());
     await sides.forEach((s) => {
-      var newLineItem = $('#sideRowTemplate li').clone()
+      var newLineItem = $('#sideRowTemplate > div').clone()
       $(newLineItem).find('.add-side-checkbox').val(s.id);
       $(newLineItem).find('.add-side-checkbox').attr('id','mealSide_' + s.id);
       $(newLineItem).find('.add-side-checkbox-label').attr('for','mealSide_' + s.id);
       $(newLineItem).find('.add-side-label').text(s.name);
       $(newLineItem).find('.add-side-label').attr('for','mealSide_' + s.id);
-      $(newLineItem).appendTo('#addSideList'); 
+      let markup = '<tr><td>' + $('<div>').append($(newLineItem).clone()).html(); + '</td></tr>';
+      $('#addSideList').append(markup);
     });
     if (weekId) {
       $('#addSidePostUpdates').val(true);
@@ -83,6 +90,25 @@
       $('#weekMealSideList_' + weekId + '_' + mealId + ' li').each(function(){
         $('#addSideList #mealSide_' + $(this).data('target')).prop('checked',true);
       })
+    }
+    if (!$.fn.DataTable.isDataTable('#sideDataTable')) {
+      $('#sideDataTable').dataTable( {
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": true,
+        "bInfo": false,
+        "ordering": false,
+        "bScrollInfinite": true,
+        "bScrollCollapse": true,
+        "sScrollY": "60vh",
+        language: {
+          search:'',
+          searchPlaceholder: "Search",
+          emptyTable: "No sides could be found"
+        }
+      } );
+      $('#sideDataTable_filter').addClass('mb-2')
+      $('#sideDataTable_filter input').addClass('form-control')
     }
     $('#addSideModal').modal('show');
   }

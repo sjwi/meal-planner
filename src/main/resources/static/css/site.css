@@ -13,6 +13,18 @@
 .nav-link {
   font-size: 1.5rem;
 }
+.dataTables_scrollBody{
+  border-bottom: 0 !important;
+}
+.dataTables_filter {
+  text-align: right !important;
+}
+.dataTables_scrollHead {
+  display:none !important;
+}
+.dataTables_scrollBody::-webkit-scrollbar {
+  display: none;
+}
 .page-container, .search-row {
   padding-top: 111px;
 }
