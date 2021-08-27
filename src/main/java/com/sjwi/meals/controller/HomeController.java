@@ -17,6 +17,7 @@ import com.sjwi.meals.model.MealsUser;
 import com.sjwi.meals.model.Week;
 import com.sjwi.meals.service.MealService;
 import com.sjwi.meals.service.security.AuthenticationService;
+import com.sjwi.meals.service.security.JwtManager;
 import com.sjwi.meals.service.security.OAuthManager;
 import com.sjwi.meals.util.WeekGenerator;
 
@@ -47,6 +48,9 @@ public class HomeController {
 
   @Autowired
   AuthenticationService authenticationService;
+
+  @Autowired
+  JwtManager jwtManager;
 
   private static final int DEFAULT_NUMBER_OF_WEEKS = 25;
 
@@ -102,6 +106,7 @@ public class HomeController {
   public ModelAndView krogerLogin(@RequestParam String code) throws Exception {
 
     AccessTokenResponse response = oauthManager.getOAuthToken(code);
+    System.out.println(jwtManager.getUnpackedAccessToken(response));
 
     return new ModelAndView("redirect:/");
   }
