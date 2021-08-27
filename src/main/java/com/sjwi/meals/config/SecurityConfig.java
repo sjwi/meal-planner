@@ -53,6 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.authorizeRequests().antMatchers("/login").permitAll().antMatchers("/images/meals.png").permitAll()
 				.antMatchers("/login").permitAll()
+				.antMatchers("/oauth2/login").permitAll()
 				.antMatchers("/css/**").permitAll()
 				.antMatchers("/js/**").permitAll()
 				.antMatchers("/images/**").permitAll()
