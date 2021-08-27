@@ -1,4 +1,4 @@
-package com.sjwi.meals.model;
+package com.sjwi.meals.model.security;
 
 public class AccessTokenResponse {
   private String refresh_token;

@@ -11,10 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.sjwi.meals.dao.MealDao;
-import com.sjwi.meals.model.AccessTokenResponse;
 import com.sjwi.meals.model.Ingredient;
 import com.sjwi.meals.model.MealsUser;
 import com.sjwi.meals.model.Week;
+import com.sjwi.meals.model.security.AccessTokenResponse;
 import com.sjwi.meals.service.MealService;
 import com.sjwi.meals.service.security.AuthenticationService;
 import com.sjwi.meals.service.security.JwtManager;

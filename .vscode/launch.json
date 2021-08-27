@@ -28,6 +28,7 @@
                 "MEALS_REDIRECT_URI": "",
                 "MEALS_TOKEN_URL": "https://api.kroger.com/v1/connect/oauth2/token",
                 "MEALS_AUTH_URL": "https://api.kroger.com/v1/connect/oauth2/authorize",
+                "MEALS_BASE_URL": "https://api.kroger.com/v1",
                 "MEALS_AUTH_SCOPES": ""
             }
         },

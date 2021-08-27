@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.Gson;
-import com.sjwi.meals.model.AccessTokenResponse;
+import com.sjwi.meals.model.security.AccessTokenResponse;
 import com.sjwi.meals.service.ParameterStringBuilder;
 
 import org.apache.tomcat.util.codec.binary.Base64;
