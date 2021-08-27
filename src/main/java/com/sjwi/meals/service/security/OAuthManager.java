@@ -46,7 +46,7 @@ public class OAuthManager {
     ResponseEntity<String> response = null;
     System.out.println("Authorization Code------" + code);
 
-    RestTemplate restTemplate = new RestTemplateBuilder().additionalCustomizers(new RestTemplateStandardCookieCustomizer()).build();
+    RestTemplate restTemplate = new RestTemplateBuilder(new RestTemplateStandardCookieCustomizer()).build();
     restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
 
     String credentials = clientId +  ":" + clientSecret;
