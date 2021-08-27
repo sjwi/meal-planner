@@ -4,15 +4,14 @@ import java.util.Arrays;
 
 import com.google.gson.Gson;
 import com.sjwi.meals.model.TokenRequest;
-import com.sjwi.meals.service.ParameterStringBuilder;
 
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -42,6 +41,7 @@ public class OAuthManager {
     System.out.println("Authorization Code------" + code);
 
     RestTemplate restTemplate = new RestTemplate();
+    restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
 
     String credentials = clientId +  ":" + clientSecret;
     System.out.println(credentials);
