@@ -62,7 +62,7 @@ public class LandingPageSessionInitializer {
     }
   }
 
-  @Before("execution(* com.sjwi.meals.controller.kroger.*(..))")
+  @Before("execution(* com.sjwi.meals.controller.kroger.*.*(..))")
   public void validateRefreshToken(JoinPoint joinPoint) throws IOException, ParseException {
     HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
     HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
