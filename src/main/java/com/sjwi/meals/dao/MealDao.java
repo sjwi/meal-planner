@@ -367,7 +367,7 @@ public class MealDao {
             r.getString("firstname"),
             r.getString("lastname"),
             r.getString("email"),
-            r.getString("password"),
+            r.getString("refreshToken"),
             getUserAuthorities(username),
             userPreferences);
       } else {
