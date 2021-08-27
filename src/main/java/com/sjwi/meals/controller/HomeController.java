@@ -94,17 +94,25 @@ public class HomeController {
   public ModelAndView krogerLogin(@RequestParam String code, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
     AccessTokenResponse tokenResponse = oAuthManager.getOAuthToken(code);
+    System.out.println("Token response");
     JwtManager jwtManager = new JwtManager(tokenResponse);
     request.getSession().setAttribute("JWT", tokenResponse.getAccess_token());
     request.getSession().setAttribute("JWT_EXPIRES_ON", oAuthManager.getExpirationDate(tokenResponse.getExpires_in()));
 
+    System.out.println("Attributes set");
+
     User user = mealDao.getUser(jwtManager.getOAuthUser());
+    System.out.println("User: " + user);
     if (user == null) {
+      System.out.println("User is null");
       user = mealDao.registerNewUser(jwtManager.getOAuthUser(), tokenResponse.getRefresh_token());
+      System.out.println("User is now registered: " + user.getUsername());
       authenticationService.generateCookieToken(request, response, jwtManager.getOAuthUser());
+      System.out.println("Cookie generated");
     }
     else
       user = mealDao.updateUserRefreshToken(jwtManager.getOAuthUser(),tokenResponse.getRefresh_token());
+    System.out.println("Adding " + user.getUsername() + " to context with authorities: " + user.getAuthorities().toString());
     SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
     return new ModelAndView("redirect:/");
   }
