@@ -47,7 +47,7 @@ public class LandingPageSessionInitializer {
         AbstractMap.SimpleEntry<String,String> token = mealDao.getStoredCookieToken(cookie.get().getValue());
         if (token.getValue() != null) {
           MealsUser user = (MealsUser) mealDao.getUser(token.getKey());
-          if (user != null) {
+          if (user != null && user.getRefreshToken() != null) {
             try {
               AccessTokenResponse tokenResponse = oAuthManager.refreshAccessToken(user.getRefreshToken());
               request.getSession().setAttribute("JWT", tokenResponse.getAccess_token());
