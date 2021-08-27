@@ -3,11 +3,13 @@ pipeline {
   stages {
     stage('Build WAR') {
       steps {
+        echo "Step 1"
        // sh 'mvn clean install package'
       }
     }
     stage('Deploy Production App') {
       steps {
+        echo "Step 2"
         //sh 'sudo cp target/meals.war /opt/tomcat/webapps'
       }
     }
