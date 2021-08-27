@@ -1,22 +1,19 @@
 package com.sjwi.meals.service.security;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.gson.Gson;
 import com.sjwi.meals.model.TokenRequest;
+import com.sjwi.meals.service.ParameterStringBuilder;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.config.CookieSpecs;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateCustomizer;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -56,11 +53,13 @@ public class OAuthManager {
     headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
     headers.add("Authorization", "Basic " + encodedCredentials);
 
+    Map<String,String> params = new HashMap<>();
+    params.put("client_id",clientId);
+    params.put("redirect_uri",redirectUri);
+    params.put("code",code);
+    params.put("grant_type","authorization_code");
 
-    TokenRequest payload = new TokenRequest(code,clientId,redirectUri);
-    System.out.println(new Gson().toJson(payload));
-
-    HttpEntity<String> request = new HttpEntity<String>(new Gson().toJson(payload),headers);
+    HttpEntity<String> request = new HttpEntity<String>(ParameterStringBuilder.getParamsString(params),headers);
     response = restTemplate.postForEntity(tokenUrl, request, String.class);
     return response.getBody();
   }
