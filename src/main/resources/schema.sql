@@ -11,40 +11,40 @@ CREATE TABLE Meals (
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 INSERT INTO Meals (NAME, FAVORITE, USER) values 
-('Meal 1',1,'admin'),
-('Meal 2',0,'admin'),
-('Meal 3',1,'admin'),
-('Meal 4',0,'admin'),
-('Meal 5',0,'admin'),
-('Meal 6',0,'admin'),
-('Meal 7',0,'admin'),
-('Meal 8',1,'admin'),
-('Meal 9',0,'admin'),
-('Meal 10',0,'admin'),
-('Meal 11',0,'admin'),
-('Meal 12',0,'admin'),
-('Meal 13',0,'admin');
+('Meal 1',1,'de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 2',0,'de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 3',1,'de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 4',0,'de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 5',0,'de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 6',0,'de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 7',0,'de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 8',1,'de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 9',0,'de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 10',0,'de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 11',0,'de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 12',0,'de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 13',0,'de9a8c23-bb74-512d-a390-2b8cb659ebcf');
 INSERT INTO Meals (NAME, FAVORITE, RECIPE_URL, NOTES,USER) values 
-('Meal 23',1,'https://stephenky.com','Notes about this meal','admin'),
-('Meal 24',1,'https://stephenky.com','Notes about this meal','admin'),
-('Meal 25',0,'https://stephenky.com','Notes about this meal','admin'),
-('Meal 26',0,'https://stephenky.com','Notes about this meal','admin'),
-('Meal 27',1,'https://stephenky.com','Notes about this meal','admin'),
-('Meal 28',0,'https://stephenky.com','Notes about this meal','admin'),
-('Meal 29',1,'https://stephenky.com','Notes about this meal','admin'),
-('Meal 30',0,'https://stephenky.com','Notes about this meal','admin'),
-('Meal 31',0,'https://stephenky.com','Notes about this meal','admin');
+('Meal 23',1,'https://stephenky.com','Notes about this meal','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 24',1,'https://stephenky.com','Notes about this meal','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 25',0,'https://stephenky.com','Notes about this meal','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 26',0,'https://stephenky.com','Notes about this meal','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 27',1,'https://stephenky.com','Notes about this meal','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 28',0,'https://stephenky.com','Notes about this meal','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 29',1,'https://stephenky.com','Notes about this meal','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 30',0,'https://stephenky.com','Notes about this meal','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 31',0,'https://stephenky.com','Notes about this meal','de9a8c23-bb74-512d-a390-2b8cb659ebcf');
 
 INSERT INTO Meals (NAME, FAVORITE, RECIPE_URL, NOTES,USER) values 
-('Meal 14',0,'https://stephenky.com','Notes about this meal','admin'),
-('Meal 15',0,'https://stephenky.com','Notes about this meal','admin'),
-('Meal 16',0,'https://stephenky.com','Notes about this meal','admin'),
-('Meal 17',0,'https://stephenky.com','Notes about this meal','admin'),
-('Meal 18',0,'https://stephenky.com','Notes about this meal','admin'),
-('Meal 19',0,'https://stephenky.com','Notes about this meal','admin'),
-('Meal 20',0,'https://stephenky.com','Notes about this meal','admin'),
-('Meal 21',0,'https://stephenky.com','Notes about this meal','admin'),
-('Meal 22',0,'https://stephenky.com','Notes about this meal','admin');
+('Meal 14',0,'https://stephenky.com','Notes about this meal','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 15',0,'https://stephenky.com','Notes about this meal','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 16',0,'https://stephenky.com','Notes about this meal','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 17',0,'https://stephenky.com','Notes about this meal','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 18',0,'https://stephenky.com','Notes about this meal','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 19',0,'https://stephenky.com','Notes about this meal','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 20',0,'https://stephenky.com','Notes about this meal','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 21',0,'https://stephenky.com','Notes about this meal','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Meal 22',0,'https://stephenky.com','Notes about this meal','de9a8c23-bb74-512d-a390-2b8cb659ebcf');
 
 DROP TABLE IF EXISTS Ingredients;
 CREATE TABLE Ingredients (
@@ -56,16 +56,16 @@ CREATE TABLE Ingredients (
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 INSERT INTO Ingredients (NAME, USER) values
-('Ingredient 1','admin'),
-('Ingredient 2','admin'),
-('Ingredient 3','admin'),
-('Ingredient 4','admin'),
-('Ingredient 5','admin'),
-('Ingredient 6','admin'),
-('Ingredient 7','admin'),
-('Ingredient 8','admin'),
-('Ingredient 9','admin'),
-('Ingredient 10','admin');
+('Ingredient 1','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Ingredient 2','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Ingredient 3','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Ingredient 4','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Ingredient 5','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Ingredient 6','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Ingredient 7','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Ingredient 8','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Ingredient 9','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Ingredient 10','de9a8c23-bb74-512d-a390-2b8cb659ebcf');
 
 DROP TABLE IF EXISTS Sides;
 CREATE TABLE Sides (
@@ -79,28 +79,28 @@ CREATE TABLE Sides (
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 INSERT INTO Sides (NAME, USER) values
-('Side 1','admin'),
-('Side 2','admin'),
-('Side 3','admin'),
-('Side 4','admin'),
-('Side 5','admin'),
-('Side 6','admin'),
-('Side 7','admin'),
-('Side 8','admin'),
-('Side 9','admin'),
-('Side 10','admin'),
-('Side 11','admin'),
-('Side 12','admin');
+('Side 1','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Side 2','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Side 3','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Side 4','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Side 5','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Side 6','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Side 7','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Side 8','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Side 9','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Side 10','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Side 11','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Side 12','de9a8c23-bb74-512d-a390-2b8cb659ebcf');
 
 INSERT INTO Sides (NAME,RECIPE_URL,NOTES,USER) values
-('Side 13','https://stephenky.com','This is a side note','admin'),
-('Side 14','https://stephenky.com','This is a side note','admin'),
-('Side 15','https://stephenky.com','This is a side note','admin'),
-('Side 16','https://stephenky.com','This is a side note','admin'),
-('Side 17','https://stephenky.com','This is a side note','admin'),
-('Side 18','https://stephenky.com','This is a side note','admin'),
-('Side 19','https://stephenky.com','This is a side note','admin'),
-('Side 20','https://stephenky.com','This is a side note','admin');
+('Side 13','https://stephenky.com','This is a side note','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Side 14','https://stephenky.com','This is a side note','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Side 15','https://stephenky.com','This is a side note','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Side 16','https://stephenky.com','This is a side note','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Side 17','https://stephenky.com','This is a side note','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Side 18','https://stephenky.com','This is a side note','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Side 19','https://stephenky.com','This is a side note','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
+('Side 20','https://stephenky.com','This is a side note','de9a8c23-bb74-512d-a390-2b8cb659ebcf');
 
 DROP TABLE IF EXISTS MealSides;
 CREATE TABLE MealSides (
@@ -210,7 +210,7 @@ CREATE TABLE WeeklySchedule (
   ID int(11) NOT NULL AUTO_INCREMENT,
   DATE_BEGIN date,
   DATE_END date,
-  USER varchar(50) NOT NULL DEFAULT 'admin',
+  USER varchar(50) NOT NULL DEFAULT 'de9a8c23-bb74-512d-a390-2b8cb659ebcf',
   DISABLED BOOLEAN DEFAULT 0,
   PRIMARY KEY (ID)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
@@ -261,7 +261,7 @@ DROP TABLE IF EXISTS Tags;
 CREATE TABLE Tags (
   ID int(11) NOT NULL AUTO_INCREMENT,
   NAME varchar(255),
-  USER varchar(50) NOT NULL DEFAULT 'admin',
+  USER varchar(50) NOT NULL DEFAULT 'de9a8c23-bb74-512d-a390-2b8cb659ebcf',
   PRIMARY KEY (ID)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
@@ -313,9 +313,9 @@ INSERT INTO MealTags (TAG_ID,MEAL_ID) values
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
   username varchar(50) NOT NULL,
-  firstname varchar(50) NOT NULL,
-  lastname varchar(50) NOT NULL,
-  password varchar(100) NOT NULL,
+  firstname varchar(50),
+  lastname varchar(50),
+  refreshToken varchar(512),
   email varchar(255),
   sort varchar(50) DEFAULT 'NAME',
   sortDirection varchar(50) DEFAULT 'ASC',
@@ -323,9 +323,6 @@ CREATE TABLE users (
   enabled tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (username)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-INSERT INTO users (username,firstname,lastname,password,email,enabled,pinFavorites,sort,sortDirection) VALUES 
-('admin','Demo','User','$2a$10$KnRdXb09WIgf1gYwYAj/pO7mB7Rp0i0xejpncp2ZZnlqZW9sj4h/m','stephenjw@fastmail.com',1,1,'CNT','DESC');
 
 DROP TABLE IF EXISTS authorities;
 CREATE TABLE authorities (
@@ -335,10 +332,6 @@ CREATE TABLE authorities (
   CONSTRAINT authorities_ibfk_1 FOREIGN KEY (username) REFERENCES users (username)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO authorities VALUES 
-('admin','USER'),
-('admin','ADMIN');
-
 DROP TABLE IF EXISTS StoredLogins;
 CREATE TABLE StoredLogins (
   ID int(11) NOT NULL AUTO_INCREMENT,
@@ -347,6 +340,3 @@ CREATE TABLE StoredLogins (
   CREATED_ON datetime NOT NULL,
   PRIMARY KEY (ID)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
-
-INSERT INTO StoredLogins (username,LOGIN_COOKIE,CREATED_ON) values
-('admin','DeT5FlpnmstPnU3O+A3omeHRYXceastOig+wRxEB/gyHKGe1oymRVfxnt3j5xX64N4+J5TybrD0+eFh+8qGdEcVzycrDsuFMQwtOi7+gk1R396O8Fujx8SbzOgmcAq5Fj+FG0UiYeH/dJCv6wM16qIbvH4oZdEwG49XnRSSpSm2EikOi6366kY2j+2w7Td4apfjaepc+GX3rx4AB7mTKEqdQR+MEuh4Rs6d90DB9nIHa7dA2jVt7ay6LHosz3HhTAwkz8i5RWWkFO+uZDuQU8wY8fqs6MhriW+Y8/c2sZizpR0m/ifO68BLJgPdOv4zxaZU3Qze3JXT8l5AUlUZOTw==', CURRENT_TIMESTAMP);

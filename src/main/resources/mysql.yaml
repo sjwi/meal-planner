@@ -101,7 +101,14 @@ searchSides: >
   ) as a
   ORDER BY NAME ASC
 
+registerNewUser: >
+  INSERT INTO users (username,refreshToken,enabled) values (?,?,1);
 
+updateUserRefreshToken: >
+  UPDATE users set refreshToken = ? where username = ?
+
+addUserAuthorities: >
+  INSERT INTO authorities (username, authority) values (?,'USER')
 
 getAllIngredients: >
   select DISTINCT i.ID, i.NAME, i.DISABLED from Ingredients i INNER JOIN MealIngredients mi on i.ID = mi.INGREDIENT_ID WHERE i.USER = :user

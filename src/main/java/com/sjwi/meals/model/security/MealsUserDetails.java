@@ -1,4 +1,4 @@
-package com.sjwi.meals.model;
+package com.sjwi.meals.model.security;
 import java.util.Collection;
 import java.util.Set;
 
@@ -37,6 +37,10 @@ public class MealsUserDetails implements UserDetails{
 
     public String getPassword() {
         return user.getPassword();
+    }
+
+    public String getRefreshToken() {
+        return user.getRefreshToken();
     }
 
     public String getUsername() {

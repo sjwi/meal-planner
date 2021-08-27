@@ -1,6 +1,6 @@
 package com.sjwi.meals.dao;
 
-import static com.sjwi.meals.model.MealsUser.USER_PREFERENCE_KEYS;
+import static com.sjwi.meals.model.security.MealsUser.USER_PREFERENCE_KEYS;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,11 +18,11 @@ import java.util.stream.Collectors;
 
 import com.sjwi.meals.model.Ingredient;
 import com.sjwi.meals.model.Meal;
-import com.sjwi.meals.model.MealsUser;
 import com.sjwi.meals.model.Side;
 import com.sjwi.meals.model.SqlQueryStore;
 import com.sjwi.meals.model.Week;
 import com.sjwi.meals.model.WeekMeal;
+import com.sjwi.meals.model.security.MealsUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -359,17 +359,20 @@ public class MealDao {
 		Map<String, String> parameters = new HashMap<>();
 		parameters.put("username", username);
 		return namedParameterJdbcTemplate.query(queryStore.get("getUser"),parameters,r -> {
-      r.next();
-      Map<String,String> userPreferences = new HashMap<>();
-      for (String key: USER_PREFERENCE_KEYS)
-        userPreferences.put(key,r.getString(key));
-      return new MealsUser(r.getString("username"),
-          r.getString("firstname"),
-          r.getString("lastname"),
-          r.getString("email"),
-          r.getString("password"),
-          getUserAuthorities(username),
-          userPreferences);
+      if (r.next()) {
+        Map<String,String> userPreferences = new HashMap<>();
+        for (String key: USER_PREFERENCE_KEYS)
+          userPreferences.put(key,r.getString(key));
+        return new MealsUser(r.getString("username"),
+            r.getString("firstname"),
+            r.getString("lastname"),
+            r.getString("email"),
+            r.getString("password"),
+            getUserAuthorities(username),
+            userPreferences);
+      } else {
+        return null;
+      }
 		});
 	}
 
@@ -578,6 +581,17 @@ public class MealDao {
         sides.add(buildSideFromResultSet(r));
       return sides;
     });
+  }
+
+  public User registerNewUser(String oAuthUser, String refreshToken) {
+    jdbcTemplate.update(queryStore.get("registerNewUser"), new Object[] {oAuthUser, refreshToken});
+    jdbcTemplate.update(queryStore.get("addUserAuthorities"), new Object[] {oAuthUser});
+    return getUser(oAuthUser);
+  }
+
+  public User updateUserRefreshToken(String oAuthUser, String refresh_token) {
+    jdbcTemplate.update(queryStore.get("updateUserRefreshToken"), new Object[] {refresh_token,oAuthUser});
+    return getUser(oAuthUser);
   }
 }
  

@@ -1,20 +1,18 @@
 package com.sjwi.meals.controller;
 
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.sjwi.meals.dao.MealDao;
 import com.sjwi.meals.model.Ingredient;
-import com.sjwi.meals.model.MealsUser;
 import com.sjwi.meals.model.Week;
 import com.sjwi.meals.model.security.AccessTokenResponse;
+import com.sjwi.meals.model.security.MealsUser;
 import com.sjwi.meals.service.MealService;
 import com.sjwi.meals.service.security.AuthenticationService;
 import com.sjwi.meals.service.security.JwtManager;
@@ -23,8 +21,10 @@ import com.sjwi.meals.util.WeekGenerator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,7 +44,7 @@ public class HomeController {
   MealService mealService;
 
   @Autowired
-  OAuthManager oauthManager;
+  OAuthManager oAuthManager;
 
   @Autowired
   AuthenticationService authenticationService;
@@ -52,9 +52,9 @@ public class HomeController {
   private static final int DEFAULT_NUMBER_OF_WEEKS = 25;
 
   @RequestMapping("/")
-  public ModelAndView homeController(Authentication auth) {
+  public ModelAndView homeController(HttpServletRequest request, Authentication auth) {
     Map<String, String> preferences  = ((MealsUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPreferences();
-    // Map<String, String> preferences = ((MealsUser) auth.getPrincipal()).getPreferences();
+    System.out.println("JWT: " + request.getSession().getAttribute("JWT").toString());
     ModelAndView mv = new ModelAndView("home");
     List<Week> weeks = mealDao.getNNumberOfWeeks(DEFAULT_NUMBER_OF_WEEKS);
     mv.addObject("meals", mealDao.getAllMeals(preferences));
@@ -87,26 +87,25 @@ public class HomeController {
   public ModelAndView login() {
     if(SecurityContextHolder.getContext().getAuthentication() != null && SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails)
       return new ModelAndView("redirect:/");
-    return new ModelAndView("login");
-  }
-
-  @RequestMapping(value = "/login", method = RequestMethod.POST)
-  public ModelAndView postLogin(HttpServletRequest request, HttpServletResponse response,
-      @RequestParam(name = "username", required = true) String username, Principal principal, Authentication auth,
-      @RequestParam(name = "password", required = true) String password) throws ServletException {
-    request.login(username, password);
-    authenticationService.generateCookieToken(request, response, username);
-    return new ModelAndView("redirect:/");
+    return new ModelAndView("redirect:" + oAuthManager.getSignOnUrl());
   }
 
   @RequestMapping(value = "/oauth2/login", method = RequestMethod.GET)
-  public ModelAndView krogerLogin(@RequestParam String code) throws Exception {
+  public ModelAndView krogerLogin(@RequestParam String code, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-    AccessTokenResponse response = oauthManager.getOAuthToken(code);
-    JwtManager jwtManager = new JwtManager(response);
-    System.out.println(jwtManager.getUnpackedAccessToken());
-    System.out.println(jwtManager.getOAuthUser());
+    AccessTokenResponse tokenResponse = oAuthManager.getOAuthToken(code);
+    JwtManager jwtManager = new JwtManager(tokenResponse);
+    request.getSession().setAttribute("JWT", tokenResponse.getAccess_token());
+    request.getSession().setAttribute("JWT_EXPIRES_ON", oAuthManager.getExpirationDate(tokenResponse.getExpires_in()));
 
+    User user = mealDao.getUser(jwtManager.getOAuthUser());
+    if (user == null) {
+      user = mealDao.registerNewUser(jwtManager.getOAuthUser(), tokenResponse.getRefresh_token());
+      authenticationService.generateCookieToken(request, response, jwtManager.getOAuthUser());
+    }
+    else
+      user = mealDao.updateUserRefreshToken(jwtManager.getOAuthUser(),tokenResponse.getRefresh_token());
+    SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
     return new ModelAndView("redirect:/");
   }
 
