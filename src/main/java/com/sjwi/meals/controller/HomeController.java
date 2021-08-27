@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.sjwi.meals.dao.MealDao;
+import com.sjwi.meals.model.AccessTokenResponse;
 import com.sjwi.meals.model.Ingredient;
 import com.sjwi.meals.model.MealsUser;
 import com.sjwi.meals.model.Week;
@@ -100,9 +101,8 @@ public class HomeController {
   @RequestMapping(value = "/oauth2/login", method = RequestMethod.GET)
   public ModelAndView krogerLogin(@RequestParam String code) throws Exception {
 
-    String response = oauthManager.getOAuthToken(code);
+    AccessTokenResponse response = oauthManager.getOAuthToken(code);
 
-    System.out.println("Access Token Response ---------" + response);
     return new ModelAndView("redirect:/");
   }
 

@@ -22,7 +22,13 @@
                 "MEALS_JDBC_DRIVER_H2": "org.h2.Driver",
                 "MEALS_JDBC_PASSWORD": "sa",
                 "MEALS_JDBC_USERNAME": "sa",
-                "MEALS_JDBC_PLATFORM": "org.hibernate.dialect.H2Dialect"
+                "MEALS_JDBC_PLATFORM": "org.hibernate.dialect.H2Dialect",
+                "MEALS_CLIENT_ID": "",
+                "MEALS_CLIENT_SECRET": "",
+                "MEALS_REDIRECT_URI": "",
+                "MEALS_TOKEN_URL": "https://api.kroger.com/v1/connect/oauth2/token",
+                "MEALS_AUTH_URL": "https://api.kroger.com/v1/connect/oauth2/authorize",
+                "MEALS_AUTH_SCOPES": ""
             }
         },
         {

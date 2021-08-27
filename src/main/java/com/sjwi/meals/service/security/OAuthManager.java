@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.gson.Gson;
-import com.sjwi.meals.model.TokenRequest;
+import com.sjwi.meals.model.AccessTokenResponse;
 import com.sjwi.meals.service.ParameterStringBuilder;
 
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -38,14 +38,12 @@ public class OAuthManager {
   @Value("${meals.auth.scopes}")
   String scopes;
 
-  public String getOAuthToken(String code) throws Exception {
+  public AccessTokenResponse getOAuthToken(String code) throws Exception {
     ResponseEntity<String> response = null;
-    System.out.println("Authorization Code------" + code);
 
     RestTemplate restTemplate = new RestTemplate();
 
     String credentials = clientId +  ":" + clientSecret;
-    System.out.println(credentials);
     String encodedCredentials = new String(Base64.encodeBase64(credentials.getBytes()));
 
     HttpHeaders headers = new HttpHeaders();
@@ -61,7 +59,7 @@ public class OAuthManager {
 
     HttpEntity<String> request = new HttpEntity<String>(ParameterStringBuilder.getParamsString(params),headers);
     response = restTemplate.postForEntity(tokenUrl, request, String.class);
-    return response.getBody();
+    return new Gson().fromJson(response.getBody(), AccessTokenResponse.class);
   }
 
 }
