@@ -1,5 +1,7 @@
 package com.sjwi.meals.service.security;
 
+import javax.xml.bind.DatatypeConverter;
+
 import com.sjwi.meals.model.AccessTokenResponse;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +16,7 @@ public class JwtManager {
   String clientSecret;
 
   public String getUnpackedAccessToken(AccessTokenResponse response) {
-    return Jwts.parser().setSigningKey(clientSecret).parseClaimsJws(response.getAccess_token()).getBody().toString();
+    return Jwts.parser().setSigningKey(DatatypeConverter.parseBase64Binary(clientSecret)).parseClaimsJws(response.getAccess_token()).getBody().toString();
   }
   
 }
