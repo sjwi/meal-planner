@@ -3,7 +3,6 @@ package com.sjwi.meals.service.security;
 import java.util.Base64;
 
 import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
 
 import com.sjwi.meals.model.AccessTokenResponse;
 
@@ -21,7 +20,7 @@ public class JwtManager {
 
   public String getUnpackedAccessToken(AccessTokenResponse response) throws Exception {
     SignatureAlgorithm sa = SignatureAlgorithm.RS256;
-    SecretKeySpec secretKeySpec = new SecretKeySpec(DatatypeConverter.parseBase64Binary(clientSecret), sa.getJcaName());
+    SecretKeySpec secretKeySpec = new SecretKeySpec(clientSecret.getBytes(), sa.getJcaName());
     String[] chunks = response.getAccess_token().split("\\.");
     Base64.Decoder decoder = Base64.getDecoder();
     String header = new String(decoder.decode(chunks[0]));
