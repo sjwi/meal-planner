@@ -49,9 +49,6 @@ public class HomeController {
   @Autowired
   AuthenticationService authenticationService;
 
-  @Autowired
-  JwtManager jwtManager;
-
   private static final int DEFAULT_NUMBER_OF_WEEKS = 25;
 
   @RequestMapping("/")
@@ -106,7 +103,9 @@ public class HomeController {
   public ModelAndView krogerLogin(@RequestParam String code) throws Exception {
 
     AccessTokenResponse response = oauthManager.getOAuthToken(code);
-    System.out.println(jwtManager.getUnpackedAccessToken(response));
+    JwtManager jwtManager = new JwtManager(response);
+    System.out.println(jwtManager.getUnpackedAccessToken());
+    System.out.println(jwtManager.getOAuthUser());
 
     return new ModelAndView("redirect:/");
   }
