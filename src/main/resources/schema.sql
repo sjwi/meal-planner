@@ -323,6 +323,7 @@ CREATE TABLE users (
   enabled tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (username)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO users (username,enabled) values ('de9a8c23-bb74-512d-a390-2b8cb659ebcf',1);
 
 DROP TABLE IF EXISTS authorities;
 CREATE TABLE authorities (
@@ -331,6 +332,8 @@ CREATE TABLE authorities (
   UNIQUE KEY ix_auth_username (username,authority),
   CONSTRAINT authorities_ibfk_1 FOREIGN KEY (username) REFERENCES users (username)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO authorities values ('de9a8c23-bb74-512d-a390-2b8cb659ebcf','USER');
 
 DROP TABLE IF EXISTS StoredLogins;
 CREATE TABLE StoredLogins (
@@ -343,4 +346,4 @@ CREATE TABLE StoredLogins (
 
 INSERT INTO StoredLogins (username,LOGIN_COOKIE,CREATED_ON)
 values
-('de9a8c23-bb74-512d-a390-2b8cb659ebcf','UvH8iML60+LYJBtU8JArpj6+S6jJG2XVBHPGKIRs+B9G+xWQqt3+Jy9mw4Hpj54Jzqs/X/bNJS92hDiTNMCErklw1OnU9lA7LF2YMOFc4hx21g0EM7IYTK6ZMjOjBV5LDjkEAnqKVi9VGQ07R1hV9wRXtGLFv2gtTvodaK89vfhCIBu/0AFPQY0mUQz4KzgCeeGg/50YUaH1bCMNzdnAOWjBaqVaQvJ+h8EsX6j9ZT6uNbM3TEZGgsaoRNAecolcF4XWs4szjcPMcZjj8GCTDlZGd/0NB0E2pVqK6hhYE8y/0IzDYbkJc3CR9jCb+FVd2FmBoXA89b3JHoWhfUck4w==','2019-08-23 17:40:55');
+('de9a8c23-bb74-512d-a390-2b8cb659ebcf','pVEgMXpY0O2eHGnqmyr6L8SgP/lV6zNB7aRdQ518GaOfakWUW5bd/hReCtJHhu5Kh2qWVMawRqQkbQexLFB9lF0vUJX04+D8msDyMCpR5zcEVcovUiiaqBG8eLOL5MsitILVpjKV4uBbCrq2FKp8KCoCDHUSm3HWHkpi63aYRMTuEsJ4JyZeNmTKus0O1OntcS0SGcSAm+3Rkj9LSmX8UgBc3qPbGGth5lxk1JsKJmTgppwlN5KGj9VI3HiRBdt0vbzLjhLcDel7XLltQflAneEt7Q1BorvL7ILhNce4Pyti2qTVmyxH32y9UvmAOpH2FqY5FmFh4MnVXXCFp4uxRw==','2019-08-23 17:40:55');
