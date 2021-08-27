@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +22,9 @@ public class AuthenticationService {
 
   @Autowired
   MealDao mealDao;
+
+  @Autowired
+  ServletContext context;
 
   public void generateCookieToken(HttpServletRequest request, HttpServletResponse response, String username) {
     String token = generateTokenString();
@@ -45,6 +49,7 @@ public class AuthenticationService {
 		}
 		cookie.setMaxAge(60 * 60 * 24 * 7 * 52 * 10);
 		cookie.setDomain(host);
+    cookie.setPath(context.getContextPath());
 		return cookie;
 	}
 

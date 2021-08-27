@@ -37,22 +37,17 @@ public class LandingPageSessionInitializer {
   @Before("execution(* com.sjwi.meals.controller.HomeController.login(..))")
   public void attemptLoginViaCookie(JoinPoint joinPoint) {
     HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-    System.out.println("In aspect");
     if (SecurityContextHolder.getContext().getAuthentication() != null
 						&& SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails) {
 				return;
     }
     if (request.getCookies() != null) {
-      System.out.println("Cookies not null");
       Optional<Cookie> cookie = Arrays.stream(request.getCookies()).filter(c -> com.sjwi.meals.service.security.AuthenticationService.STORED_COOKIE_TOKEN_KEY.equals(c.getName())).findFirst();
       if (cookie.isPresent()) {
-        System.out.println("Cookie is present");
         AbstractMap.SimpleEntry<String,String> token = mealDao.getStoredCookieToken(cookie.get().getValue());
         if (token.getValue() != null) {
-          System.out.println("token is present");
           MealsUser user = (MealsUser) mealDao.getUser(token.getKey());
           if (user != null) {
-            System.out.println("user is present");
             try {
               AccessTokenResponse tokenResponse = oAuthManager.refreshAccessToken(user.getRefreshToken());
               request.getSession().setAttribute("JWT", tokenResponse.getAccess_token());
