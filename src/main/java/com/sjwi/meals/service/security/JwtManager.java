@@ -1,10 +1,13 @@
 package com.sjwi.meals.service.security;
 
 import java.net.URI;
+import java.security.KeyFactory;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.Base64;
 
-import javax.crypto.spec.SecretKeySpec;
+import javax.xml.bind.DatatypeConverter;
 
 import com.google.gson.Gson;
 import com.sjwi.meals.model.security.AccessTokenResponse;
@@ -18,7 +21,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JwtManager {
@@ -31,14 +33,20 @@ public class JwtManager {
     Base64.Decoder decoder = Base64.getDecoder();
     String header = new String(decoder.decode(chunks[0]));
     JwtHeader jwtHeader = new Gson().fromJson(header, JwtHeader.class);
+    String payload = new String(decoder.decode(chunks[1]));
     String privateKey = getPrivateKey(jwtHeader);
-    System.out.println(privateKey);
-    SignatureAlgorithm sa = SignatureAlgorithm.RS256;
-    System.out.println(privateKey);
-    SecretKeySpec secretKeySpec = new SecretKeySpec(privateKey.getBytes(), sa.getJcaName());
+
+
+    byte[] keyBytes = DatatypeConverter.parseBase64Binary(privateKey); // your key here
+
+    X509EncodedKeySpec keySpecX509 = new X509EncodedKeySpec(keyBytes);
+    KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+    RSAPublicKey pubKey = (RSAPublicKey) keyFactory.generatePublic(keySpecX509);
     return Jwts.parser()
-            .setSigningKey(secretKeySpec)
-            .parseClaimsJws(response.getAccess_token()).getBody().toString();
+      .setSigningKey(pubKey)
+      .parseClaimsJws(response.getAccess_token()).getBody().toString();
+ 
+ 
     // String[] chunks = response.getAccess_token().split("\\.");
     // Base64.Decoder decoder = Base64.getDecoder();
     // String header = new String(decoder.decode(chunks[0]));

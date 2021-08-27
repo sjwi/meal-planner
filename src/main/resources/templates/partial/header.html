@@ -5,7 +5,7 @@
     </div>
     <div class="col-5 px-2 text-end">
       <a class="dropdown-toggle user-toggle text-white text-decoration-none" data-toggle="dropdown" style="font-size:.7rem; line-height:1" sec:authentication="principal.fullName"></a>
-      <ul class="dropdown-menu dropdown-menu-right nav-dropdown-menu py-1">
+      <ul class="dropdown-menu dropdown-menu-right nav-dropdown-menu py-1" style="right:0;">
         <li><a class="dropdown-item logout" href="javascript:void(0)" onclick="$('#logoutForm').submit()">Logout</a></li>
         <li sec:authorize="hasAuthority('ADMIN')">
           <a th:href="${@environment.getProperty('meals.auth.auth_url') +
