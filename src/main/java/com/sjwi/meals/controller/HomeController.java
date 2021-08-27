@@ -103,8 +103,11 @@ public class HomeController {
       user = mealDao.registerNewUser(jwtManager.getOAuthUser(), tokenResponse.getRefresh_token());
       authenticationService.generateCookieToken(request, response, jwtManager.getOAuthUser());
     }
-    else
+    else {
       user = mealDao.updateUserRefreshToken(jwtManager.getOAuthUser(),tokenResponse.getRefresh_token());
+      if (!authenticationService.userHasLoginCookie(request, response, user.getUsername()))
+        authenticationService.generateCookieToken(request, response, jwtManager.getOAuthUser());
+    }
     SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
     System.out.println("Refresh Token: " + tokenResponse.getRefresh_token());
     return new ModelAndView("redirect:/");

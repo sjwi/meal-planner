@@ -58,4 +58,9 @@ public class AuthenticationService {
 			mealDao.deleteCookieToken(cookieToken.getValue());
 		}
   }
+
+  public boolean userHasLoginCookie(HttpServletRequest request, HttpServletResponse response, String username) {
+    Cookie[] cookies = request.getCookies();
+    return cookies != null && Arrays.stream(cookies).anyMatch(c -> c.getName().equals(STORED_COOKIE_TOKEN_KEY));
+  }
 }
