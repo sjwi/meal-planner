@@ -437,15 +437,6 @@ public class MealDao {
     });
   }
 
-  private Date getMealLastEaten(int mealId) {
-    return jdbcTemplate.query(queryStore.get("getMealLastEaten"), new Object[] { mealId }, r -> {
-      if (r.next())
-        return r.getDate("LAST_EATEN");
-      else
-        return null;
-    });
-  }
-
   private List<Ingredient> getIngredientsInSide(int sideId) {
     return jdbcTemplate.query(queryStore.get("getIngredientsInSide"), new Object[] { sideId }, r -> {
       List<Ingredient> ingredients = new ArrayList<>();
