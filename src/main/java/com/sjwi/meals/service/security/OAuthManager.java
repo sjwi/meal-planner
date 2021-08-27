@@ -10,6 +10,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -43,6 +44,15 @@ public class OAuthManager {
     StringEntity input = new StringEntity(payloadString);
     input.setContentType("application/json");
     postRequest.setEntity(input);
+
+    String credentials = clientId +  ":" + clientSecret;
+    System.out.println(credentials);
+    String encodedCredentials = new String(Base64.encodeBase64(credentials.getBytes()));
+    //headers.setAccept(Arrays.asList(MediaType.ALL));
+    // headers.setContentType(MediaType.APPLICATION_JSON);
+    postRequest.setHeader("Authorization", "Basic " + encodedCredentials);
+    postRequest.setHeader("Accept", "*/*");
+    postRequest.setHeader("Content-Type", "application/x-www-form-urlencoded");
 
     HttpResponse response = httpClient.execute(postRequest);
 
