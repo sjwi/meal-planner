@@ -36,6 +36,13 @@ public class OAuthManager {
   String scopes;
 
   public String getOAuthToken(String code) throws Exception {
+    System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.SimpleLog");
+
+System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
+
+System.setProperty("org.apache.commons.logging.simplelog.log.httpclient.wire", "debug");
+
+System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.commons.httpclient", "debug");
     DefaultHttpClient httpClient = new DefaultHttpClient();
     HttpPost postRequest = new HttpPost(tokenUrl);
 
