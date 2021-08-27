@@ -4,7 +4,7 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.Base64;
 
-import javax.xml.bind.DatatypeConverter;
+import javax.crypto.spec.SecretKeySpec;
 
 import com.google.gson.Gson;
 import com.sjwi.meals.model.security.AccessTokenResponse;
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
 public class JwtManager {
@@ -32,8 +33,11 @@ public class JwtManager {
     JwtHeader jwtHeader = new Gson().fromJson(header, JwtHeader.class);
     String privateKey = getPrivateKey(jwtHeader);
     System.out.println(privateKey);
+    SignatureAlgorithm sa = SignatureAlgorithm.RS256;
+    System.out.println(privateKey);
+    SecretKeySpec secretKeySpec = new SecretKeySpec(privateKey.getBytes(), sa.getJcaName());
     return Jwts.parser()
-            .setSigningKey(DatatypeConverter.parseBase64Binary(privateKey))
+            .setSigningKey(secretKeySpec)
             .parseClaimsJws(response.getAccess_token()).getBody().toString();
     // String[] chunks = response.getAccess_token().split("\\.");
     // Base64.Decoder decoder = Base64.getDecoder();
