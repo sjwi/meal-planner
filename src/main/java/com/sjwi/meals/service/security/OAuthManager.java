@@ -6,7 +6,13 @@ import com.google.gson.Gson;
 import com.sjwi.meals.model.TokenRequest;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.CookieSpecs;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.boot.web.client.RestTemplateCustomizer;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -40,7 +46,7 @@ public class OAuthManager {
     ResponseEntity<String> response = null;
     System.out.println("Authorization Code------" + code);
 
-    RestTemplate restTemplate = new RestTemplate();
+    RestTemplate restTemplate = new RestTemplateBuilder().additionalCustomizers(new RestTemplateStandardCookieCustomizer()).build();
     restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
 
     String credentials = clientId +  ":" + clientSecret;
@@ -61,4 +67,17 @@ public class OAuthManager {
     return response.getBody();
   }
 
+  public class RestTemplateStandardCookieCustomizer implements RestTemplateCustomizer {
+    @Override
+    public void customize(final RestTemplate restTemplate) {
+      final HttpClient httpClient = HttpClients.custom()
+          .setDefaultRequestConfig(RequestConfig.custom()
+              .setCookieSpec(CookieSpecs.STANDARD).build())
+          .build();
+
+      restTemplate.setRequestFactory(
+        new HttpComponentsClientHttpRequestFactory(httpClient)
+      );
+    }
+  }
 }
