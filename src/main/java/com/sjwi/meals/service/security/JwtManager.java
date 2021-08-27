@@ -24,7 +24,7 @@ public class JwtManager {
   String clientSecret;
 
   public String getUnpackedAccessToken(AccessTokenResponse response) throws NoSuchAlgorithmException, ExpiredJwtException, UnsupportedJwtException, MalformedJwtException, SignatureException, IllegalArgumentException, InvalidKeySpecException {
-    SignatureAlgorithm sa = SignatureAlgorithm.HS256;
+    SignatureAlgorithm sa = SignatureAlgorithm.RS256;
     SecretKeySpec secretKeySpec = new SecretKeySpec(clientSecret.getBytes(), sa.getJcaName());
     return Jwts.parser().setSigningKey(secretKeySpec).parseClaimsJws(response.getAccess_token()).getBody().toString();
   }
