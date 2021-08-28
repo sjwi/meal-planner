@@ -14,12 +14,12 @@
         <div class="row">
           <div class="col col-7 text-small text-secondary">
             <th:block th:if="${product.items[0].price != null}" th:with="sale=${product.items[0].price.get('promo') != 0 && product.items[0].price.get('promo') != product.items[0].price.get('regular') }">
-              <span th:if="${sale}" class="text-success" th:text="${'$' + #numbers.formatDecimal(product.items[0].price.get('promo'), 0, 'COMMA', 2, 'POINT')} + 
+              <span th:if="${sale}" class="text-success" th:text="${'$' + #numbers.formatDecimal(product.items[0].price.get('promo'), 1, 'COMMA', 2, 'POINT')} + 
                   ${product.items[0].soldBy == 'UNIT'? '':  '/'  + product.items[0].size}"></span>
               <span>
-                <del th:if="${sale}" th:text="${'$' + #numbers.formatDecimal(product.items[0].price.get('regular'), 0, 'COMMA', 2, 'POINT')} + 
+                <del th:if="${sale}" th:text="${'$' + #numbers.formatDecimal(product.items[0].price.get('regular'), 1, 'COMMA', 2, 'POINT')} + 
                   ${product.items[0].soldBy == 'UNIT'? '':  '/'  + product.items[0].size}"></del>
-                <span th:if="${!sale}" th:text="${'$' + #numbers.formatDecimal(product.items[0].price.get('regular'), 0, 'COMMA', 2, 'POINT')} + 
+                <span th:if="${!sale}" th:text="${'$' + #numbers.formatDecimal(product.items[0].price.get('regular'), 1, 'COMMA', 2, 'POINT')} + 
                   ${product.items[0].soldBy == 'UNIT'? '':  '/'  + product.items[0].size}"></span>
               </span>
             </th:block>
