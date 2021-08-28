@@ -61,10 +61,10 @@
     });
   })
 
-  $('#krogerModal').on('hidden.bs.modal', function () {
+  $('#krogerModal').on('hide.bs.modal', function () {
     $('#ingredientsModal').modal('show');
     if (itemPurchased) {
-      $('#shoppingCart_' + currentId).css('color','green');
+      $('#shoppingCart_' + currentId).addClass('text-success');
       itemPurchased = false;
     }
   });
