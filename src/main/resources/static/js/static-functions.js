@@ -316,7 +316,7 @@ function addItemToCart(upc) {
     method: "PUT",
     data: {
       upc: upc,
-      count: $('#productRow_' + upc + ' #quantity').val()
+      count: $('#productRow_' + upc + ' .quantity-field').val()
     }
   });
 }

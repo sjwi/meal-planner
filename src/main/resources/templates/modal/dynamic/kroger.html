@@ -12,22 +12,25 @@
           </div>
         </div>
         <div class="row">
-          <div class="col col-7 text-small">
-            <th:block th:if="${product.items[0].price != null}">
-              <span th:if="${product.items[0].price.get('promo') != 0}" class="text-green" th:text="${'$' + product.items[0].price.get('promo')} + 
+          <div class="col col-7 text-small text-secondary">
+            <th:block th:if="${product.items[0].price != null}" th:with="sale=${product.items[0].price.get('promo') != 0 && product.items[0].price.get('promo') != product.items[0].price.get('regular') }">
+              <span th:if="${sale}" class="text-success" th:text="${'$' + product.items[0].price.get('promo')} + 
                   ${product.items[0].soldBy == 'UNIT'? '':  '/'  + product.items[0].soldBy}"></span>
-              <span th:classappend="${product.items[0].price.get('promo') == 0? 'text-green':''}">
-                <del th:if="${product.items[0].price.get('promo') != 0}" th:text="${'$' + product.items[0].price.get('promo')} + 
+              <span>
+                <del th:if="${sale}" th:text="${'$' + product.items[0].price.get('regular')} + 
                   ${product.items[0].soldBy == 'UNIT'? '':  '/'  + product.items[0].soldBy}"></del>
-                <span th:if="${product.items[0].price.get('promo') == 0}" th:text="${'$' + product.items[0].price.get('regular')} + 
+                <span th:if="${!sale}" th:text="${'$' + product.items[0].price.get('regular')} + 
                   ${product.items[0].soldBy == 'UNIT'? '':  '/'  + product.items[0].soldBy}"></span>
               </span>
+            </th:block>
+            <th:block th:if="${product.items[0].price == null}">
+              <span>Price unavailable</span>
             </th:block>
           </div>
           <div class="col col-5 text-end px-0 mt-1">
             <div class="input-group counter-input-group w-auto justify-content-end align-items-center">
               <input type="button" value="-" class="button-minus border rounded-circle  icon-shape icon-sm mx-1 " data-field="quantity">
-              <input type="number" step="1" max="10" value="1" name="quantity" id="quantity" class="quantity-field border-0 text-center w-25">
+              <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field border-0 text-center w-25">
               <input type="button" value="+" class="button-plus border rounded-circle icon-shape icon-sm " data-field="quantity">
             </div>
           </div>
