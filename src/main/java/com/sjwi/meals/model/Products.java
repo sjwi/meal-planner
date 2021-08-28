@@ -19,18 +19,18 @@ public class Products {
     public Map<String, Object> temperature;
   }
 
-  public class Image {
+  public static class Image {
     public String perspective;
     public boolean featured;
     public Size[] sizes;
   }
 
-  public class Size {
+  public static class Size {
     public String size;
     public String url;
   }
 
-  public class Item {
+  public static class Item {
     public String itemId;
     public boolean favorite;
     public Map<String, Boolean> fulfillment;
