@@ -53,8 +53,8 @@ public class KrogerService {
     RestTemplate restTemplate = new RestTemplate();
      
     String url = baseUrl + PRODUCTS_ENDPOINT +
-      "?filter.term=" + URLEncoder.encode(name, "UTF-8") +
-      "&filter.locationId=" + LOCATION_ID +
+      "?filter.locationId=" + LOCATION_ID +
+      name != null && !name.trim().isEmpty()? "&filter.term=" + URLEncoder.encode(name, "UTF-8") : "" +
       "&filter.limit=" + LIMIT;
     URI uri = new URI(url);
     
