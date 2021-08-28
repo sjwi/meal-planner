@@ -1,0 +1,54 @@
+<div class="modal fade" id="krogerModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog text-dark">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Search Kroger Products</h5>
+        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col">
+            <div class="input-group">
+              <input id="krogerSearchBox" type="search" class="form-control" placeholder="Search" aria-label="Search"/>
+              <button id="krogerSearchBtn" type="submit" class="input-group-text border-1" data-title="Search">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div id="productTable">
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  let currentId;
+  let itemPurchased = false;
+  function searchProductForIngredient(id) {
+    currentId = id;
+    $('#ingredientsSummaryTable').modal('hide');
+    $('#krogerModal #productTable').html($('#loading').html());
+    $('#krogerModal #krogerSearchBox').val($('#ingredientSummaryName_' + id).html());
+    $('#krogerModal').modal('show');
+    $.ajax({
+      url: contextpath + 'kroger/searchProducts?ingredientId=' + id,
+      method: "GET",
+      success: function(data) {
+        $('#ingredientsModal #productTable').html(data);
+      },
+      error: function(data){
+        alert('Something went wrong! Unable to retreive products from the Kroger catalog')
+      },
+    });
+  }
+
+  $('#krogerModal').on('hide.bs.modal', function () {
+    $('#ingredientsSummaryTable').modal('show');
+    if (!itemPurchased) {
+      $('#shoppingCart_' + currentId).css('color','green');
+      itemPurchased = false;
+    }
+  });
+</script>

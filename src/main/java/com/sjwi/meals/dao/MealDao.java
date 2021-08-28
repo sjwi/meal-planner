@@ -584,5 +584,12 @@ public class MealDao {
     jdbcTemplate.update(queryStore.get("updateUserRefreshToken"), new Object[] {refresh_token,oAuthUser});
     return getUser(oAuthUser);
   }
+
+  public Ingredient getIngredientById(int id) {
+    return jdbcTemplate.query(queryStore.get("getIngredientById"), new Object[] {id}, r -> {
+      r.next();
+      return new Ingredient(r.getInt("ID"), r.getString("NAME"));
+    });
+  }
 }
  

@@ -173,3 +173,6 @@ getWeekMealById: >
 
 removeSideFromWeekMeal: >
   DELETE FROM MealSides WHERE MEAL_ID = (select ID From PlannedMeals where MEAL_ID = ? and SCHEDULE_ID = ? ORDER BY ID DESC LIMIT 1) AND SIDE_ID = ?
+
+getIngredientById: >
+  Select * From Ingredients where ID = ?

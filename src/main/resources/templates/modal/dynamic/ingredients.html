@@ -2,8 +2,9 @@
   <ul class="list-group list-group-flush">
       <li class="list-group-item" th:each="ingredient:${ingredients}">
         <div class="row no-gutters">
-          <div class="col-10" th:text="${ingredient.key.name}"></div>
+          <div class="col-8 text-truncate" th:id="${'ingredientSummaryName_' + ingredient.key.id}" th:text="${ingredient.key.name}"></div>
           <div class="col-2 text-end" th:text="${ingredient.value}"></div>
+          <div class="col-2 text-end my-1"><i th:id="${'shoppingCart_' + ingredient.key.id}" th:attr="onclick=${'searchProductForIngredient(' + ingredient.key.id + ')'}" class="fas fa-shopping-cart text-info"></i></div>
         </div>
       </li>
   </ul>

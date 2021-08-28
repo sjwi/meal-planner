@@ -53,8 +53,9 @@ public class HomeController {
 
   @RequestMapping("/")
   public ModelAndView homeController(HttpServletRequest request, Authentication auth) {
+    //  MealsUser user = (MealsUser) mealDao.getUser("de9a8c23-bb74-512d-a390-2b8cb659ebcf");
+    //  SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
     Map<String, String> preferences  = ((MealsUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPreferences();
-    System.out.println("JWT: " + request.getSession().getAttribute("JWT").toString());
     ModelAndView mv = new ModelAndView("home");
     List<Week> weeks = mealDao.getNNumberOfWeeks(DEFAULT_NUMBER_OF_WEEKS);
     mv.addObject("meals", mealDao.getAllMeals(preferences));
