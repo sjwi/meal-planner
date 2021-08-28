@@ -26,8 +26,8 @@ public class KrogerController {
 
   @RequestMapping("/kroger/searchProducts")
   @ResponseStatus(HttpStatus.OK)
-  public ModelAndView getLocations(@RequestParam int id) throws URISyntaxException{
-    Ingredient ingredient = mealDao.getIngredientById(id);
+  public ModelAndView getLocations(@RequestParam int ingredientId) throws URISyntaxException{
+    Ingredient ingredient = mealDao.getIngredientById(ingredientId);
     System.out.println("got 'eem");
     Products products = krogerService.getProductsByTerm(ingredient.getName());
     ModelAndView mv = new ModelAndView("modal/dynamic/kroger");
