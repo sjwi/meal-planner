@@ -2,29 +2,29 @@
   <li class="list-group-item" th:each="product : ${products.data}">
     <div class="row" th:id="${'productRow_' + product.upc}">
       <div class="col col-2 ps-0">
-        <img th:src="${product.images[0].sizes[3].url}"></img>
+        <img width="50px" class="my-2" th:src="${product.images[0].sizes[3].url}"></img>
       </div>
       <div class="col-10">
         <div class="row">
           <div class="col col-9 text-wrap text-small product-text pe-0" th:text="${product.description}"></div>
           <div class="col col-3 text-end px-0">
-            <a class="btn btn-success" th:attr="onclick=${'addItemToCart(' + product.upc + ')'}"><i class="fas fa-cart-plus py-1"></i></a>
+            <a class="btn btn-success" th:id="${'addItemToCart_' + product.upc}" th:attr="onclick=${'addItemToCart(' + product.upc + ')'}"><i class="fas fa-cart-plus py-1"></i></a>
           </div>
         </div>
         <div class="row">
-          <div class="col col-9 text-small">
+          <div class="col col-7 text-small">
             <th:block th:if="${product.items[0].price != null}">
-              <span th:if="${product.items[0].price.get('promo') != 0}" class="text-green" th:text="${'$' + product.items[0].price.get('promo') + 
-                  product.items[0].soldBy == 'UNIT'? '':  '/'  + product.items[0].soldBy}"></span>
+              <span th:if="${product.items[0].price.get('promo') != 0}" class="text-green" th:text="${'$' + product.items[0].price.get('promo')} + 
+                  ${product.items[0].soldBy == 'UNIT'? '':  '/'  + product.items[0].soldBy}"></span>
               <span th:classappend="${product.items[0].price.get('promo') == 0? 'text-green':''}">
-                <del th:if="${product.items[0].price.get('promo') != 0}" th:text="${'$' + product.items[0].price.get('promo') + 
-                  product.items[0].soldBy == 'UNIT'? '':  '/'  + product.items[0].soldBy}"></del>
-                <span th:if="${product.items[0].price.get('regular') != 0}" th:text="${'$' + product.items[0].price.get('regular') + 
-                  product.items[0].soldBy == 'UNIT'? '':  '/'  + product.items[0].soldBy}"></span>
+                <del th:if="${product.items[0].price.get('promo') != 0}" th:text="${'$' + product.items[0].price.get('promo')} + 
+                  ${product.items[0].soldBy == 'UNIT'? '':  '/'  + product.items[0].soldBy}"></del>
+                <span th:if="${product.items[0].price.get('promo') == 0}" th:text="${'$' + product.items[0].price.get('regular')} + 
+                  ${product.items[0].soldBy == 'UNIT'? '':  '/'  + product.items[0].soldBy}"></span>
               </span>
             </th:block>
           </div>
-          <div class="col col-3 text-end px-0">
+          <div class="col col-5 text-end px-0 mt-1">
             <div class="input-group counter-input-group w-auto justify-content-end align-items-center">
               <input type="button" value="-" class="button-minus border rounded-circle  icon-shape icon-sm mx-1 " data-field="quantity">
               <input type="number" step="1" max="10" value="1" name="quantity" id="quantity" class="quantity-field border-0 text-center w-25">

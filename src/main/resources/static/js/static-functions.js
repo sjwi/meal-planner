@@ -303,3 +303,20 @@ function decrementValue(e) {
       parent.find('input[name=' + fieldName + ']').val(0);
   }
 }
+
+function addItemToCart(upc) {
+    $('#addItemToCart_' + upc).prop('disabled',true);
+    $('#addItemToCart_' + upc).addClass('btn-success');
+  setTimeout(function(){
+    $('#addItemToCart_' + upc).prop('disabled',false);
+    $('#addItemToCart_' + upc).removeClass('btn-success');
+  },2000)
+  $.ajax({
+    url: contextpath + 'kroger/addProductToCart',
+    method: "PUT",
+    data: {
+      upc: upc,
+      count: $('#productRow_' + upc + ' #quantity').val()
+    }
+  });
+}
