@@ -8,7 +8,7 @@
         <div class="row">
           <div class="col col-9 text-wrap text-small product-text pe-0" th:text="${product.description}"></div>
           <div class="col col-3 text-end px-0">
-            <a class="btn btn-success" th:id="${'addItemToCart_' + product.upc}" th:attr="onclick=${'addItemToCart(' + product.upc + ')'}"><i class="fas fa-cart-plus py-1"></i></a>
+            <a class="btn btn-success" th:id="${'addItemToCart_' + product.upc}" th:attr="onclick=${'addItemToCart(''' + product.upc + ''')'}"><i class="fas fa-cart-plus py-1"></i></a>
           </div>
         </div>
         <div class="row">
