@@ -26,7 +26,7 @@ public class Products {
     public Size[] sizes;
     public String getSize(String name) {
       return Arrays.stream(sizes)
-        .filter(s -> s.size == name)
+        .filter(s -> s.size.equals(name))
         .map(s -> s.url)
         .findFirst().orElse("");
     }
