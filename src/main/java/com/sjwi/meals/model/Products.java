@@ -3,7 +3,7 @@ package com.sjwi.meals.model;
 import java.util.Map;
 
 public class Products {
-  Product[] data;
+  public Product[] data;
 
   public class Product {
     public String productId;
