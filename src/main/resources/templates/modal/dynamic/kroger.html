@@ -13,14 +13,16 @@
         </div>
         <div class="row">
           <div class="col col-9 text-small">
-            <span th:if="${product.items[0].price.get('promo') != 0}" class="text-green" th:text="${'$' + product.items[0].price.get('promo') + 
-                product.items[0].soldBy == 'UNIT'? '':  '/'  + product.items[0].soldBy}"></span>
-            <span th:classappend="${product.items[0].price.get('promo') == 0? 'text-green':''}">
-              <del th:if="${product.items[0].price.get('promo') != 0}" th:text="'$' + product.items[0].proce.get('promo') + 
-                product.items[0].soldBy == 'UNIT'? '':  '/'  + product.items[0].soldBy"></del>
-              <span th:if="${product.items[0].price.get('regular') != 0}" th:text="'$' + product.items[0].proce.get('regular') + 
-                product.items[0].soldBy == 'UNIT'? '':  '/'  + product.items[0].soldBy"></span>
-            </span>
+            <th:block th:if="${product.items[0].price != null}">
+              <span th:if="${product.items[0].price.get('promo') != 0}" class="text-green" th:text="${'$' + product.items[0].price.get('promo') + 
+                  product.items[0].soldBy == 'UNIT'? '':  '/'  + product.items[0].soldBy}"></span>
+              <span th:classappend="${product.items[0].price.get('promo') == 0? 'text-green':''}">
+                <del th:if="${product.items[0].price.get('promo') != 0}" th:text="'$' + product.items[0].price.get('promo') + 
+                  product.items[0].soldBy == 'UNIT'? '':  '/'  + product.items[0].soldBy"></del>
+                <span th:if="${product.items[0].price.get('regular') != 0}" th:text="'$' + product.items[0].price.get('regular') + 
+                  product.items[0].soldBy == 'UNIT'? '':  '/'  + product.items[0].soldBy"></span>
+              </span>
+            </th:block>
           </div>
           <div class="col col-3 text-end px-0">
             <div class="input-group counter-input-group w-auto justify-content-end align-items-center">
