@@ -13,6 +13,24 @@
 .nav-link {
   font-size: 1.5rem;
 }
+.product-text {
+  line-height: 20px;
+  height: 40px;
+  overflow: hidden;
+}
+.icon-shape {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.icon-sm {
+  width: 2rem;
+  height: 2rem;
+  
+}
 .dataTables_scrollBody{
   overflow-x:hidden !important;
   border-bottom: 0 !important;

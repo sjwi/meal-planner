@@ -240,4 +240,11 @@
     $("#sidesContainer").show();
   }
 
+
+  $(document).on('click', '.counter-input-group .button-plus', function(e) {
+      incrementValue(e);
+  });
+  $(document).on('click', '.counter-input-group .button-minus', function(e) {
+      decrementValue(e);
+  });
 </script>
