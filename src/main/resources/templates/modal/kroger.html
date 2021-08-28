@@ -47,7 +47,7 @@
         $('#krogerModal #productTable').html(data);
       },
       error: function(data){
-        alert('Something went wrong! Unable to retreive products from the Kroger catalog')
+        alert('Something went wrong! Unable to retreive products from the Kroger catalog. Maybe adjust your search term and try again.')
       },
     });
   }
@@ -65,6 +65,7 @@
     $('#ingredientsModal').modal('show');
     if (itemPurchased) {
       $('#shoppingCart_' + currentId).addClass('text-success');
+      $('#shoppingCart_' + currentId).removeClass('text-info');
       itemPurchased = false;
     }
   });

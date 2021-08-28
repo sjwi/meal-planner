@@ -2,7 +2,7 @@
   <li class="list-group-item" th:each="product : ${products.data}">
     <div class="row" th:id="${'productRow_' + product.upc}">
       <div class="col col-2 ps-0">
-        <img width="50px" class="my-2" th:src="${product.images[0].sizes[3].url}"></img>
+        <img width="50px" class="my-2" th:src="${product.images[0].getSize('medium')}"></img>
       </div>
       <div class="col-10">
         <div class="row">

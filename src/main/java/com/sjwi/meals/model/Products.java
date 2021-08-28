@@ -1,5 +1,6 @@
 package com.sjwi.meals.model;
 
+import java.util.Arrays;
 import java.util.Map;
 
 public class Products {
@@ -23,6 +24,12 @@ public class Products {
     public String perspective;
     public boolean featured;
     public Size[] sizes;
+    public String getSize(String name) {
+      return Arrays.stream(sizes)
+        .filter(s -> s.size == name)
+        .map(s -> s.url)
+        .findFirst().orElse("");
+    }
   }
 
   public static class Size {
