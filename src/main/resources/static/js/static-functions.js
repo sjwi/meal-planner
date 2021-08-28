@@ -312,8 +312,8 @@ function addItemToCart(upc) {
     $('#addItemToCart_' + upc).prop('disabled',false);
     $('#addItemToCart_' + upc).removeClass('btn-success');
   },2000)
-  let theCount = $('#productRow_' + upc + ' .quantity-field').val();
-  console.log($('#productRow_' + upc));
+  let theCount = $('#productRow_' + upc.toString() + ' .quantity-field').val();
+  console.log($('#productRow_' + upc.toString()));
   console.log(theCount);
   $.ajax({
     url: contextpath + 'kroger/addProductToCart',
