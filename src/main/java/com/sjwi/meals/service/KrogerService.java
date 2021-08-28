@@ -71,7 +71,8 @@ public class KrogerService {
     String url = baseUrl + ADD_CART_ENDPOINT;
     URI uri = new URI(url);
     
-    Item[] items = new Item[] {new Item(upc,count)};
+    Items items = new Items();
+    items.items = new Item[] {new Item(upc,count)};
     HttpHeaders headers = new HttpHeaders();
     headers.add("Authorization", "Bearer " + getSessionToken());
     headers.add("Content-Type", "application/json");
@@ -82,6 +83,10 @@ public class KrogerService {
   private String getSessionToken() {
     HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
     return request.getSession().getAttribute("JWT").toString();
+  }
+
+  public class Items {
+    public Item[] items;
   }
 
   public class Item {
