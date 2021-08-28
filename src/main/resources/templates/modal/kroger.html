@@ -32,8 +32,12 @@
     $('#krogerModal #productTable').html($('#loading').html());
     $('#krogerModal #krogerSearchBox').val($('#ingredientSummaryName_' + id).html());
     $('#krogerModal').modal('show');
+    refreshKrogerPage();
+  }
+
+  function refreshKrogerPage() {
     $.ajax({
-      url: contextpath + 'kroger/searchProducts?ingredientId=' + id,
+      url: contextpath + 'kroger/searchProducts?term=' + encodeURI($('#krogerModal #krogerSearchBox').val()),
       method: "GET",
       success: function(data) {
         $('#krogerModal #productTable').html(data);
@@ -44,7 +48,16 @@
     });
   }
 
-  $('#krogerModal').on('hide.bs.modal', function () {
+  $(document).ready(function(){
+    $('#krogerSearchBtn').on('click',function(){
+      $('#krogerSearchBox').trigger('search');
+    })
+    $('#krogerSearchBox').on('search',function(){
+      refreshKrogerPage();
+    });
+  })
+
+  $('#krogerModal').on('hidden.bs.modal', function () {
     $('#ingredientsSummaryTable').modal('show');
     if (!itemPurchased) {
       $('#shoppingCart_' + currentId).css('color','green');
