@@ -28,7 +28,7 @@
   let itemPurchased = false;
   function searchProductForIngredient(id) {
     currentId = id;
-    $('#ingredientsSummaryTable').modal('hide');
+    $('#ingredientsModal').modal('hide');
     $('#krogerModal #productTable').html($('#loading').html());
     $('#krogerModal #krogerSearchBox').val($('#ingredientSummaryName_' + id).html());
     $('#krogerModal').modal('show');

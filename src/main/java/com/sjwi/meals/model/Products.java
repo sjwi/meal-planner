@@ -5,7 +5,7 @@ import java.util.Map;
 public class Products {
   public Product[] data;
 
-  public class Product {
+  public static class Product {
     public String productId;
     public String upc;
     public Map<String, String> aisleLocations;
