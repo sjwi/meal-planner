@@ -63,7 +63,7 @@
 
   $('#krogerModal').on('hidden.bs.modal', function () {
     $('#ingredientsModal').modal('show');
-    if (!itemPurchased) {
+    if (itemPurchased) {
       $('#shoppingCart_' + currentId).css('color','green');
       itemPurchased = false;
     }
