@@ -8,7 +8,7 @@ public class Products {
   public static class Product {
     public String productId;
     public String upc;
-    public Map<String, String> aisleLocations;
+    public Map<String, String>[] aisleLocations;
     public String brand;
     public String[] categories;
     public String countryOrigin;
