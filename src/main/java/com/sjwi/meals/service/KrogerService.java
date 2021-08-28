@@ -7,6 +7,7 @@ import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.google.gson.Gson;
 import com.sjwi.meals.model.Products;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -44,6 +45,7 @@ public class KrogerService {
   String baseUrl;
 
   private static final String PRODUCTS_ENDPOINT = "/products";
+  private static final String ADD_CART_ENDPOINT = "/cart/add";
   private static final String LOCATION_ID = "02400347";
   private static final String LIMIT = "15";
 
@@ -63,9 +65,33 @@ public class KrogerService {
     return result.getBody();
   }
 
+  public Products addProductToCart(String upc, int count) throws URISyntaxException, UnsupportedEncodingException {
+    RestTemplate restTemplate = new RestTemplate();
+     
+    String url = baseUrl + ADD_CART_ENDPOINT;
+    URI uri = new URI(url);
+    
+    Item[] items = new Item[] {new Item(upc,count)};
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Authorization", "Bearer " + getSessionToken());
+    headers.add("Content-Type", "application/json");
+    HttpEntity<String> requestEntity = new HttpEntity<>(new Gson().toJson(items), headers);
+    ResponseEntity<Products> result = restTemplate.exchange(uri, HttpMethod.POST, requestEntity, Products.class);
+    return result.getBody();
+  }
+
   private String getSessionToken() {
     HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
     return request.getSession().getAttribute("JWT").toString();
+  }
+
+  public class Item {
+    public Item (String upc, int quantity) {
+      this.upc = upc;
+      this.quantity = quantity;
+    }
+    public int quantity;
+    public String upc;
   }
 
 }
