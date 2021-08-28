@@ -1,7 +1,9 @@
 package com.sjwi.meals.service;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -45,11 +47,11 @@ public class KrogerService {
   private static final String LOCATION_ID = "02400347";
   private static final String LIMIT = "15";
 
-  public Products getProductsByTerm(String name) throws URISyntaxException {
+  public Products getProductsByTerm(String name) throws URISyntaxException, UnsupportedEncodingException {
     RestTemplate restTemplate = new RestTemplate();
      
     String url = baseUrl + PRODUCTS_ENDPOINT +
-      "?filter.term=" + name +
+      "?filter.term=" + URLEncoder.encode(name, "UTF-8") +
       "&filter.locationId=" + LOCATION_ID +
       "&filter.limit=" + LIMIT;
     URI uri = new URI(url);

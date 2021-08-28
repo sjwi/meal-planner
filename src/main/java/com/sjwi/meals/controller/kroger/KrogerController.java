@@ -1,5 +1,6 @@
 package com.sjwi.meals.controller.kroger;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 
 import com.sjwi.meals.dao.MealDao;
@@ -26,9 +27,8 @@ public class KrogerController {
 
   @RequestMapping("/kroger/searchProducts")
   @ResponseStatus(HttpStatus.OK)
-  public ModelAndView getLocations(@RequestParam int ingredientId) throws URISyntaxException{
+  public ModelAndView getLocations(@RequestParam int ingredientId) throws URISyntaxException, UnsupportedEncodingException{
     Ingredient ingredient = mealDao.getIngredientById(ingredientId);
-    System.out.println("got 'eem");
     Products products = krogerService.getProductsByTerm(ingredient.getName());
     ModelAndView mv = new ModelAndView("modal/dynamic/kroger");
     mv.addObject("products", products);
