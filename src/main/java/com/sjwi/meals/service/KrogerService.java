@@ -57,7 +57,7 @@ public class KrogerService {
     URI uri = new URI(url);
     
     HttpHeaders headers = new HttpHeaders();
-    headers.add("Authorization", "Basic " + getSessionToken());
+    headers.add("Authorization", "Bearer " + getSessionToken());
     HttpEntity<String> requestEntity = new HttpEntity<>(null, headers);
     ResponseEntity<Products> result = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, Products.class);
     return result.getBody();

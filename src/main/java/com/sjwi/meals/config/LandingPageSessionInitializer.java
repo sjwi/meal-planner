@@ -69,6 +69,7 @@ public class LandingPageSessionInitializer {
     String jwtTokenExpiresOn = request.getSession().getAttribute("JWT_EXPIRES_ON").toString();
     if (oAuthManager.hasTokenExpired(jwtTokenExpiresOn)) {
       try {
+        System.out.println("Refreshing token");
         MealsUser user = (MealsUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         AccessTokenResponse tokenResponse = oAuthManager.refreshAccessToken(user.getRefreshToken());
         request.getSession().setAttribute("JWT", tokenResponse.getAccess_token());
