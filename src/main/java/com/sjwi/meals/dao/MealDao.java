@@ -49,7 +49,7 @@ public class MealDao {
   NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
   public List<Meal> getAllMeals(Map<String,String> preferences) {
-    return jdbcTemplate.query(queryStore.get("getAllMeals",preferences), new Object[] {getUsername()}, r -> {
+    return jdbcTemplate.query(queryStore.get("getAllMeals",preferences), new Object[] {getSuperUsername()}, r -> {
       List<Meal> meals = new ArrayList<>();
       while (r.next()) {
         meals.add(buildMealFromResultSet(r));
@@ -64,7 +64,7 @@ public class MealDao {
 		Map<String, Object> parameters = new HashMap<>();
 		parameters.put("term","%" + searchTerm + "%");
 		parameters.put("tags", tags);
-		parameters.put("user", getUsername());
+		parameters.put("user", getSuperUsername());
     List<Integer> mealIds = namedParameterJdbcTemplate.query(query, parameters, r -> {
       List<Integer> mIds = new ArrayList<>();
       while (r.next()) {
@@ -76,7 +76,7 @@ public class MealDao {
   }
 
   public List<Week> getAllWeeks() {
-    return jdbcTemplate.query(queryStore.get("getAllWeeks"), new Object[] {getUsername()}, r -> {
+    return jdbcTemplate.query(queryStore.get("getAllWeeks"), new Object[] {getSuperUsername()}, r -> {
       List<Week> weeks = new ArrayList<>();
       while (r.next()) {
         List<WeekMeal> meals = getMealsInWeek(r.getInt("ID"));
@@ -87,7 +87,7 @@ public class MealDao {
   }
 
   public List<Week> getNNumberOfWeeks(int n) {
-    return jdbcTemplate.query(queryStore.get("getNNumberOfWeeks"), new Object[] {getUsername(),n}, r -> {
+    return jdbcTemplate.query(queryStore.get("getNNumberOfWeeks"), new Object[] {getSuperUsername(),n}, r -> {
       List<Week> weeks = new ArrayList<>();
       while (r.next()) {
         List<WeekMeal> meals = getMealsInWeek(r.getInt("ID"));
@@ -98,7 +98,7 @@ public class MealDao {
   }
 
   public Map<Integer, String> getAllTags() {
-    return jdbcTemplate.query(queryStore.get("getAllTags"), new Object[] {getUsername()}, r -> {
+    return jdbcTemplate.query(queryStore.get("getAllTags"), new Object[] {getSuperUsername()}, r -> {
       Map<Integer, String> tags = new HashMap<>();
       while (r.next())
         tags.put(r.getInt("ID"), r.getString("NAME"));
@@ -107,7 +107,7 @@ public class MealDao {
   }
 
   public List<Ingredient> getAllIngredients() {
-    SqlParameterSource parameters = new MapSqlParameterSource("user", getUsername());
+    SqlParameterSource parameters = new MapSqlParameterSource("user", getSuperUsername());
     return namedParameterJdbcTemplate.query(queryStore.get("getAllIngredients"), parameters, r -> {
       List<Ingredient> ingredients = new ArrayList<>();
       while (r.next()) {
@@ -139,14 +139,14 @@ public class MealDao {
   }
 
   public Integer getLatestWeekId() {
-    return jdbcTemplate.query(queryStore.get("getLatestWeekId"), new Object[] {getUsername()}, r -> {
+    return jdbcTemplate.query(queryStore.get("getLatestWeekId"), new Object[] {getSuperUsername()}, r -> {
       r.next();
       return r.getInt("ID");
     });
   }
 
   public Integer getLatestMealId() {
-    return jdbcTemplate.query(queryStore.get("getLatestMealId"), new Object[] {getUsername()}, r -> {
+    return jdbcTemplate.query(queryStore.get("getLatestMealId"), new Object[] {getSuperUsername()}, r -> {
       r.next();
       return r.getInt("ID");
     });
@@ -325,7 +325,7 @@ public class MealDao {
         return ingredientsToCreate.size();
       }
     });
-    return jdbcTemplate.query(queryStore.get("getNMostRecentIngredients"), new Object[] {getUsername(),ingredientsToCreate.size()}, r -> {
+    return jdbcTemplate.query(queryStore.get("getNMostRecentIngredients"), new Object[] {getSuperUsername(),ingredientsToCreate.size()}, r -> {
       Set<Integer> createdIngredientIds = new HashSet<>();
       while (r.next()) {
         createdIngredientIds.add(r.getInt("ID"));
@@ -346,7 +346,7 @@ public class MealDao {
         return tagsToCreate.size();
       }
     });
-    return jdbcTemplate.query(queryStore.get("getNMostRecentTags"), new Object[] {getUsername(),tagsToCreate.size()}, r -> {
+    return jdbcTemplate.query(queryStore.get("getNMostRecentTags"), new Object[] {getSuperUsername(),tagsToCreate.size()}, r -> {
       Set<Integer> createdTagIds = new HashSet<>();
       while (r.next()) {
         createdTagIds.add(r.getInt("ID"));
@@ -470,7 +470,7 @@ public class MealDao {
   }
 
   public List<Side> getAllSides() {
-    return jdbcTemplate.query(queryStore.get("getAllSides"), new Object[] {getUsername()}, r -> {
+    return jdbcTemplate.query(queryStore.get("getAllSides"), new Object[] {getSuperUsername()}, r -> {
       List<Side> sides = new ArrayList<>();
       while (r.next()) {
         sides.add(buildSideFromResultSet(r));
@@ -486,7 +486,7 @@ public class MealDao {
   }
 
   private int getLatestSideId() {
-    return jdbcTemplate.query(queryStore.get("getLatestSideId"), new Object[] {getUsername()}, r -> {
+    return jdbcTemplate.query(queryStore.get("getLatestSideId"), new Object[] {getSuperUsername()}, r -> {
       r.next();
       return r.getInt("ID");
     });
@@ -558,6 +558,17 @@ public class MealDao {
     return SecurityContextHolder.getContext().getAuthentication().getName();
   }
 
+  private String getSuperUsername(){
+    if (userHasAuthority("ADMIN"))
+      return "%";
+    return SecurityContextHolder.getContext().getAuthentication().getName();
+  }
+
+  public static boolean userHasAuthority(String authority) {
+    return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+      .anyMatch(ga -> ga.getAuthority().equals("ADMIN"));
+}
+
   public void deleteCookieToken(String token) {
     jdbcTemplate.update(queryStore.get("deleteCookieToken"), new Object[] {token});
   }
@@ -565,7 +576,7 @@ public class MealDao {
   public List<Side> searchSides(String searchTerm) {
 		Map<String, Object> parameters = new HashMap<>();
 		parameters.put("term","%" + searchTerm + "%");
-		parameters.put("user",getUsername());
+		parameters.put("user",getSuperUsername());
     return namedParameterJdbcTemplate.query(queryStore.get("searchSides"), parameters, r -> {
       List<Side> sides = new ArrayList<>();
       while (r.next())
@@ -589,6 +600,27 @@ public class MealDao {
     return jdbcTemplate.query(queryStore.get("getIngredientById"), new Object[] {id}, r -> {
       r.next();
       return new Ingredient(r.getInt("ID"), r.getString("NAME"));
+    });
+  }
+
+  public Integer getIngredientIdByName(String inputSideName) {
+    return jdbcTemplate.query(queryStore.get("getIngredientIdByName"), new Object[] {inputSideName, getSuperUsername()}, r -> {
+      if (r.next())
+        return r.getInt("ID");
+      else
+        return null;
+    });
+  }
+
+  public Integer createIngredient(String inputSideName) {
+    jdbcTemplate.update(queryStore.get("createIngredient"), new Object[] {inputSideName, getUsername()});
+    return getLatestIngredientId();
+  }
+
+  private Integer getLatestIngredientId() {
+    return jdbcTemplate.query(queryStore.get("getLatestIngredientId"), new Object[] {getSuperUsername()}, r -> {
+      r.next();
+      return r.getInt("ID");
     });
   }
 }

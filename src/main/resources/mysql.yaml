@@ -1,19 +1,19 @@
 getAllMeals: >
-  select m.ID,m.NAME,(SELECT MAX(w.DATE_BEGIN) FROM PlannedMeals pm JOIN WeeklySchedule w on w.ID = pm.SCHEDULE_ID where pm.MEAL_ID = m.ID) as LAST_EATEN, m.FAVORITE,m.RECIPE_URL,m.NOTES, COUNT(*) as CNT from Meals m LEFT JOIN PlannedMeals ppm on ppm.MEAL_ID = m.ID where m.DISABLED = 0 AND m.USER = ? group by m.ID,m.NAME
+  select m.ID,m.NAME,(SELECT MAX(w.DATE_BEGIN) FROM PlannedMeals pm JOIN WeeklySchedule w on w.ID = pm.SCHEDULE_ID where pm.MEAL_ID = m.ID) as LAST_EATEN, m.FAVORITE,m.RECIPE_URL,m.NOTES, COUNT(*) as CNT from Meals m LEFT JOIN PlannedMeals ppm on ppm.MEAL_ID = m.ID where m.DISABLED = 0 AND m.USER like ? group by m.ID,m.NAME
   ORDER BY {{SORT}} {{SORT_DIRECTION}}
 
 searchMeals: >
-  select DISTINCT m.ID from Meals m LEFT JOIN MealTags mt on m.ID = mt.MEAL_ID where LOWER(NAME) like LOWER(:term) and DISABLED = 0 AND m.USER = :user {{ADDITIONAL_PARAMS}}
+  select DISTINCT m.ID from Meals m LEFT JOIN MealTags mt on m.ID = mt.MEAL_ID where LOWER(NAME) like LOWER(:term) and DISABLED = 0 AND m.USER like :user {{ADDITIONAL_PARAMS}}
   UNION
-  select DISTINCT m.ID from Meals m LEFT JOIN MealIngredients mi on m.ID = mi.MEAL_ID LEFT JOIN Ingredients i on mi.INGREDIENT_ID = i.ID where m.DISABLED = 0 AND m.USER = :user AND LOWER(i.NAME) like LOWER(:term) {{ADDITIONAL_PARAMS}}
+  select DISTINCT m.ID from Meals m LEFT JOIN MealIngredients mi on m.ID = mi.MEAL_ID LEFT JOIN Ingredients i on mi.INGREDIENT_ID = i.ID where m.DISABLED = 0 AND m.USER like :user AND LOWER(i.NAME) like LOWER(:term) {{ADDITIONAL_PARAMS}}
   UNION
-  select DISTINCT m.ID from Meals m LEFT JOIN MealTags mt on m.ID = mt.MEAL_ID where LOWER(NOTES) like LOWER(:term) and DISABLED = 0 AND m.USER = :user {{ADDITIONAL_PARAMS}}
+  select DISTINCT m.ID from Meals m LEFT JOIN MealTags mt on m.ID = mt.MEAL_ID where LOWER(NOTES) like LOWER(:term) and DISABLED = 0 AND m.USER like :user {{ADDITIONAL_PARAMS}}
 
 getAllWeeks: >
-  select * from WeeklySchedule where DISABLED = 0 and USER = ? ORDER BY DATE_BEGIN DESC
+  select * from WeeklySchedule where DISABLED = 0 and USER like ? ORDER BY DATE_BEGIN DESC
 
 getNNumberOfWeeks: >
-  select * from WeeklySchedule where DISABLED = 0 and USER = ? ORDER BY DATE_BEGIN DESC LIMIT ?
+  select * from WeeklySchedule where DISABLED = 0 and USER like ? ORDER BY DATE_BEGIN DESC LIMIT ?
 
 createWeek: >
   INSERT INTO WeeklySchedule (DATE_BEGIN,DATE_END,USER) values (?,?,?)
@@ -40,13 +40,13 @@ addMealToWeek: >
   INSERT INTO PlannedMeals (SCHEDULE_ID,MEAL_ID) values (?,?)
 
 getLatestMealId: >
-  select ID from Meals where DISABLED = 0 and USER = ? ORDER BY ID desc LIMIT 1
+  select ID from Meals where DISABLED = 0 and USER like ? ORDER BY ID desc LIMIT 1
 
 getLatestSideId: >
-  select ID from Sides where DISABLED = 0 and USER = ? ORDER BY ID desc LIMIT 1
+  select ID from Sides where DISABLED = 0 and USER like ? ORDER BY ID desc LIMIT 1
 
 getLatestWeekId: >
-  select ID from WeeklySchedule where DISABLED = 0 and USER = ? ORDER BY ID desc LIMIT 1
+  select ID from WeeklySchedule where DISABLED = 0 and USER like ? ORDER BY ID desc LIMIT 1
 
 updateMeal: >
   UPDATE Meals SET NAME = ?, FAVORITE = ?, NOTES = ?, RECIPE_URL = ? WHERE ID = ?
@@ -88,16 +88,16 @@ getMealTags: >
   select * from MealTags mt INNER JOIN Tags t on mt.TAG_ID = t.ID where mt.MEAL_ID = ?
 
 getAllTags: >
-  select DISTINCT Tags.ID, Tags.NAME from Tags INNER JOIN MealTags on Tags.ID = MealTags.TAG_ID where Tags.USER = ?
+  select DISTINCT Tags.ID, Tags.NAME from Tags INNER JOIN MealTags on Tags.ID = MealTags.TAG_ID where Tags.USER like ?
 
 getAllSides: >
-  select * from Sides where DISABLED = 0 AND USER = ? ORDER BY NAME ASC
+  select * from Sides where DISABLED = 0 AND USER like ? ORDER BY NAME ASC
 
 searchSides: >
   select * from (
-    select DISTINCT ID, NAME, NOTES, RECIPE_URL from Sides where DISABLED = 0 AND USER = :user AND LOWER(NAME) like LOWER(:term)
+    select DISTINCT ID, NAME, NOTES, RECIPE_URL from Sides where DISABLED = 0 AND USER like :user AND LOWER(NAME) like LOWER(:term)
     union
-    select DISTINCT s.ID, s.NAME, s.NOTES, s.RECIPE_URL from Sides s LEFT JOIN SideIngredients si on s.ID = si.SIDE_ID LEFT JOIN Ingredients i on si.INGREDIENT_ID = i.ID where s.DISABLED = 0 AND s.USER = :user AND LOWER(i.NAME) like LOWER(:term)
+    select DISTINCT s.ID, s.NAME, s.NOTES, s.RECIPE_URL from Sides s LEFT JOIN SideIngredients si on s.ID = si.SIDE_ID LEFT JOIN Ingredients i on si.INGREDIENT_ID = i.ID where s.DISABLED = 0 AND s.USER like :user AND LOWER(i.NAME) like LOWER(:term)
   ) as a
   ORDER BY NAME ASC
 
@@ -111,9 +111,9 @@ addUserAuthorities: >
   INSERT INTO authorities (username, authority) values (?,'USER')
 
 getAllIngredients: >
-  select DISTINCT i.ID, i.NAME, i.DISABLED from Ingredients i INNER JOIN MealIngredients mi on i.ID = mi.INGREDIENT_ID WHERE i.USER = :user
+  select DISTINCT i.ID, i.NAME, i.DISABLED from Ingredients i INNER JOIN MealIngredients mi on i.ID = mi.INGREDIENT_ID WHERE i.USER like :user
   union
-  select DISTINCT i.ID, i.NAME, i.DISABLED from Ingredients i INNER JOIN SideIngredients si on i.ID = si.INGREDIENT_ID WHERE i.USER = :user
+  select DISTINCT i.ID, i.NAME, i.DISABLED from Ingredients i INNER JOIN SideIngredients si on i.ID = si.INGREDIENT_ID WHERE i.USER like :user
   ORDER BY NAME ASC
 
 getMealById: >
@@ -130,13 +130,13 @@ createIngredient: >
   INSERT INTO Ingredients (NAME,USER) values (?,?)
 
 getNMostRecentIngredients: >
-  SELECT * FROM Ingredients WHERE USER = ? ORDER BY ID Desc LIMIT ?
+  SELECT * FROM Ingredients WHERE USER like ? ORDER BY ID Desc LIMIT ?
 
 createTag: >
   INSERT INTO Tags (NAME,USER) values (?,?)
 
 getNMostRecentTags: >
-  SELECT * FROM Tags where USER = ? ORDER BY ID Desc LIMIT ?
+  SELECT * FROM Tags where USER like ? ORDER BY ID Desc LIMIT ?
 
 getUser: >
   SELECT * FROM users where username = :username OR email = :username and enabled = 1
@@ -176,3 +176,9 @@ removeSideFromWeekMeal: >
 
 getIngredientById: >
   Select * From Ingredients where ID = ?
+
+getIngredientIdByName: >
+  SELECT * FROM Ingredients where NAME = ? and USER like ?
+
+getLatestIngredientId: >
+  SELECT * FROM Ingredients where USER like ? order by ID DESC LIMIT 1

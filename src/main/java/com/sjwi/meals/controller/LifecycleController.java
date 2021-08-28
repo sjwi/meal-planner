@@ -129,6 +129,10 @@ public class LifecycleController {
         @RequestParam(name="inputSideIngredients", defaultValue = "") Set<String> ingredients) {
 
       Set<Integer> createdIngredients = mealService.getItemIngredientsIdsToAdd(ingredients);
+      Integer sideAsIngredient = mealDao.getIngredientIdByName(inputSideName);
+      if (sideAsIngredient == null)
+        sideAsIngredient = mealDao.createIngredient(inputSideName);
+      createdIngredients.add(sideAsIngredient);
       mealDao.createSide(inputSideName, createdIngredients);
     }
 
