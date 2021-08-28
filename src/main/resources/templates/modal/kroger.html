@@ -36,7 +36,7 @@
       url: contextpath + 'kroger/searchProducts?ingredientId=' + id,
       method: "GET",
       success: function(data) {
-        $('#krogerModel #productTable').html(data);
+        $('#krogerModal #productTable').html(data);
       },
       error: function(data){
         alert('Something went wrong! Unable to retreive products from the Kroger catalog')
