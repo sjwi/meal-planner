@@ -307,10 +307,10 @@ function decrementValue(e) {
 function addItemToCart(upc) {
   itemPurchased = true;
   $('#addItemToCart_' + upc).prop('disabled',true);
-  $('#addItemToCart_' + upc).addClass('btn-success');
+  $('#addItemToCart_' + upc).addClass('btn-info');
   setTimeout(function(){
     $('#addItemToCart_' + upc).prop('disabled',false);
-    $('#addItemToCart_' + upc).removeClass('btn-success');
+    $('#addItemToCart_' + upc).removeClass('btn-info');
   },2000)
   let theCount = $('#productRow_' + upc + ' .quantity-field').val();
   console.log($('#productRow_' + upc));
