@@ -51,15 +51,12 @@ public class KrogerService {
 
   public Products getProductsByTerm(String name) throws URISyntaxException, UnsupportedEncodingException {
     RestTemplate restTemplate = new RestTemplate();
-    String url;
     if (name == null || name.trim().isEmpty()) 
-      url = baseUrl + PRODUCTS_ENDPOINT +
+      return new Products();
+
+    String url = baseUrl + PRODUCTS_ENDPOINT +
         "?filter.locationId=" + LOCATION_ID +
         "&filter.term=" + URLEncoder.encode(name, "UTF-8") +
-        "&filter.limit=" + LIMIT;
-    else
-      url = baseUrl + PRODUCTS_ENDPOINT +
-        "?filter.locationId=" + LOCATION_ID +
         "&filter.limit=" + LIMIT;
 
     URI uri = new URI(url);
