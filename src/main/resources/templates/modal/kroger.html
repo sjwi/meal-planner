@@ -39,7 +39,11 @@
     $.ajax({
       url: contextpath + 'kroger/searchProducts?term=' + encodeURI($('#krogerModal #krogerSearchBox').val()),
       method: "GET",
+      beforeSend: function(){
+        $('#krogerModal #productTable').addClass('loading');
+      },
       success: function(data) {
+        $('#krogerModal #productTable').removeClass('loading');
         $('#krogerModal #productTable').html(data);
       },
       error: function(data){
