@@ -311,12 +311,14 @@ function addItemToCart(upc) {
     $('#addItemToCart_' + upc).prop('disabled',false);
     $('#addItemToCart_' + upc).removeClass('btn-success');
   },2000)
+  let theCount = $('#productRow_' + upc + ' .quantity-field').val();
+  console.log(theCount);
   $.ajax({
     url: contextpath + 'kroger/addProductToCart',
     method: "PUT",
     data: {
       upc: upc,
-      count: $('#productRow_' + upc + ' .quantity-field').val()
+      count: theCount
     }
   });
 }
