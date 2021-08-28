@@ -65,7 +65,7 @@ public class KrogerService {
     return result.getBody();
   }
 
-  public Products addProductToCart(String upc, int count) throws URISyntaxException, UnsupportedEncodingException {
+  public void addProductToCart(String upc, int count) throws URISyntaxException, UnsupportedEncodingException {
     RestTemplate restTemplate = new RestTemplate();
      
     String url = baseUrl + ADD_CART_ENDPOINT;
@@ -76,8 +76,7 @@ public class KrogerService {
     headers.add("Authorization", "Bearer " + getSessionToken());
     headers.add("Content-Type", "application/json");
     HttpEntity<String> requestEntity = new HttpEntity<>(new Gson().toJson(items), headers);
-    ResponseEntity<Products> result = restTemplate.exchange(uri, HttpMethod.POST, requestEntity, Products.class);
-    return result.getBody();
+    ResponseEntity<String> result = restTemplate.exchange(uri, HttpMethod.PUT, requestEntity, String.class);
   }
 
   private String getSessionToken() {
