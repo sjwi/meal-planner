@@ -62,7 +62,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.and().exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
 				.and().requestCache().requestCache(requestCache())
 				.and().logout()
-        	.deleteCookies(com.sjwi.meals.service.security.AuthenticationService.STORED_COOKIE_TOKEN_KEY)
         	.logoutSuccessHandler(new CustomLogoutSuccessHandler())
 				.and().headers().frameOptions().sameOrigin().httpStrictTransportSecurity().disable();
 		;
@@ -78,9 +77,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				HttpServletResponse response, Authentication authentication)
 				throws IOException, ServletException {
 			String tokenKey = com.sjwi.meals.service.security.AuthenticationService.STORED_COOKIE_TOKEN_KEY;
-			if (request.getCookies() != null && Arrays.stream(request.getCookies()).anyMatch(c -> tokenKey.equals(c.getName()))) {
+			if (request.getCookies() != null && authenticationService.userHasLoginCookie()) {
 				try {
 					authenticationService.deleteCookieToken(Arrays.stream(request.getCookies()).filter(c -> tokenKey.equals(c.getName())).findFirst().orElse(null));
+					authenticationService.deleteTokenCookie();
 				} catch (Exception e ) {}
 			}
 			response.setStatus(HttpStatus.OK.value());

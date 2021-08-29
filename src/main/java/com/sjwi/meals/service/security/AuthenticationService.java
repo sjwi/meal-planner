@@ -65,7 +65,8 @@ public class AuthenticationService {
 		}
   }
 
-  public boolean userHasLoginCookie(HttpServletRequest request) {
+  public boolean userHasLoginCookie() {
+    HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
     Cookie[] cookies = request.getCookies();
     return cookies != null && Arrays.stream(cookies).anyMatch(c -> c.getName().equals(STORED_COOKIE_TOKEN_KEY));
   }

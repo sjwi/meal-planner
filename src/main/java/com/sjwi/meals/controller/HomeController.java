@@ -106,7 +106,7 @@ public class HomeController {
     }
     else {
       user = mealDao.updateUserRefreshToken(jwtManager.getOAuthUser(),tokenResponse.getRefresh_token());
-      if (!authenticationService.userHasLoginCookie(request))
+      if (!authenticationService.userHasLoginCookie())
         authenticationService.generateCookieToken(jwtManager.getOAuthUser());
     }
     SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
