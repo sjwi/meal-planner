@@ -182,3 +182,12 @@ getIngredientIdByName: >
 
 getLatestIngredientId: >
   SELECT * FROM Ingredients where USER like ? order by ID DESC LIMIT 1
+
+addImageToMeal: >
+  INSERT INTO RecipeImageUrls (IMAGE_URL, MEAL_ID) values (?,?)
+
+flagRecipeUrlSelfHosted: >
+  UPDATE Meals SET RECIPE_URL = 'self_hosted' where ID = ?
+
+getRecipeImagesForMeal: >
+  SELECT * FROM RecipeImageUrls where MEAL_ID = ?

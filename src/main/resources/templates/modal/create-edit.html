@@ -28,8 +28,22 @@
           <div class="input-group mb-3">
             <textArea name="inputMealNotes" id="inputMealNotes" type="text" class="form-control input-meal-notes" placeholder="Notes" aria-label="Meal notes"></textArea>
           </div>
-          <div class="input-group mb-3">
+          <div class="input-group mb-1">
             <input id="inputRecipeUrl" name="inputRecipeUrl" type="text" class="form-control input-recipe-url" placeholder="Recipe URL" aria-label="Recipe URL">
+            <input accept="image/png, image/gif, image/jpeg" class="form-control collapse" type="file" name="recipeImages" id="recipeImages" multiple>
+          </div>
+          <div class="row fs-sm">
+            <div class="col-5 text-end px-0">
+              <label class="form-check-label" for="recipeToggle">Link recipe</label>
+            </div>
+            <div class="col-2 px-0">
+              <div class="form-check form-switch d-flex justify-content-center">
+                <input class="form-check-input" type="checkbox" name="recipeToggle" id="recipeToggle">
+              </div>
+            </div>
+            <div class="col-5 px-0">
+              <label class="form-check-label" for="recipeToggle">Upload recipe</label>
+            </div>
           </div>
         </form>
       </div>
@@ -41,6 +55,15 @@
 </div>
 
 <script>
+  $('#recipeToggle').on('change',function(){
+    if ($(this).is(':checked')) {
+      $('#inputRecipeUrl').hide()
+      $('#recipeImages').show();
+    } else {
+      $('#inputRecipeUrl').show()
+      $('#recipeImages').hide();
+    }
+  });
   $('#inputFavorite').on('click',function(){
     if($(this).hasClass('far')) {
       $('#createEditFavorite').prop('checked',true);
@@ -53,12 +76,16 @@
     }
   });
   $('#createEditForm').on('submit',function(e){
-    var dataString = $(this).serialize();
+    var dataString = new FormData(this);
     e.preventDefault();
     $.ajax({
       url: $(this).attr("action"),
       type: "POST",
       method: "POST",
+      enctype: 'multipart/form-data',
+      processData: false,
+      contentType: false,
+      cache: false,
       data: dataString,
       beforeSend: function() {
         $('#inputSubmitBtn').prop('disabled',true);
@@ -171,5 +198,6 @@
     $('#createEditFavorite').prop('checked',false);
     $('#inputFavorite').addClass('far');
     $('#inputFavorite').removeClass('fas');
+    $('#recipeToggle').prop('checked',false);
   })
 </script>

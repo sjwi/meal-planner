@@ -1,5 +1,6 @@
 package com.sjwi.meals.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,6 +16,7 @@ import com.sjwi.meals.model.Ingredient;
 import com.sjwi.meals.model.Meal;
 import com.sjwi.meals.model.Side;
 import com.sjwi.meals.model.Week;
+import com.sjwi.meals.service.ImageService;
 import com.sjwi.meals.service.MealService;
 import com.sjwi.meals.util.WeekGenerator;
 
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -35,6 +38,9 @@ public class LifecycleController {
 
     @Autowired
     MealDao mealDao;
+
+    @Autowired
+    ImageService imageService;
 
     @Autowired
     MealService mealService;
@@ -115,12 +121,22 @@ public class LifecycleController {
     public void createMeal(@RequestParam String inputMealName, @RequestParam(name="createEditFavorite", defaultValue = "false") Boolean favorite,
         @RequestParam(name="inputMealIngredients", defaultValue = "") Set<String> ingredients, 
         @RequestParam(name="inputMealTags", defaultValue = "") Set<String> tags, @RequestParam(name="inputMealNotes", required = false) String notes, 
-        @RequestParam(name="inputRecipeUrl", required = false) String recipeUrl) {
+        @RequestParam(name="inputRecipeUrl", required = false) String recipeUrl,
+        @RequestParam(name="recipeToggle", defaultValue = "false") Boolean recipeToggle,
+        @RequestParam(name="recipeImages", required = false) MultipartFile[] recipeImages
+        ) throws IOException {
 
       Set<Integer> createdIngredients = mealService.getItemIngredientsIdsToAdd(ingredients);
       Set<Integer> createdTags = mealService.getMealTagIdsToAdd(tags);
 
-      mealDao.createMeal(inputMealName, favorite, createdIngredients, createdTags, notes, recipeUrl);
+      int mealId = mealDao.createMeal(inputMealName, favorite, createdIngredients, createdTags, notes, recipeUrl);
+      System.out.println(recipeToggle);
+      System.out.println(recipeImages);
+      if (recipeToggle && recipeImages != null) {
+        List<String> fileNames = imageService.storeFiles(recipeImages, mealId);
+        mealDao.setMealsFiles(fileNames, mealId);
+        mealDao.flagRecipeUrlSelfHosted(mealId);
+      }
     }
 
     @RequestMapping(value = "/side/create", method = RequestMethod.POST)

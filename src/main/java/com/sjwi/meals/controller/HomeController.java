@@ -122,6 +122,14 @@ public class HomeController {
     return mv;
   }
 
+  @RequestMapping("/recipe/hosted/{mealId}")
+  public ModelAndView hostedRecipe(@PathVariable int mealId) {
+    ModelAndView mv = new ModelAndView("recipe-images");
+    mv.addObject("recipeUrls", mealDao.getRecipeImagesForMeal(mealId));
+    return mv;
+  }
+
+
   @RequestMapping("/weeks")
   public ModelAndView weeks(@RequestParam boolean showAll) {
     ModelAndView mv = new ModelAndView("home :: weekList");

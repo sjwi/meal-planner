@@ -623,5 +623,32 @@ public class MealDao {
       return r.getInt("ID");
     });
   }
+
+  public void setMealsFiles(List<String> fileNames, int mealId) {
+    jdbcTemplate.batchUpdate(queryStore.get("addImageToMeal"), new BatchPreparedStatementSetter() {
+      @Override
+      public void setValues(PreparedStatement ps, int i) throws SQLException {
+        ps.setString(1, fileNames.get(i));
+        ps.setInt(2, mealId);
+      }
+      @Override
+      public int getBatchSize() {
+        return fileNames.size();
+      }
+    });
+  }
+
+  public void flagRecipeUrlSelfHosted(int mealId) {
+    jdbcTemplate.update(queryStore.get("flagRecipeUrlSelfHosted"), new Object[] {mealId});
+  }
+
+  public List<String> getRecipeImagesForMeal(int mealId) {
+    return jdbcTemplate.query(queryStore.get("getRecipeImagesForMeal"), new Object[] {mealId}, r -> {
+      List<String> imageUrls = new ArrayList<>();
+      while (r.next())
+        imageUrls.add(r.getString("RECIPE_URL"));
+      return imageUrls;
+    });
+  }
 }
  

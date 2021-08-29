@@ -102,6 +102,14 @@ INSERT INTO Sides (NAME,RECIPE_URL,NOTES,USER) values
 ('Side 19','https://stephenky.com','This is a side note','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
 ('Side 20','https://stephenky.com','This is a side note','de9a8c23-bb74-512d-a390-2b8cb659ebcf');
 
+DROP TABLE IF EXISTS RecipeImageUrls;
+CREATE TABLE RecipeImageUrls (
+  ID int(11) NOT NULL AUTO_INCREMENT,
+  MEAL_ID int(11),
+  IMAGE_URL varchar(2000),
+  PRIMARY KEY (ID)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
 DROP TABLE IF EXISTS MealSides;
 CREATE TABLE MealSides (
   ID int(11) NOT NULL AUTO_INCREMENT,
