@@ -66,7 +66,7 @@ public class LandingPageSessionInitializer {
             } catch (Exception e) {
               System.out.println("Refresh token expired, sending to login page");
             }
-          } else if (user.getRefreshToken() == null || user.getRefreshToken().trim().isEmpty())
+          } else if (user != nulll && (user.getRefreshToken() == null || user.getRefreshToken().trim().isEmpty()))
             authenticationService.deleteTokenCookie();
         }
       }
