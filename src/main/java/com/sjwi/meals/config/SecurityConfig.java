@@ -57,11 +57,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/css/**").permitAll()
 				.antMatchers("/js/**").permitAll()
 				.antMatchers("/images/**").permitAll()
-				// .antMatchers("/**").permitAll()
 				.antMatchers("/**").access("hasAuthority('USER')")
 				.and().exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
 				.and().requestCache().requestCache(requestCache())
 				.and().logout()
+					.invalidateHttpSession(true)
         	.logoutSuccessHandler(new CustomLogoutSuccessHandler())
 				.and().headers().frameOptions().sameOrigin().httpStrictTransportSecurity().disable();
 		;
