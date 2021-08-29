@@ -130,8 +130,6 @@ public class LifecycleController {
       Set<Integer> createdTags = mealService.getMealTagIdsToAdd(tags);
 
       int mealId = mealDao.createMeal(inputMealName, favorite, createdIngredients, createdTags, notes, recipeUrl);
-      System.out.println(recipeToggle);
-      System.out.println(recipeImages);
       if (recipeToggle && recipeImages != null) {
         List<String> fileNames = imageService.storeFiles(recipeImages, mealId);
         mealDao.setMealsFiles(fileNames, mealId);
@@ -173,7 +171,9 @@ public class LifecycleController {
         @RequestParam(name="inputMealIngredients", defaultValue =  "") Set<String> ingredients, 
         @RequestParam(name="inputMealTags", defaultValue = "") Set<String> tags, 
         @RequestParam(name="inputMealNotes", required = false) String notes, 
-        @RequestParam(name="inputRecipeUrl", required = false) String recipeUrl) {
+        @RequestParam(name="recipeToggle", defaultValue = "false") Boolean recipeToggle,
+        @RequestParam(name="recipeImages", required = false) MultipartFile[] recipeImages,
+        @RequestParam(name="inputRecipeUrl", required = false) String recipeUrl) throws IOException {
 
       Meal originalMeal = mealDao.getMealById(id);
 
@@ -190,6 +190,11 @@ public class LifecycleController {
       Set<Integer> tagsToAdd = SetUtils.difference(existingTags, originalTags);
 
       mealDao.editMeal(id,inputMealName,favorite,notes,recipeUrl,ingredientsToAdd,tagsToAdd,ingredientsToDelete,tagsToDelete);
+      if (recipeToggle && recipeImages != null) {
+        List<String> fileNames = imageService.storeFiles(recipeImages, id);
+        mealDao.setMealsFiles(fileNames, id);
+        mealDao.flagRecipeUrlSelfHosted(id);
+      }
       return new ModelAndView("redirect:/");
     }
 }

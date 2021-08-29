@@ -110,7 +110,10 @@
     $('#inputMealId').val(id);
     $('#createEditFavorite').prop('checked',$('#favoriteCheckbox_' + id).hasClass("fas"));
     $('#inputMealNotes').val($('#mealNotes_' + id).text());
-    $('#inputRecipeUrl').val($('#mealRecipeUrl_' + id).attr("href"));
+    if ($('#mealRecipeUrl_' + id).attr("href") == "self_hosted")
+      $('#recipeToggle').prop('checked',false);
+    else
+      $('#inputRecipeUrl').val($('#mealRecipeUrl_' + id).attr("href"));
     $('#createEditModal form').attr('action', contextpath + 'meal/edit/' + id);
     if ($('#favoriteCheckbox_' + id).hasClass("fas")) {
       $('#inputFavorite').click();
