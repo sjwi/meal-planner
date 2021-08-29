@@ -111,7 +111,7 @@
     $('#createEditFavorite').prop('checked',$('#favoriteCheckbox_' + id).hasClass("fas"));
     $('#inputMealNotes').val($('#mealNotes_' + id).text());
     if ($('#mealRecipeUrl_' + id).data("image") == "self_hosted")
-      $('#recipeToggle').prop('checked',false);
+      $('#recipeToggle').prop('checked',true);
     else
       $('#inputRecipeUrl').val($('#mealRecipeUrl_' + id).attr("href"));
     $('#createEditModal form').attr('action', contextpath + 'meal/edit/' + id);
@@ -202,5 +202,6 @@
     $('#inputFavorite').addClass('far');
     $('#inputFavorite').removeClass('fas');
     $('#recipeToggle').prop('checked',false);
+    $('#recipeImages').val('');
   })
 </script>
