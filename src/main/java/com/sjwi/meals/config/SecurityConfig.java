@@ -61,7 +61,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.and().exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
 				.and().requestCache().requestCache(requestCache())
 				.and().logout()
-					.invalidateHttpSession(true)
         	.logoutSuccessHandler(new CustomLogoutSuccessHandler())
 				.and().headers().frameOptions().sameOrigin().httpStrictTransportSecurity().disable();
 		;
@@ -83,6 +82,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 					authenticationService.deleteTokenCookie();
 				} catch (Exception e ) {}
 			}
+			request.getSession().invalidate();
 			response.setStatus(HttpStatus.OK.value());
 			response.sendRedirect(request.getContextPath() + "/login");
 		}
