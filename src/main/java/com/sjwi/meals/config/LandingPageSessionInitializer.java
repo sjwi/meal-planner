@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.sjwi.meals.dao.MealDao;
 import com.sjwi.meals.model.security.AccessTokenResponse;
 import com.sjwi.meals.model.security.MealsUser;
+import com.sjwi.meals.service.security.AuthenticationService;
 import com.sjwi.meals.service.security.OAuthManager;
 
 import org.aspectj.lang.JoinPoint;
@@ -31,9 +32,13 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class LandingPageSessionInitializer {
   @Autowired
   MealDao mealDao;
+
   @Autowired
   OAuthManager oAuthManager;
-
+  
+  @Autowired
+  AuthenticationService authenticationService;
+  
   @Before("execution(* com.sjwi.meals.controller.HomeController.login(..))")
   public void attemptLoginViaCookie(JoinPoint joinPoint) {
     HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
@@ -47,7 +52,7 @@ public class LandingPageSessionInitializer {
         AbstractMap.SimpleEntry<String,String> token = mealDao.getStoredCookieToken(cookie.get().getValue());
         if (token.getValue() != null) {
           MealsUser user = (MealsUser) mealDao.getUser(token.getKey());
-          if (user != null && user.getRefreshToken() != null) {
+          if (user != null && user.getRefreshToken() != null && !user.getRefreshToken().trim().isEmpty()) {
             try {
               AccessTokenResponse tokenResponse = oAuthManager.refreshAccessToken(user.getRefreshToken());
               request.getSession().setAttribute("JWT", tokenResponse.getAccess_token());
@@ -56,7 +61,8 @@ public class LandingPageSessionInitializer {
             } catch (Exception e) {
               System.out.println("Refresh token expired, sending to login page");
             }
-          }
+          } else if (user.getRefreshToken() == null || user.getRefreshToken().trim().isEmpty())
+            authenticationService.deleteTokenCookie();
         }
       }
     }

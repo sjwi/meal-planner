@@ -14,6 +14,8 @@ import com.sjwi.meals.dao.MealDao;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Component
 public class AuthenticationService {
@@ -26,10 +28,11 @@ public class AuthenticationService {
   @Autowired
   ServletContext context;
 
-  public void generateCookieToken(HttpServletRequest request, HttpServletResponse response, String username) {
+  public void generateCookieToken(String username) {
+    HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
     String token = generateTokenString();
     mealDao.storeCookieToken(username,token);
-    response.addCookie(buildStaticCookie(request.getServerName(), STORED_COOKIE_TOKEN_KEY, token, request.getCookies()));
+    response.addCookie(buildStaticCookie(STORED_COOKIE_TOKEN_KEY, token));
   }
 
   private String generateTokenString(){
@@ -39,8 +42,11 @@ public class AuthenticationService {
     return Base64.encodeBase64String(r);
   }
 
-  public Cookie buildStaticCookie(String host, String key, String setting, Cookie[] cookies) {
+  public Cookie buildStaticCookie(String key, String setting) {
+    HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+    String host = request.getServerName();
 		Cookie cookie = null;
+    Cookie[] cookies = request.getCookies();
 		if (cookies != null && Arrays.stream(cookies).anyMatch(c -> c.getName().equals(key))) {
 			cookie = Arrays.stream(cookies).filter(c -> c.getName().equals(key)).findFirst().orElse(null);
 			cookie.setValue(setting);
@@ -59,8 +65,15 @@ public class AuthenticationService {
 		}
   }
 
-  public boolean userHasLoginCookie(HttpServletRequest request, HttpServletResponse response, String username) {
+  public boolean userHasLoginCookie(HttpServletRequest request) {
     Cookie[] cookies = request.getCookies();
     return cookies != null && Arrays.stream(cookies).anyMatch(c -> c.getName().equals(STORED_COOKIE_TOKEN_KEY));
+  }
+
+  public void deleteTokenCookie() {
+    HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
+    Cookie cookie = buildStaticCookie(STORED_COOKIE_TOKEN_KEY, "");
+    cookie.setMaxAge(0);
+    response.addCookie(cookie);
   }
 }
