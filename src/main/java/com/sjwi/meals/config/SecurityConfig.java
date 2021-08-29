@@ -79,6 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			String tokenKey = com.sjwi.meals.service.security.AuthenticationService.STORED_COOKIE_TOKEN_KEY;
 			if (request.getCookies() != null && authenticationService.userHasLoginCookie()) {
 				try {
+					System.out.println("Deleting cookies and tokens");
 					authenticationService.deleteCookieToken(Arrays.stream(request.getCookies()).filter(c -> tokenKey.equals(c.getName())).findFirst().orElse(null));
 					authenticationService.deleteTokenCookie();
 				} catch (Exception e ) {}
