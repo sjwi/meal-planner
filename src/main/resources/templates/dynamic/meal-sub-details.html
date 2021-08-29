@@ -39,7 +39,7 @@
       </div>
     </div>
     <div th:if="${meal.recipeUrl != null && meal.recipeUrl != ''}" class="my-2 col text-center">
-      <a th:id="${'mealRecipeUrl_' + meal.id}" th:href="${meal.recipeUrl == 'self_hosted'}? @{/recipe/hosted/__meal.id__} : ${meal.recipeUrl}"
+      <a th:id="${'mealRecipeUrl_' + meal.id}" th:href="${meal.recipeUrl == 'self_hosted'}? @{/recipe/hosted/${meal.id}} : ${meal.recipeUrl}"
         target="_blank">View Recipe <i class="ms-1 fas fa-external-link-alt"></i></a>
     </div>
   </li>
