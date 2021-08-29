@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
@@ -26,10 +27,9 @@ public class ImageService {
   public List<String> storeFiles(MultipartFile[] imageFiles, Integer mealId) throws IOException {
     final Path root = Paths.get(imagePath);
     List<String> fileNames = new ArrayList<>();
-    Integer counter = 0;
     for(MultipartFile file : imageFiles) {
       String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-      String fileName = IMAGE_FILE_PREFIX + mealId + "_" + counter++ + "." + extension;
+      String fileName = IMAGE_FILE_PREFIX + mealId + "_" + new Date().getTime() + "." + extension;
       Files.copy(file.getInputStream(), root.resolve(fileName));
       fileNames.add(urlBase + "/" + fileName);
     }
