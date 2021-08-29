@@ -76,7 +76,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				HttpServletResponse response, Authentication authentication)
 				throws IOException, ServletException {
 			String tokenKey = com.sjwi.meals.service.security.AuthenticationService.STORED_COOKIE_TOKEN_KEY;
-			if (request.getCookies() != null && authenticationService.userHasLoginCookie()) {
+			if (request != null && request.getCookies() != null && authenticationService.userHasLoginCookie()) {
 				try {
 					authenticationService.deleteCookieToken(Arrays.stream(request.getCookies()).filter(c -> tokenKey.equals(c.getName())).findFirst().orElse(null));
 					authenticationService.deleteTokenCookie();
