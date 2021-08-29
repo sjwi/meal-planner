@@ -31,7 +31,8 @@
                 "MEALS_BASE_URL": "https://api.kroger.com/v1",
                 "MEALS_AUTH_SCOPES": "",
                 "MEALS_IMAGE_PATH": "/Users/stephenwilliams",
-                "MEALS_IMAGE_URL_BASE": "https://stephenky.com/images"
+                "MEALS_IMAGE_URL_BASE": "https://stephenky.com/images",
+                "MEALS_FEDERATE_IDENTITY": "false"
             }
         },
         {

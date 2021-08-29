@@ -20,6 +20,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -38,14 +39,17 @@ public class LandingPageSessionInitializer {
   
   @Autowired
   AuthenticationService authenticationService;
+
+  @Value("${meals.settings.federateIdentity}")
+  Boolean federateIdentity;
   
   @Before("execution(* com.sjwi.meals.controller.HomeController.login(..))")
   public void attemptLoginViaCookie(JoinPoint joinPoint) {
-    // if (1 == 1){
-    //   MealsUser localUser = (MealsUser) mealDao.getUser("de9a8c23-bb74-512d-a390-2b8cb659ebcf");
-    //   SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(localUser, null, localUser.getAuthorities()));
-    //   return;
-    // }
+    if (!federateIdentity){
+      MealsUser localUser = (MealsUser) mealDao.getUser("de9a8c23-bb74-512d-a390-2b8cb659ebcf");
+      SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(localUser, null, localUser.getAuthorities()));
+      return;
+    }
     HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
     if (SecurityContextHolder.getContext().getAuthentication() != null
 						&& SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails) {
