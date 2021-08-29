@@ -84,7 +84,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				} catch (Exception e ) {}
 			}
 			response.setStatus(HttpStatus.OK.value());
-			response.sendRedirect(request.getContextPath() + "/");
+			response.sendRedirect(request.getContextPath() + "/login");
 		}
 	}
 }
