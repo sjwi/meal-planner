@@ -3,11 +3,9 @@ getAllMeals: >
   ORDER BY {{SORT}} {{SORT_DIRECTION}}
 
 searchMeals: >
-  select DISTINCT m.ID from Meals m LEFT JOIN MealTags mt on m.ID = mt.MEAL_ID where LOWER(NAME) like LOWER(:term) and DISABLED = 0 AND m.USER like :user {{ADDITIONAL_PARAMS}}
+  select DISTINCT m.ID from Meals m LEFT JOIN MealTags mt on m.ID = mt.MEAL_ID where (LOWER(NAME) like LOWER(:term) or LOWER(NOTES) like LOWER(:term)) and DISABLED = 0 and m.USER like :user {{ADDITIONAL_PARAMS}}
   UNION
-  select DISTINCT m.ID from Meals m LEFT JOIN MealIngredients mi on m.ID = mi.MEAL_ID LEFT JOIN Ingredients i on mi.INGREDIENT_ID = i.ID where m.DISABLED = 0 AND m.USER like :user AND LOWER(i.NAME) like LOWER(:term) {{ADDITIONAL_PARAMS}}
-  UNION
-  select DISTINCT m.ID from Meals m LEFT JOIN MealTags mt on m.ID = mt.MEAL_ID where LOWER(NOTES) like LOWER(:term) and DISABLED = 0 AND m.USER like :user {{ADDITIONAL_PARAMS}}
+  select DISTINCT m.ID from Meals m LEFT JOIN MealIngredients mi on m.ID = mi.MEAL_ID LEFT JOIN Ingredients i on mi.INGREDIENT_ID = i.ID LEFT JOIN MealTags mt on m.ID = mt.MEAL_ID where m.DISABLED = 0 and m.USER like :user AND LOWER(i.NAME) like LOWER(:term) {{ADDITIONAL_PARAMS}}
 
 getAllWeeks: >
   select * from WeeklySchedule where DISABLED = 0 and USER like ? ORDER BY DATE_BEGIN DESC
