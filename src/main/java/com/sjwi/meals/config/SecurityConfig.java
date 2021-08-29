@@ -39,6 +39,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		auth.userDetailsService(userDetailsService);
 	}
 
+	@Autowired
+	private AuthenticationService authenticationService;
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -69,14 +72,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
 	private class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
-		@Autowired
-		private AuthenticationService authenticationService;
 		@Override
 		public void onLogoutSuccess(HttpServletRequest request,
 				HttpServletResponse response, Authentication authentication)
 				throws IOException, ServletException {
 			String tokenKey = com.sjwi.meals.service.security.AuthenticationService.STORED_COOKIE_TOKEN_KEY;
-			if (request != null && request.getCookies() != null && authenticationService.userHasLoginCookie()) {
+			if (request.getCookies() != null && authenticationService.userHasLoginCookie()) {
 				try {
 					authenticationService.deleteCookieToken(Arrays.stream(request.getCookies()).filter(c -> tokenKey.equals(c.getName())).findFirst().orElse(null));
 					authenticationService.deleteTokenCookie();
