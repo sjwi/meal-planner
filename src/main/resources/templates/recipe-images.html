@@ -4,7 +4,7 @@
     <meta name="viewport"
       content="width=device-width, initial-scale=1.0, shrink-to-fit=no maximum-scale=1.0,user-scalable=0, minimal-ui" />
     <meta name="apple-mobile-web-app-title" content="Meal Planner">
-    <title >Login - Meal Planner</title>
+    <title >Recipe Images</title>
     <link rel="shortcut icon" th:href="@{/images/app.png}" type="image/x-icon">
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
     <link rel="apple-touch-icon" th:href="@{/images/app.png}">
@@ -13,7 +13,7 @@
     <div class="container">
       <div class="row my-2" th:each="url: ${recipeUrls}">
         <div class="col text-center">
-          <img th:src="${url}">
+          <img width="350px" th:src="${url}">
         </div>
       </div>
     </div>

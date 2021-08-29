@@ -110,7 +110,7 @@
     $('#inputMealId').val(id);
     $('#createEditFavorite').prop('checked',$('#favoriteCheckbox_' + id).hasClass("fas"));
     $('#inputMealNotes').val($('#mealNotes_' + id).text());
-    if ($('#mealRecipeUrl_' + id).attr("href") == "self_hosted")
+    if ($('#mealRecipeUrl_' + id).data("image") == "self_hosted")
       $('#recipeToggle').prop('checked',false);
     else
       $('#inputRecipeUrl').val($('#mealRecipeUrl_' + id).attr("href"));
