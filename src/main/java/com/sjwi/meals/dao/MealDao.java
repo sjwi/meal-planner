@@ -646,7 +646,7 @@ public class MealDao {
     return jdbcTemplate.query(queryStore.get("getRecipeImagesForMeal"), new Object[] {mealId}, r -> {
       List<String> imageUrls = new ArrayList<>();
       while (r.next())
-        imageUrls.add(r.getString("RECIPE_URL"));
+        imageUrls.add(r.getString("IMAGE_URL"));
       return imageUrls;
     });
   }
