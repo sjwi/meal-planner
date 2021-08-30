@@ -14,7 +14,7 @@
     <h6 th:if="${#maps.size(meal.tags) > 0}" class="my-2">Tags</h6>
     <div th:if="${#maps.size(meal.tags) > 0}" class="row no-gutters my-2">
       <div class="col">
-          <span class="badge rounded-pill bg-secondary px-2 py-2 mx-1 my-1 meal-tag" th:each="tag : ${meal.tags}"
+          <span class="badge rounded-pill bg-info px-2 py-2 mx-1 my-1 meal-tag" th:each="tag : ${meal.tags}"
             th:attr="data-target=${tag.key}">
             <small th:text="${tag.value}"></small>
           </span>
