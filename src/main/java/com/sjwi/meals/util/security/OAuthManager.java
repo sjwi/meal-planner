@@ -1,4 +1,4 @@
-package com.sjwi.meals.service.security;
+package com.sjwi.meals.util.security;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

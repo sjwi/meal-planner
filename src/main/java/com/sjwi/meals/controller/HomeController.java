@@ -13,11 +13,12 @@ import com.sjwi.meals.model.Ingredient;
 import com.sjwi.meals.model.Week;
 import com.sjwi.meals.model.security.AccessTokenResponse;
 import com.sjwi.meals.model.security.MealsUser;
+import com.sjwi.meals.service.KrogerService;
 import com.sjwi.meals.service.MealService;
-import com.sjwi.meals.service.security.AuthenticationService;
-import com.sjwi.meals.service.security.JwtManager;
-import com.sjwi.meals.service.security.OAuthManager;
 import com.sjwi.meals.util.WeekGenerator;
+import com.sjwi.meals.util.security.AuthenticationService;
+import com.sjwi.meals.util.security.JwtManager;
+import com.sjwi.meals.util.security.OAuthManager;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,9 @@ public class HomeController {
   MealService mealService;
 
   @Autowired
+  KrogerService krogerService;
+
+  @Autowired
   OAuthManager oAuthManager;
 
   @Autowired
@@ -53,15 +57,14 @@ public class HomeController {
 
   @RequestMapping("/")
   public ModelAndView homeController(HttpServletRequest request, Authentication auth) {
-    //  MealsUser user = (MealsUser) mealDao.getUser("de9a8c23-bb74-512d-a390-2b8cb659ebcf");
-    //  SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
     Map<String, String> preferences  = ((MealsUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPreferences();
     ModelAndView mv = new ModelAndView("home");
     List<Week> weeks = mealDao.getNNumberOfWeeks(DEFAULT_NUMBER_OF_WEEKS);
+    WeekGenerator weekGenerator = new WeekGenerator(Integer.parseInt(preferences.get("weekStartDay")));
     mv.addObject("meals", mealDao.getAllMeals(preferences));
     mv.addObject("sides", mealDao.getAllSides());
     mv.addObject("weeks", weeks);
-    mv.addObject("weeksForSelect", WeekGenerator.getWeeksForSelect(weeks));
+    mv.addObject("weeksForSelect", weekGenerator.getWeeksForSelect(weeks));
     return mv;
   }
 
@@ -110,7 +113,6 @@ public class HomeController {
         authenticationService.generateCookieToken(jwtManager.getOAuthUser());
     }
     SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
-    System.out.println("Refresh Token: " + tokenResponse.getRefresh_token());
     return new ModelAndView("redirect:/");
   }
 

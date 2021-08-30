@@ -16,6 +16,7 @@ import com.sjwi.meals.model.Ingredient;
 import com.sjwi.meals.model.Meal;
 import com.sjwi.meals.model.Side;
 import com.sjwi.meals.model.Week;
+import com.sjwi.meals.model.security.MealsUser;
 import com.sjwi.meals.service.ImageService;
 import com.sjwi.meals.service.MealService;
 import com.sjwi.meals.util.WeekGenerator;
@@ -23,6 +24,7 @@ import com.sjwi.meals.util.WeekGenerator;
 import org.apache.commons.collections4.SetUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,20 +50,22 @@ public class LifecycleController {
     @RequestMapping(value = "/week/add-meal", method = RequestMethod.POST)
     @ResponseBody
     public Week addMealToWeek(@RequestParam Integer weekId, @RequestParam String meals, 
-      @RequestParam Integer addIndex, @RequestParam String mealSidesMap) {
-        if (weekId == 0) {
-            List<Week> weeks = WeekGenerator.getWeeksForSelect(mealDao.getAllWeeks());
-            weekId = mealDao.createWeek(weeks.get(addIndex - 1).getStart(),weeks.get(addIndex - 1).getEnd());
-        }
-        List<Integer> mealIdsToAdd = new Gson().fromJson(meals, new TypeToken<ArrayList<Integer>>() {}.getType());
-        List<Integer> existingMealIds = mealDao.getWeekById(weekId).getMeals().stream()
-          .map(m -> m.getId())
-          .collect(Collectors.toList());
-        mealIdsToAdd.removeAll(existingMealIds);
-        Map<Integer,List<Integer>> sidesMap = new Gson().fromJson(mealSidesMap, new TypeToken<HashMap<Integer,List<Integer>>>() {}.getType());
-        mealDao.addMealsToWeek(weekId,mealIdsToAdd);
-        mealDao.addSidesToMeals(mealIdsToAdd, sidesMap,weekId);
-        return mealDao.getWeekById(weekId);
+        @RequestParam Integer addIndex, @RequestParam String mealSidesMap) {
+      Map<String, String> preferences  = ((MealsUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPreferences();
+      WeekGenerator weekGenerator = new WeekGenerator(Integer.parseInt(preferences.get("weekStartDay")));
+      if (weekId == 0) {
+          List<Week> weeks = weekGenerator.getWeeksForSelect(mealDao.getAllWeeks());
+          weekId = mealDao.createWeek(weeks.get(addIndex - 1).getStart(),weeks.get(addIndex - 1).getEnd());
+      }
+      List<Integer> mealIdsToAdd = new Gson().fromJson(meals, new TypeToken<ArrayList<Integer>>() {}.getType());
+      List<Integer> existingMealIds = mealDao.getWeekById(weekId).getMeals().stream()
+        .map(m -> m.getId())
+        .collect(Collectors.toList());
+      mealIdsToAdd.removeAll(existingMealIds);
+      Map<Integer,List<Integer>> sidesMap = new Gson().fromJson(mealSidesMap, new TypeToken<HashMap<Integer,List<Integer>>>() {}.getType());
+      mealDao.addMealsToWeek(weekId,mealIdsToAdd);
+      mealDao.addSidesToMeals(mealIdsToAdd, sidesMap,weekId);
+      return mealDao.getWeekById(weekId);
     }
     
     @RequestMapping(value = "/meal/add-sides", method = RequestMethod.POST)

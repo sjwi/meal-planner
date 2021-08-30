@@ -1,4 +1,4 @@
-package com.sjwi.meals.model;
+package com.sjwi.meals.model.kroger;
 
 import java.util.Arrays;
 import java.util.Map;

@@ -1,10 +1,9 @@
 package com.sjwi.meals.model;
 
 import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -24,9 +23,9 @@ public class Week {
 
     public boolean isNext() {
         LocalDate now = LocalDate.now();
-        LocalDate nextSaturday = now.with(TemporalAdjusters.next(DayOfWeek.SATURDAY));
-        Date nextSaturdayDate = Date.from(nextSaturday.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        return end.compareTo(nextSaturdayDate) > 0 && nextSaturdayDate.compareTo(start) > 0;
+        LocalDate nextWeek = now.plus(1, ChronoUnit.WEEKS);
+        Date oneWeekLaterDate = Date.from(nextWeek.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        return end.compareTo(oneWeekLaterDate) > 0 && oneWeekLaterDate.compareTo(start) > 0;
     }
 
     public boolean isCurrent() {

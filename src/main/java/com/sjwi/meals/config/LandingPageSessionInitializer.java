@@ -13,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.sjwi.meals.dao.MealDao;
 import com.sjwi.meals.model.security.AccessTokenResponse;
 import com.sjwi.meals.model.security.MealsUser;
-import com.sjwi.meals.service.security.AuthenticationService;
-import com.sjwi.meals.service.security.OAuthManager;
+import com.sjwi.meals.util.security.AuthenticationService;
+import com.sjwi.meals.util.security.OAuthManager;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -56,7 +56,7 @@ public class LandingPageSessionInitializer {
 				return;
     }
     if (request.getCookies() != null) {
-      Optional<Cookie> cookie = Arrays.stream(request.getCookies()).filter(c -> com.sjwi.meals.service.security.AuthenticationService.STORED_COOKIE_TOKEN_KEY.equals(c.getName())).findFirst();
+      Optional<Cookie> cookie = Arrays.stream(request.getCookies()).filter(c -> com.sjwi.meals.util.security.AuthenticationService.STORED_COOKIE_TOKEN_KEY.equals(c.getName())).findFirst();
       if (cookie.isPresent()) {
         AbstractMap.SimpleEntry<String,String> token = mealDao.getStoredCookieToken(cookie.get().getValue());
         if (token.getValue() != null) {

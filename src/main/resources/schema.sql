@@ -328,6 +328,8 @@ CREATE TABLE users (
   sort varchar(50) DEFAULT 'NAME',
   sortDirection varchar(50) DEFAULT 'ASC',
   pinFavorites BOOLEAN DEFAULT 0,
+  weekStartDay tinyint(1) DEFAULT 5,
+  krogerLocationId varchar(50) DEFAULT '02400347',
   enabled tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (username)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

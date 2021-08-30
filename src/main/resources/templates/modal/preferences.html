@@ -1,0 +1,63 @@
+<div class="modal fade" id="preferencesModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title text-dark">User Preferences</h6>
+        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="submit" form="preferencesModal" class="btn btn-lg btn-primary w-100" data-dismiss="modal">Save</button>
+        <button type="button" class="btn btn-lg btn-secondary w-100" onclick="resetPreferences()">Reset</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function resetPreferences() {
+    $('#prefSortBy').val('NAME');
+    $('#prefSortOrder').val('ASC');
+    $('#prefWeekStartDay').val('5');
+    $('#krogerZip').val('40517');
+    $('#prefKrogerLocationId').val('02400347');
+  }
+  function openUserPreferences() {
+    $.ajax({
+      url: contextpath + 'user-preferences',
+      method: "GET",
+      success: function(data){
+        $('#preferencesModal .modal-body').html(data)
+      }
+    });
+  }
+  $(document).on('submit','#preferencesForm',function(e){
+    e.preventDefault();
+    $('#preferencesModal').modal('hide');
+    $.ajax({
+      url: contextpath + 'update-preferences',
+      method: "POST",
+      data: $(this).serialize()
+    })
+  });
+
+  $(document).on('change','#krogerZip',function(){
+    $('#prefKrogerLocationId').find('option').remove().end();
+    $.ajax({
+      url: contextpath + 'json/kroger-locations',
+      method: "GET",
+      data: {
+        zipCode: $('#krogerZip').val()
+      },
+      success: function(data){
+        data.data.forEach(l => {
+          jQuery('<option/>', {
+            value: l.locationId,
+            html: l.name,
+            }).appendTo('#prefKrogerLocationId'); 
+          });
+      }
+    });
+  });
+</script>

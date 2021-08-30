@@ -7,7 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.sjwi.meals.service.security.AuthenticationService;
+import com.sjwi.meals.util.security.AuthenticationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -76,7 +76,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		public void onLogoutSuccess(HttpServletRequest request,
 				HttpServletResponse response, Authentication authentication)
 				throws IOException, ServletException {
-			String tokenKey = com.sjwi.meals.service.security.AuthenticationService.STORED_COOKIE_TOKEN_KEY;
+			String tokenKey = com.sjwi.meals.util.security.AuthenticationService.STORED_COOKIE_TOKEN_KEY;
 			if (request.getCookies() != null && authenticationService.userHasLoginCookie()) {
 				try {
 					System.out.println("Deleting cookies and tokens");

@@ -13,7 +13,7 @@ public class MealsUser extends User {
 	/**
 	 * 
 	 */
-	public static final Set<String> USER_PREFERENCE_KEYS = new HashSet<>(Arrays.asList("sort", "sortDirection", "pinFavorites"));
+	public static final Set<String> USER_PREFERENCE_KEYS = new HashSet<>(Arrays.asList("sort", "sortDirection", "pinFavorites","weekStartDay","krogerLocationId"));
 	private static final long serialVersionUID = -8215868281708962565L;
 	private final String firstName;
 	private final String lastName;
