@@ -41,14 +41,6 @@
                 </h5>
             </div>
           </div>
-          <div class="row mt-3">
-            <div class="col">
-              <div class="form-check form-switch">
-                <input class="form-check-input" th:checked="${#authentication.principal.preferences.get('pinFavorites') == '1'}" type="checkbox" id="preferFavorites"/>
-                <label class="form-check-label text-muted" for="preferFavorites"><small>Pin favorites</small></label>
-              </div>
-            </div>
-          </div>
         </form>
       </div>
       <div class="modal-footer">
@@ -80,17 +72,6 @@
               }).appendTo('#tagFilters'); 
       });
     }
-  })
-  $('#preferFavorites, #sortBy, #sortOrder').on('change',function() {
-    $.ajax({
-      url: contextpath + 'update-preferences',
-      method: "POST",
-      data: {
-        pinFavorites: $('#preferFavorites').prop('checked'),
-        sortBy: $('#sortBy').val(),
-        sortOrder: $('#sortOrder').val()
-      }
-    })
   })
   $(document).on('click','.search-tag',function(){
     if ($(this).hasClass('active')) {

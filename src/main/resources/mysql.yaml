@@ -155,7 +155,7 @@ deleteCookieToken: >
   delete from StoredLogins where LOGIN_COOKIE = ?
 
 updateUserPreferences: >
-  UPDATE users set pinFavorites = ?, sort = ?, sortDirection = ? where username = ?
+  UPDATE users set pinFavorites = ?, sort = ?, sortDirection = ?, weekStartDay = ?, krogerLocationId = ? where username = ?
 
 deleteSide: >
   UPDATE Sides set DISABLED = 1 where ID = ?

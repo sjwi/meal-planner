@@ -465,8 +465,8 @@ public class MealDao {
 		});
 	}
 
-  public void updatePreferences(boolean pinFavorites, String sortBy, String sortOrder, String username) {
-    jdbcTemplate.update(queryStore.get("updateUserPreferences"), new Object[] {pinFavorites, sortBy, sortOrder, username});
+  public void updatePreferences(boolean pinFavorites, String sortBy, String sortOrder, int weekStartDay, String locationId, String username) {
+    jdbcTemplate.update(queryStore.get("updateUserPreferences"), new Object[] {pinFavorites, sortBy, sortOrder, weekStartDay, locationId, username});
   }
 
   public List<Side> getAllSides() {

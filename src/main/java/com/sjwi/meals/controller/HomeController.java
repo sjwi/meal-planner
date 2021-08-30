@@ -70,19 +70,26 @@ public class HomeController {
 
   @RequestMapping(value = "/update-preferences", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
-  public void setPreferences(@RequestParam(name="pinFavorites", required = false) boolean pinFavorites,
-      @RequestParam String sortBy, @RequestParam String sortOrder, Authentication auth) {
-    mealService.setPreferences(pinFavorites,sortBy,sortOrder, ((MealsUser) auth.getPrincipal()).getUsername());
+  public void setPreferences(@RequestParam(name="prefPreferFavorites", required = false) boolean pinFavorites,
+      @RequestParam String prefSortBy, @RequestParam String prefSortOrder, @RequestParam int prefWeekStartDay,
+      @RequestParam String prefKrogerLocationId, Authentication auth) {
+    mealService.setPreferences(pinFavorites,prefSortBy,prefSortOrder, prefWeekStartDay,
+      prefKrogerLocationId, ((MealsUser) auth.getPrincipal()).getUsername());
   }
 
   @RequestMapping("/search/meals")
   public ModelAndView search(@RequestParam(required = false) String searchTerm, Authentication auth,
-      @RequestParam(value="tags[]",required = false) List<Integer> tags) {
-    Map<String, String> preferences = ((MealsUser) auth.getPrincipal()).getPreferences();
+      @RequestParam(value="tags[]",required = false) List<Integer> tags,
+      @RequestParam(name="pinFavorites", required = false) boolean pinFavorites,
+      @RequestParam String sortBy, @RequestParam String sortOrder) {
+    Map<String, String> searchParams = new HashMap<>();
+    searchParams.put("sort",sortBy);
+    searchParams.put("sortDirection",sortOrder);
+    searchParams.put("pinFavorites",pinFavorites? "1":"0");
     if (tags == null)
         tags = new ArrayList<Integer>();
     ModelAndView mv = new ModelAndView("home :: mealList");
-    mv.addObject("meals", mealDao.searchMeals(searchTerm, tags, preferences));
+    mv.addObject("meals", mealDao.searchMeals(searchTerm, tags, searchParams));
     return mv;
   }
 

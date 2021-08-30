@@ -53,8 +53,8 @@ public class MealService {
       return existingTags;
   }
 
-  public void setPreferences(boolean pinFavorites, String sortBy, String sortOrder, String username) {
-    mealDao.updatePreferences(pinFavorites, sortBy, sortOrder, username);
+  public void setPreferences(boolean pinFavorites, String sortBy, String sortOrder, int weekStartDay, String locationId, String username) {
+    mealDao.updatePreferences(pinFavorites, sortBy, sortOrder, weekStartDay, locationId, username);
     UserDetails userDetails = userService.loadUserByUsername(username);
     Authentication newAuth = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
     SecurityContextHolder.getContext().setAuthentication(newAuth);
