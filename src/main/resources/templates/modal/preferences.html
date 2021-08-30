@@ -6,7 +6,8 @@
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        
+        <form id="preferencesForm">
+        </form>
       </div>
       <div class="modal-footer">
         <button type="submit" form="preferencesForm" class="btn btn-lg btn-primary w-100" data-dismiss="modal">Save</button>
@@ -28,11 +29,11 @@
       url: contextpath + 'user-preferences',
       method: "GET",
       beforeSend: function() {
-        $('#preferencesModal .modal-body').html($('#loading').html());
+        $('#preferencesModal #preferencesForm').html($('#loading').html());
         $('#preferencesModal').modal('show');
       },
       success: function(data){
-        $('#preferencesModal .modal-body').html(data)
+        $('#preferencesModal #preferencesForm').html(data)
       }
     });
   }

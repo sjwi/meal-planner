@@ -1,69 +1,67 @@
-<form id="preferencesForm">
-  <div class="row">
-    <div class="col-8">
-      <div class="form-floating">
-        <select class="form-select" id="prefSortBy" name="prefSortBy" aria-label="Sort meals by">
-          <option th:selected="${#authentication.principal.preferences.get('sort') == 'NAME'}" value="NAME">Meal name</option>
-          <option th:selected="${#authentication.principal.preferences.get('sort') == 'CNT'}" value="CNT">Total times planned</option>
-          <option th:selected="${#authentication.principal.preferences.get('sort') == 'LAST_EATEN'}" value="LAST_EATEN">Last planned</option>
-        </select>
-        <label for="prefSortBy">Sort meals by</label>
-      </div>
-    </div>
-    <div class="col-4">
-      <div class="form-floating">
-        <select class="form-select" id="prefSortOrder" name="prefSortOrder" aria-label="Sort direction">
-          <option th:selected="${#authentication.principal.preferences.get('sortDirection') == 'ASC'}" value="ASC">Asc.</option>
-          <option th:selected="${#authentication.principal.preferences.get('sortDirection') == 'DESC'}" value="DESC">Desc.</option>
-        </select>
-        <label for="prefSortOrder">Order</label>
-      </div>
+<div class="row">
+  <div class="col-8">
+    <div class="form-floating">
+      <select class="form-select" id="prefSortBy" name="prefSortBy" aria-label="Sort meals by">
+        <option th:selected="${#authentication.principal.preferences.get('sort') == 'NAME'}" value="NAME">Meal name</option>
+        <option th:selected="${#authentication.principal.preferences.get('sort') == 'CNT'}" value="CNT">Total times planned</option>
+        <option th:selected="${#authentication.principal.preferences.get('sort') == 'LAST_EATEN'}" value="LAST_EATEN">Last planned</option>
+      </select>
+      <label for="prefSortBy">Sort meals by</label>
     </div>
   </div>
-  <div class="row mt-3">
-    <div class="col">
-      <div class="form-floating">
-        <select class="form-select" id="prefWeekStartDay" name="prefWeekStartDay" aria-label="Week Start Day">
-          <option th:selected="${#authentication.principal.preferences.get('weekStartDay') == '1'}" value="1">Monday</option>
-          <option th:selected="${#authentication.principal.preferences.get('weekStartDay') == '2'}" value="2">Tuesday</option>
-          <option th:selected="${#authentication.principal.preferences.get('weekStartDay') == '3'}" value="3">Wednesday</option>
-          <option th:selected="${#authentication.principal.preferences.get('weekStartDay') == '4'}" value="4">Thursday</option>
-          <option th:selected="${#authentication.principal.preferences.get('weekStartDay') == '5'}" value="5">Friday</option>
-          <option th:selected="${#authentication.principal.preferences.get('weekStartDay') == '6'}" value="6">Saturday</option>
-          <option th:selected="${#authentication.principal.preferences.get('weekStartDay') == '7'}" value="7">Sunday</option>
-        </select>
-        <label for="prefWeekStartDay">Week Start Day</label>
-      </div>
+  <div class="col-4">
+    <div class="form-floating">
+      <select class="form-select" id="prefSortOrder" name="prefSortOrder" aria-label="Sort direction">
+        <option th:selected="${#authentication.principal.preferences.get('sortDirection') == 'ASC'}" value="ASC">Asc.</option>
+        <option th:selected="${#authentication.principal.preferences.get('sortDirection') == 'DESC'}" value="DESC">Desc.</option>
+      </select>
+      <label for="prefSortOrder">Order</label>
     </div>
   </div>
-  <div class="row mt-3">
-    <div class="col-12 mb-1">
-      <span>Kroger Store</span>
-    </div>
-    <div class="col-6">
-      <div class="form-floating">
-        <input id="krogerZip" name="krogerZip" class="form-control" type="text" value="40517">
-        <label for="krogerZip">Zip Code</label>
-      </div>
-    </div>
-    <div class="col-6">
-      <div class="form-floating">
-        <select class="form-select" id="prefKrogerLocationId" name="prefKrogerLocationId" aria-label="Sort direction">
-          <option th:each="location: ${locations.data}" 
-            th:selected="${#authentication.principal.preferences.get('krogerLocationId') == location.locationId}" 
-            th:value="${location.locationId}"
-            th:text="${location.name}"></option>
-        </select>
-        <label for="prefKrogerLocationId">Location</label>
-      </div>
+</div>
+<div class="row mt-3">
+  <div class="col">
+    <div class="form-floating">
+      <select class="form-select" id="prefWeekStartDay" name="prefWeekStartDay" aria-label="Week Start Day">
+        <option th:selected="${#authentication.principal.preferences.get('weekStartDay') == '1'}" value="1">Monday</option>
+        <option th:selected="${#authentication.principal.preferences.get('weekStartDay') == '2'}" value="2">Tuesday</option>
+        <option th:selected="${#authentication.principal.preferences.get('weekStartDay') == '3'}" value="3">Wednesday</option>
+        <option th:selected="${#authentication.principal.preferences.get('weekStartDay') == '4'}" value="4">Thursday</option>
+        <option th:selected="${#authentication.principal.preferences.get('weekStartDay') == '5'}" value="5">Friday</option>
+        <option th:selected="${#authentication.principal.preferences.get('weekStartDay') == '6'}" value="6">Saturday</option>
+        <option th:selected="${#authentication.principal.preferences.get('weekStartDay') == '7'}" value="7">Sunday</option>
+      </select>
+      <label for="prefWeekStartDay">Week Start Day</label>
     </div>
   </div>
-  <div class="row mt-3">
-    <div class="col">
-      <div class="form-check form-switch">
-        <input class="form-check-input" th:checked="${#authentication.principal.preferences.get('pinFavorites') == '1'}" type="checkbox" id="prefPreferFavorites" name="prefPreferFavorites"/>
-        <label class="form-check-label text-muted" for="prefPreferFavorites"><small>Pin favorites</small></label>
-      </div>
+</div>
+<div class="row mt-3">
+  <div class="col-12 mb-1">
+    <span>Kroger Store</span>
+  </div>
+  <div class="col-6">
+    <div class="form-floating">
+      <input id="krogerZip" name="krogerZip" class="form-control" type="text" value="40517">
+      <label for="krogerZip">Zip Code</label>
     </div>
   </div>
-</form>
+  <div class="col-6">
+    <div class="form-floating">
+      <select class="form-select" id="prefKrogerLocationId" name="prefKrogerLocationId" aria-label="Sort direction">
+        <option th:each="location: ${locations.data}" 
+          th:selected="${#authentication.principal.preferences.get('krogerLocationId') == location.locationId}" 
+          th:value="${location.locationId}"
+          th:text="${location.name}"></option>
+      </select>
+      <label for="prefKrogerLocationId">Location</label>
+    </div>
+  </div>
+</div>
+<div class="row mt-3">
+  <div class="col">
+    <div class="form-check form-switch">
+      <input class="form-check-input" th:checked="${#authentication.principal.preferences.get('pinFavorites') == '1'}" type="checkbox" id="prefPreferFavorites" name="prefPreferFavorites"/>
+      <label class="form-check-label text-muted" for="prefPreferFavorites"><small>Pin favorites</small></label>
+    </div>
+  </div>
+</div>
