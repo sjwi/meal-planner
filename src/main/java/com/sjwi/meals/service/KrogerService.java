@@ -82,7 +82,7 @@ public class KrogerService {
       if (zipCode == null || zipCode.trim().isEmpty()) 
         return new Locations();
 
-      String url = baseUrl + LOCATIONS_ENDPOINT + "?filter.zipCode.near" + zipCode;
+      String url = baseUrl + LOCATIONS_ENDPOINT + "?filter.zipCode.near=" + zipCode;
 
       URI uri = new URI(url);
       
