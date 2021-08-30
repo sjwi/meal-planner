@@ -105,8 +105,6 @@ public class OAuthManager {
     headers.add("Authorization", "Basic " + encodedCredentials);
 
     Map<String,String> params = new HashMap<>();
-    params.put("client_id",clientId);
-    params.put("redirect_uri",redirectUri);
     params.put("grant_type","refresh_token");
     params.put("refresh_token",refreshToken);
 
