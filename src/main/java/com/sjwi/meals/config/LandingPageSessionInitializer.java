@@ -66,6 +66,7 @@ public class LandingPageSessionInitializer {
               AccessTokenResponse tokenResponse = oAuthManager.refreshAccessToken(user.getRefreshToken());
               request.getSession().setAttribute("JWT", tokenResponse.getAccess_token());
               request.getSession().setAttribute("JWT_EXPIRES_ON", oAuthManager.getExpirationDate(tokenResponse.getExpires_in()));
+              mealDao.updateUserRefreshToken(user.getUsername(), tokenResponse.getRefresh_token());
               SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
             } catch (Exception e) {
               System.out.println("Refresh token expired, sending to login page");
@@ -88,6 +89,7 @@ public class LandingPageSessionInitializer {
         System.out.println("Refreshing token");
         MealsUser user = (MealsUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         AccessTokenResponse tokenResponse = oAuthManager.refreshAccessToken(user.getRefreshToken());
+        mealDao.updateUserRefreshToken(user.getUsername(), tokenResponse.getRefresh_token());
         request.getSession().setAttribute("JWT", tokenResponse.getAccess_token());
         request.getSession().setAttribute("JWT_EXPIRES_ON", oAuthManager.getExpirationDate(tokenResponse.getExpires_in()));
       } catch (Exception e) {
