@@ -27,6 +27,10 @@
     $.ajax({
       url: contextpath + 'user-preferences',
       method: "GET",
+      beforeSend: function() {
+        $('#preferencesModal .modal-body').html($('#loading').html());
+        $('#preferencesModal').modal('show');
+      },
       success: function(data){
         $('#preferencesModal .modal-body').html(data)
       }
