@@ -32,7 +32,12 @@
     $(this).addClass('active');
     $('.page-container').hide();
     $($(this).data('target')).show();
-    $('body').scrollTop(window.localStorage.getItem($(this).data('key')));
+
+    let scrollToHeight = window.localStorage.getItem($(this).data('key'));
+    $('body').scrollTop(scrollToHeight);
+    if (scrollToHeight > 111)
+      $('.navbar').css('top','0');
+
     if ($('#mealsContainer').is(':visible'))
       $('.create-meal').addClass('showme');
     else
@@ -60,7 +65,12 @@
     }
   });
   $(document).ready(function(){
-    $('body').scrollTop(window.localStorage.getItem($('.nav-item.active').data('key')));
+    if (window.localStorage.hasOwnProperty($('.nav-item.active').data('key'))) {
+      let scrollToHeight = window.localStorage.getItem($('.nav-item.active').data('key'));
+      $('body').scrollTop(scrollToHeight);
+      if (scrollToHeight > 111)
+				$('.navbar').css('top','0');
+    }
     if (tab == 'meals' || tab === null)
       $('.create-meal').addClass('showme');
     if (tab == 'sides')
