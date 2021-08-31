@@ -9,6 +9,13 @@ function search() {
   else 
     $('#searchFilterBtn').removeClass('active');
 
+  console.log($('#tagFilters .search-tag.active').length);
+  console.log($('#searchModal #sortBy :selected'));
+  console.log($('#searchModal #sortOrder :selected'));
+  console.log($('#searchModal #pinFavorites').is(':checked'));
+  console.log($('#searchModal #pinFavorites').hasClass('pref-not-checked'));
+  console.log($('#searchModal #pinFavorites').is(':checked'));
+  console.log($('#searchModal #pinFavorites').hasClass('pref-checked'));
   let searchTerm = $('#searchBox').val();
   let tags = $('#tagFilters .search-tag.active').map(function(){
     return $(this).data('target');
