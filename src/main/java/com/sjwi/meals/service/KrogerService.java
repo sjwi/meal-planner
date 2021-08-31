@@ -58,12 +58,12 @@ public class KrogerService {
       if (name == null || name.trim().isEmpty()) 
         return new Products();
 
-      Integer start = (pageCount - 1) * ITEMS_PER_PAGE;
+      Integer start = pageCount == 1? 1: (pageCount - 1) * ITEMS_PER_PAGE;
       String url = baseUrl + PRODUCTS_ENDPOINT +
           "?filter.locationId=" + locationId +
           "&filter.term=" + URLEncoder.encode(name, "UTF-8") +
-          "&filter.limit=" + ITEMS_PER_PAGE.toString() + 
-          "&filter.start=" + start.toString();
+          "&filter.limit=" + ITEMS_PER_PAGE + 
+          "&filter.start=" + start;
 
       URI uri = new URI(url);
       
