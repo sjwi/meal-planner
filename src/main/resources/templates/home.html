@@ -187,6 +187,8 @@
       $('.alert.add-meal').addClass('display');
     } else {
       $('.alert.add-meal').removeClass('display slide-down');
+      $('#hideAddAlert .fa-angle-up').hide();
+      $('#hideAddAlert .fa-angle-down').show();
     }
   });
   $('#sideSearchBtn').on('click',function(){
