@@ -31,6 +31,12 @@ deleteWeek: >
 deleteMeal: >
   UPDATE Meals SET DISABLED = 1 WHERE ID = ?
 
+deleteMealTags: >
+  DELETE FROM MealTags WHERE MEAL_ID = ?
+
+deleteMealIngredients: >
+  DELETE FROM MealIngredients WHERE MEAL_ID = ?
+
 getWeekById: >
   select * from WeeklySchedule where ID = ?
 

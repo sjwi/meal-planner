@@ -167,6 +167,8 @@ public class MealDao {
 
   public void deleteMeal(int mealId) {
     jdbcTemplate.update(queryStore.get("deleteMeal"), new Object[] { mealId });
+    jdbcTemplate.update(queryStore.get("deleteMealTags"), new Object[] { mealId });
+    jdbcTemplate.update(queryStore.get("deleteMealIngredients"), new Object[] { mealId });
   }
 
   public Week getWeekById(int id) {
