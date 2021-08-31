@@ -40,22 +40,19 @@
 
   </li>
 </ul>
-<nav aria-label="Kroger navigation">
-  <div class="row">
-    <div class="col text-center">
-      <ul class="pagination kroger-paginator" th:with="countStart=${pageCount > 3? pageCount - 2: 1},final=${products.data.length < 14? pageCount: pageCount + 1}">
-        <li class="page-item" th:classappend="${pageCount == 1? 'disabled':''}">
-          <a class="page-link" href="javascript:;" th:attr="onclick=${'refreshKrogerPage(' + 1 + ')'}"><span aria-hidden="true">&laquo;</span></a>
-        </li>
-        <th:block th:each="i: ${#numbers.sequence(countStart,final)}">
-          <li class="page-item" th:classappend="${pageCount == i? 'active':''}">
-            <a class="page-link"  href="javascript:;" th:attr="onclick=${'refreshKrogerPage(' + i + ')'}" th:text=${i}></a>
-          </li>
-        </th:block>
-        <li class="page-item">
-          <a class="page-link" href="javascript:;" th:attr="onclick=${'refreshKrogerPage(' + final + ')'}"><span aria-hidden="true">&raquo;</span></a>
-        </li>
-      </ul>
-    </div>
-  </div>
+<nav aria-label="Kroger navigation mt-2">
+  <ul class="pagination kroger-paginator justify-content-center" th:with="countStart=${pageCount > 3? pageCount - 2: 1},final=${products.data.length < 14? pageCount: pageCount + 1}">
+    <li class="page-item" th:classappend="${pageCount == 1? 'disabled':''}">
+      <a class="page-link" href="javascript:;" th:attr="onclick=${'refreshKrogerPage(' + 1 + ')'}"><span aria-hidden="true">&laquo;</span></a>
+    </li>
+    <th:block th:each="i: ${#numbers.sequence(countStart,final)}">
+      <li class="page-item" th:classappend="${pageCount == i? 'active':''}">
+        <a class="page-link"  href="javascript:;" th:attr="onclick=${'refreshKrogerPage(' + i + ')'}" th:text=${i}></a>
+      </li>
+    </th:block>
+    <span th:if="${products.data.length == 14}">...</span>
+    <li class="page-item">
+      <a class="page-link" href="javascript:;" th:attr="onclick=${'refreshKrogerPage(' + final + ')'}"><span aria-hidden="true">&raquo;</span></a>
+    </li>
+  </ul>
 </nav>
