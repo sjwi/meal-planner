@@ -43,17 +43,17 @@
 <nav aria-label="Kroger navigation">
   <div class="row">
     <div class="col text-center">
-      <ul class="pagination kroger-paginator" th:with="countStart=${pageCount > 3? pageCount - 2: 1}">
+      <ul class="pagination kroger-paginator" th:with="countStart=${pageCount > 3? pageCount - 2: 1},final=${products.data.length < 14? pageCount: pageCount + 1}">
         <li class="page-item" th:classappend="${pageCount == 1? 'disabled':''}">
           <a class="page-link" href="javascript:;" th:attr="onclick=${'refreshKrogerPage(' + 1 + ')'}"><span aria-hidden="true">&laquo;</span></a>
         </li>
-        <th:block th:with="final=${products.data.length > 0? pageCount + 1: pageCount}" th:each="i: ${#numbers.sequence(countStart,final)}">
+        <th:block th:each="i: ${#numbers.sequence(countStart,final)}">
           <li class="page-item" th:classappend="${pageCount == i? 'active':''}">
             <a class="page-link"  href="javascript:;" th:attr="onclick=${'refreshKrogerPage(' + i + ')'}" th:text=${i}></a>
           </li>
         </th:block>
         <li class="page-item">
-          <a class="page-link" href="javascript:;" th:attr="onclick=${'refreshKrogerPage(' + nextPage + ')'}" th:with="nextPage=${pageCount + 1}"><span aria-hidden="true">&raquo;</span></a>
+          <a class="page-link" href="javascript:;" th:attr="onclick=${'refreshKrogerPage(' + final + ')'}"><span aria-hidden="true">&raquo;</span></a>
         </li>
       </ul>
     </div>
