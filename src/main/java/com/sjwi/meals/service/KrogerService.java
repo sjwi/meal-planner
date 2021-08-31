@@ -50,7 +50,7 @@ public class KrogerService {
   private static final String PRODUCTS_ENDPOINT = "/products";
   private static final String LOCATIONS_ENDPOINT = "/locations";
   private static final String ADD_CART_ENDPOINT = "/cart/add";
-  private static final Integer ITMES_PER_PAGE = 15;
+  private static final Integer ITEMS_PER_PAGE = 15;
 
   public Products getProductsByTerm(String name, String locationId, Integer pageCount) {
     try {
@@ -58,11 +58,12 @@ public class KrogerService {
       if (name == null || name.trim().isEmpty()) 
         return new Products();
 
-      Integer limit = pageCount * ITMES_PER_PAGE;
+      Integer start = (pageCount - 1) * ITEMS_PER_PAGE;
       String url = baseUrl + PRODUCTS_ENDPOINT +
           "?filter.locationId=" + locationId +
           "&filter.term=" + URLEncoder.encode(name, "UTF-8") +
-          "&filter.limit=" + limit.toString();
+          "&filter.limit=" + ITEMS_PER_PAGE.toString() + 
+          "&filter.start=" + start.toString();
 
       URI uri = new URI(url);
       
