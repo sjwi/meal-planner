@@ -41,7 +41,7 @@
   </li>
 </ul>
 <nav aria-label="Kroger navigation mt-2">
-  <ul class="pagination kroger-paginator justify-content-center" th:with="countStart=${pageCount > 3? pageCount - 2: 1},final=${products.data.length < 14? pageCount: pageCount + 2}">
+  <ul class="pagination kroger-paginator justify-content-center" th:with="countStart=${pageCount > 3? pageCount - 2: 1},final=${products.data == null || products.data.length < 14? pageCount: pageCount + 2}">
     <li class="page-item" th:classappend="${pageCount == 1? 'disabled':''}">
       <a class="page-link" href="javascript:;" th:attr="onclick=${'refreshKrogerPage(' + 1 + ')'}"><span aria-hidden="true">&laquo;</span></a>
     </li>
