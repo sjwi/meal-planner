@@ -36,7 +36,7 @@
     let scrollToHeight = window.localStorage.getItem($(this).data('key'));
     $('body').scrollTop(scrollToHeight);
     if (scrollToHeight > 111)
-      $('.navbar').css('top','0');
+      $('.navbar').css('top','-111px');
 
     if ($('#mealsContainer').is(':visible'))
       $('.create-meal').addClass('showme');
@@ -69,7 +69,7 @@
       let scrollToHeight = window.localStorage.getItem($('.nav-item.active').data('key'));
       $('body').scrollTop(scrollToHeight);
       if (scrollToHeight > 111)
-				$('.navbar').css('top','0');
+				$('.navbar').css('top','-111px');
     }
     if (tab == 'meals' || tab === null)
       $('.create-meal').addClass('showme');
