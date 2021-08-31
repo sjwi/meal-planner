@@ -61,23 +61,24 @@ img.kroger-thumbnail {
   width: 100%;
   transition: top 0.3s;
 }
-.alert.add-meal {
-  transition-duration: .5s;
-  position:fixed; 
-  bottom: -175px; 
-  left: 2%; 
-  width: 96%;
-  z-index:9999; 
-}
 .ingredient-counter {
   padding-left: .4rem !important;
   padding-right: .4rem !important;
 }
+.alert.add-meal {
+  transition-duration: .5s;
+  position:fixed; 
+  bottom: -325px; 
+  left: 2%; 
+  width: 96%;
+  z-index:9999; 
+  padding-bottom: 150px;
+}
 .alert.add-meal.display {
-  bottom: 0px; 
+  bottom: -100px;
 }
 .alert.add-meal.slide-down {
-  bottom: -150px; 
+  bottom: -290px; 
 }
 #searchFilterBtn:focus {
   outline: none;
