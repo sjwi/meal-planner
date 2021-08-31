@@ -50,8 +50,9 @@
         <a class="page-link"  href="javascript:;" th:attr="onclick=${'refreshKrogerPage(' + i + ')'}" th:text=${i}></a>
       </li>
     </th:block>
+    <li th:if="${products.data?.length == 15}">...</li>
     <li class="page-item" th:classappend="${products.data == null || products.data.length != 15? 'disabled':''}">
-      <a class="page-link" href="javascript:;" th:attr="onclick=${'refreshKrogerPage(' + nextPage + ')'}" th:with="nextPage:${pageCount + 1}"><span aria-hidden="true">&raquo;</span></a>
+      <a class="page-link" href="javascript:;"><span aria-hidden="true">&raquo;</span></a>
     </li>
   </ul>
 </nav>
