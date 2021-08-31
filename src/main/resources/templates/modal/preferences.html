@@ -6,7 +6,7 @@
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form id="preferencesForm" th:action="@{/update-preferences}">
+        <form id="preferencesForm" th:action="@{/update-preferences}" onkeydown="return event.key != 'Enter';">
         </form>
       </div>
       <div class="modal-footer">
@@ -62,6 +62,7 @@
         $('#prefKrogerLocationId').prepend('<option selected>Loading...</option>')
       },
       success: function(data){
+        $('#prefKrogerLocationId').find('option').remove().end();
         data.data.forEach(l => {
           jQuery('<option/>', {
             value: l.locationId,
