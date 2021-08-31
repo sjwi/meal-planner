@@ -115,9 +115,8 @@
     else
       $('#inputRecipeUrl').val($('#mealRecipeUrl_' + id).attr("href"));
     $('#createEditModal form').attr('action', contextpath + 'meal/edit/' + id);
-    if ($('#favoriteCheckbox_' + id).hasClass("fas")) {
+    if ($('#favoriteCheckbox_' + id).hasClass("fas"))
       $('#inputFavorite').click();
-    }
     
     //Ingredients
     let mealIngredients = $('#accordion_' + id + ' .meal-ingredient').map(function(){

@@ -32,7 +32,10 @@
         <small class="mb-0 text-primary">Last time planned: </small>
       </div>
       <div class="col-6 pt-2 text-end">
-        <small th:text="${meal.lastEaten == null? 'Never': meal.getWeeksSinceLastEaten() + ' weeks ago'}"></small>
+        <small th:text="${meal.lastEaten == null? 'Never': 
+          meal.getWeeksSinceLastEaten() == 0? 'This week':
+          meal.getWeeksSinceLastEaten() == 1? 'Last week':
+          meal.getWeeksSinceLastEaten() + ' weeks ago'}"></small>
       </div>
     </div>
     <div class="row mb-2">
