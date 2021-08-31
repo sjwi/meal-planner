@@ -35,9 +35,11 @@
     refreshKrogerPage();
   }
 
-  function refreshKrogerPage() {
+  function refreshKrogerPage(pageCount) {
+    if(!pageCount)
+      pageCount = 1;
     $.ajax({
-      url: contextpath + 'kroger/searchProducts?term=' + encodeURI($('#krogerModal #krogerSearchBox').val()),
+      url: contextpath + 'kroger/searchProducts?term=' + encodeURI($('#krogerModal #krogerSearchBox').val()) + '&pageCount=' + pageCount,
       method: "GET",
       beforeSend: function(){
         $('#krogerModal #productTable').addClass('loading');

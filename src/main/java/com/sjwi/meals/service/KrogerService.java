@@ -50,18 +50,19 @@ public class KrogerService {
   private static final String PRODUCTS_ENDPOINT = "/products";
   private static final String LOCATIONS_ENDPOINT = "/locations";
   private static final String ADD_CART_ENDPOINT = "/cart/add";
-  private static final String LIMIT = "15";
+  private static final Integer ITMES_PER_PAGE = 15;
 
-  public Products getProductsByTerm(String name, String locationId) {
+  public Products getProductsByTerm(String name, String locationId, Integer pageCount) {
     try {
       RestTemplate restTemplate = new RestTemplate();
       if (name == null || name.trim().isEmpty()) 
         return new Products();
 
+      Integer limit = pageCount * ITMES_PER_PAGE;
       String url = baseUrl + PRODUCTS_ENDPOINT +
           "?filter.locationId=" + locationId +
           "&filter.term=" + URLEncoder.encode(name, "UTF-8") +
-          "&filter.limit=" + LIMIT;
+          "&filter.limit=" + limit.toString();
 
       URI uri = new URI(url);
       

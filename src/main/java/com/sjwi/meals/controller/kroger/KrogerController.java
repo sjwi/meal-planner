@@ -34,11 +34,13 @@ public class KrogerController {
 
   @RequestMapping("/kroger/searchProducts")
   @ResponseStatus(HttpStatus.OK)
-  public ModelAndView searchProducts(@RequestParam String term) throws URISyntaxException, UnsupportedEncodingException{
+  public ModelAndView searchProducts(@RequestParam String term, @RequestParam(defaultValue = "1") Integer pageCount) throws URISyntaxException, UnsupportedEncodingException{
     Map<String, String> preferences  = ((MealsUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPreferences();
-    Products products = krogerService.getProductsByTerm(term, preferences.get(KROGER_LOCATION_KEY));
+    Products products = krogerService.getProductsByTerm(term, preferences.get(KROGER_LOCATION_KEY), pageCount);
     ModelAndView mv = new ModelAndView("modal/dynamic/kroger");
     mv.addObject("products", products);
+    mv.addObject("searchedTerm", term);
+    mv.addObject("pageCount", pageCount);
     return mv;
   }
   
