@@ -1,11 +1,14 @@
 function search() {
   if($('#tagFilters .search-tag.active').length ||
-    !$('#searchModal #sortBy').hasClass('prev-val') ||
-    !$('#searchModal #sortOrder').hasClass('prev-val') ||
+    !$('#searchModal #sortBy').hasClass('pref-val') ||
+    !$('#searchModal #sortOrder').hasClass('pref-val') ||
     ($('#searchModal #pinFavorites').is(':checked') && $('#searchModal #pinFavorites').hasClass('pref-not-checked')) ||
     (!$('#searchModal #pinFavorites').is(':checked') && $('#searchModal #pinFavorites').hasClass('pref-checked'))
   )
     $('#searchFilterBtn').addClass('active');
+  else 
+    $('#searchFilterBtn').removeClass('active');
+
   let searchTerm = $('#searchBox').val();
   let tags = $('#tagFilters .search-tag.active').map(function(){
     return $(this).data('target');
