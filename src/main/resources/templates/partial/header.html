@@ -48,8 +48,17 @@
       window.localStorage.setItem($(this).data('key'), 0);
   });
   $(window).on("unload",function() {
+    window.localStorage.setItem($('.nav-item.active').data('key'), $('body').scrollTop());
+    tab = new URLSearchParams(window.location.hash.substr(1)).get('tab');
+    window.localStorage.setItem('mp_tabsKey',tab);
+  });
+  document.addEventListener("visibilitychange", function() {
+    if (document.hidden) {
       window.localStorage.setItem($('.nav-item.active').data('key'), $('body').scrollTop());
-   });
+      tab = new URLSearchParams(window.location.hash.substr(1)).get('tab');
+      window.localStorage.setItem('mp_tabsKey',tab);
+    }
+  });
   $(document).ready(function(){
     $('body').scrollTop(window.localStorage.getItem($('.nav-item.active').data('key')));
     if (tab == 'meals' || tab === null)

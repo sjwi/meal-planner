@@ -227,7 +227,12 @@
   });
   $('.week-meal-sides').listSwipe();
 
-  const tab = new URLSearchParams(window.location.hash.substr(1)).get('tab');
+  let tab = new URLSearchParams(window.location.hash.substr(1)).get('tab');
+  if ((tab == undefined || tab == null) && window.localStorage.hasOwnProperty('mp_tabsKey') ) {
+    let storedTab = window.localStorage.getItem('mp_tabsKey');
+    location.hash = 'tab=' + storedTab
+    tab = new URLSearchParams(window.location.hash.substr(1)).get('tab');
+  }
   if (tab == 'weeks') {
     $('.nav-item').removeClass('active');
     $('#weekNavLink').addClass('active');
