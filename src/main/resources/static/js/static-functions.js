@@ -1,7 +1,7 @@
 function search() {
   if($('#tagFilters .search-tag.active').length ||
-    !$('#searchModal #sortBy:selected').hasClass('pref-val') ||
-    !$('#searchModal #sortOrder:selected').hasClass('pref-val') ||
+    !$('#searchModal #sortBy :selected').hasClass('pref-val') ||
+    !$('#searchModal #sortOrder :selected').hasClass('pref-val') ||
     ($('#searchModal #pinFavorites').is(':checked') && $('#searchModal #pinFavorites').hasClass('pref-not-checked')) ||
     (!$('#searchModal #pinFavorites').is(':checked') && $('#searchModal #pinFavorites').hasClass('pref-checked'))
   )
