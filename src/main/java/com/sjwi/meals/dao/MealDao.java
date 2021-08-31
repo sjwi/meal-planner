@@ -84,7 +84,7 @@ public class MealDao {
       List<Week> weeks = new ArrayList<>();
       while (r.next()) {
         List<WeekMeal> meals = getMealsInWeek(r.getInt("ID"));
-        weeks.add(new Week(r.getInt("ID"), r.getTimestamp("DATE_BEGIN"), r.getTimestamp("DATE_END"), meals));
+        weeks.add(new Week(r.getInt("ID"), r.getDate("DATE_BEGIN"), r.getDate("DATE_END"), meals));
       }
       return weeks;
     });
@@ -95,7 +95,7 @@ public class MealDao {
       List<Week> weeks = new ArrayList<>();
       while (r.next()) {
         List<WeekMeal> meals = getMealsInWeek(r.getInt("ID"));
-        weeks.add(new Week(r.getInt("ID"), r.getTimestamp("DATE_BEGIN"), r.getTimestamp("DATE_END"), meals));
+        weeks.add(new Week(r.getInt("ID"), new java.util.Date(r.getDate("DATE_BEGIN").getTime()), r.getDate("DATE_END"), meals));
       }
       return weeks;
     });
@@ -179,7 +179,7 @@ public class MealDao {
     return jdbcTemplate.query(queryStore.get("getWeekById"), new Object[] { id }, r -> {
       r.next();
       List<WeekMeal> meals = getMealsInWeek(r.getInt("ID"));
-      return new Week(r.getInt("ID"), r.getTimestamp("DATE_BEGIN"), r.getTimestamp("DATE_END"), meals);
+      return new Week(r.getInt("ID"), r.getDate("DATE_BEGIN"), r.getDate("DATE_END"), meals);
     });
   }
 
@@ -430,7 +430,7 @@ public class MealDao {
   private Meal buildMealFromResultSet(ResultSet rs) throws SQLException {
     List<Ingredient> ingredients = getIngredientsInMeal(rs.getInt("ID"));
     Map<Integer, String> tags = getMealTags(rs.getInt("ID"));
-    return new Meal(rs.getInt("ID"), rs.getString("NAME"), rs.getInt("CNT"), rs.getTimestamp("LAST_EATEN"),
+    return new Meal(rs.getInt("ID"), rs.getString("NAME"), rs.getInt("CNT"), rs.getDate("LAST_EATEN"),
             rs.getBoolean("FAVORITE"), rs.getString("RECIPE_URL"), rs.getString("NOTES"), ingredients, tags);
   }
 
