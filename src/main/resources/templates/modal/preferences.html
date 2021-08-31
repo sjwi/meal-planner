@@ -58,6 +58,9 @@
       data: {
         zipCode: $('#krogerZip').val()
       },
+      beforeSend: function() {
+        $('#prefKrogerLocationId').prepend('<option selected>Loading...</option>')
+      },
       success: function(data){
         data.data.forEach(l => {
           jQuery('<option/>', {
