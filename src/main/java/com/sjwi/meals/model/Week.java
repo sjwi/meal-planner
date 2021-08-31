@@ -18,9 +18,6 @@ public class Week {
         this.id = id;
         this.start = start;
         this.end = end;
-        System.out.println("ID: " + this.id);
-        System.out.println("Start: " + this.start);
-        System.out.println("End: " + this.end);
         this.meals = meals;
     }
 
