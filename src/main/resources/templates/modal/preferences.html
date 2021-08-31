@@ -43,7 +43,10 @@
     $.ajax({
       url: contextpath + 'update-preferences',
       method: "POST",
-      data: $(this).serialize()
+      data: $(this).serialize(),
+      success: function(){
+        refreshSearchModal();
+      }
     })
   });
 

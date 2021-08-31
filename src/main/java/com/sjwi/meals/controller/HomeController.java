@@ -159,6 +159,10 @@ public class HomeController {
     return mv;
   }
 
+  @RequestMapping("/search-modal")
+  public ModelAndView searchModal() {
+    return new ModelAndView("modal/search :: searchForm");
+  }
 
   @RequestMapping("/week/ingredients/{id}")
   public ModelAndView getIngredientsInWeek(@PathVariable int id) {

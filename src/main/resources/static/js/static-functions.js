@@ -1,5 +1,10 @@
 function search() {
-  if($('#tagFilters .search-tag.active').length)
+  if($('#tagFilters .search-tag.active').length ||
+    !$('#searchModal #sortBy').hasClass('prev-val') ||
+    !$('#searchModal #sortOrder').hasClass('prev-val') ||
+    ($('#searchModal #pinFavorites').is(':checked') && $('#searchModal #pinFavorites').hasClass('pref-not-checked')) ||
+    (!$('#searchModal #pinFavorites').is(':checked') && $('#searchModal #pinFavorites').hasClass('pref-checked'))
+  )
     $('#searchFilterBtn').addClass('active');
   let searchTerm = $('#searchBox').val();
   let tags = $('#tagFilters .search-tag.active').map(function(){
@@ -25,6 +30,16 @@ function search() {
         $('#mealCheckbox_' + id).prop('checked',true);
         $('#sideAlert_' + id).addClass('show');
       });
+    }
+  });
+}
+function refreshSearchModal() {
+  $.ajax({
+    url: contextpath + 'search-modal',
+    method: "GET",
+    success: function (data) {
+      $('#searchForm').html(data)
+      search();
     }
   });
 }
