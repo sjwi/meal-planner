@@ -25,6 +25,7 @@ import com.sjwi.meals.model.WeekMeal;
 import com.sjwi.meals.model.security.MealsUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -38,6 +39,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class MealDao {
+
+  @Value("${meals.files.urlBase}")
+  String imageUrlBase;
 
   @Autowired
   private SqlQueryStore queryStore;
@@ -648,7 +652,7 @@ public class MealDao {
     return jdbcTemplate.query(queryStore.get("getRecipeImagesForMeal"), new Object[] {mealId}, r -> {
       List<String> imageUrls = new ArrayList<>();
       while (r.next())
-        imageUrls.add(r.getString("IMAGE_URL"));
+        imageUrls.add(imageUrlBase + "/" + r.getString("IMAGE_URL"));
       return imageUrls;
     });
   }

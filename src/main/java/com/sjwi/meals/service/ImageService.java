@@ -19,9 +19,6 @@ public class ImageService {
   @Value("${meals.files.imagePath}")
   String imagePath;
 
-  @Value("${meals.files.urlBase}")
-  String urlBase;
-
   private static final String IMAGE_FILE_PREFIX = "recipe_";
 
   public List<String> storeFiles(MultipartFile[] imageFiles, Integer mealId) throws IOException {
@@ -31,7 +28,7 @@ public class ImageService {
       String extension = FilenameUtils.getExtension(file.getOriginalFilename());
       String fileName = IMAGE_FILE_PREFIX + mealId + "_" + new Date().getTime() + "." + extension;
       Files.copy(file.getInputStream(), root.resolve(fileName));
-      fileNames.add(urlBase + "/" + fileName);
+      fileNames.add(fileName);
     }
     return fileNames;
   }
