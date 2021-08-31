@@ -2,8 +2,6 @@ function search() {
   if($('#tagFilters .search-tag.active').length)
     $('#searchFilterBtn').addClass('active');
   let searchTerm = $('#searchBox').val();
-  let dateFilterBegin = $('#dateFilterBegin').val()
-  let dateFilterEnd = $('#dateFilterBegin').val()
   let tags = $('#tagFilters .search-tag.active').map(function(){
     return $(this).data('target');
   }).get();
@@ -12,7 +10,10 @@ function search() {
     method: "GET",
     data: {
       searchTerm: searchTerm,
-      tags: tags
+      tags: tags,
+      pinFavorites: $('#searchModal #pinFavorites').val(),
+      sortBy: $('#searchModal #sortBy').val(),
+      sortOrder: $('#searchModal #sortOrder').val()
     },
     beforeSend: function() {
       $('#mealTable').addClass('loading');

@@ -10,7 +10,7 @@
           <div class="row">
             <div class="col-8">
               <div class="form-floating">
-                <select class="form-select" id="sortBy" aria-label="Sort meals by">
+                <select class="form-select" id="sortBy" name="sortBy" aria-label="Sort meals by">
                   <option th:selected="${#authentication.principal.preferences.get('sort') == 'NAME'}" value="NAME">Meal name</option>
                   <option th:selected="${#authentication.principal.preferences.get('sort') == 'CNT'}" value="CNT">Total times planned</option>
                   <option th:selected="${#authentication.principal.preferences.get('sort') == 'LAST_EATEN'}" value="LAST_EATEN">Last planned</option>
@@ -20,7 +20,7 @@
             </div>
             <div class="col-4">
               <div class="form-floating">
-                <select class="form-select" id="sortOrder" aria-label="Sort direction">
+                <select class="form-select" id="sortOrder" name="sortOrder" aria-label="Sort direction">
                   <option th:selected="${#authentication.principal.preferences.get('sortDirection') == 'ASC'}" value="ASC">Asc.</option>
                   <option th:selected="${#authentication.principal.preferences.get('sortDirection') == 'DESC'}" value="DESC">Desc.</option>
                 </select>
@@ -39,6 +39,14 @@
             <div class="col">
                 <h5 id="tagFilters" class="d-inline-block search-tag-box">
                 </h5>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col">
+              <div class="form-check form-switch">
+                <input class="form-check-input" th:checked="${#authentication.principal.preferences.get('pinFavorites') == '1'}" type="checkbox" id="pinFavorites" name="pinFavorites"/>
+                <label class="form-check-label text-muted" for="pinFavorites"><small>Pin favorites</small></label>
+              </div>
             </div>
           </div>
         </form>
