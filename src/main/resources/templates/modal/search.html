@@ -25,9 +25,9 @@
               <div class="form-floating">
                 <select class="form-select search-input" id="sortOrder" name="sortOrder" aria-label="Sort direction">
                   <option th:selected="${#authentication.principal.preferences.get('sortDirection') == 'ASC'}"
-                    th:appendclass="${#authentication.principal.preferences.get('sortDirection') == 'ASC'? 'pref-val': ''}" value="ASC">Asc.</option>
+                    th:classappend="${#authentication.principal.preferences.get('sortDirection') == 'ASC'? 'pref-val': ''}" value="ASC">Asc.</option>
                   <option th:selected="${#authentication.principal.preferences.get('sortDirection') == 'DESC'}"
-                    th:appendclass="${#authentication.principal.preferences.get('sortDirection') == 'DESC'? 'pref-val': ''}" value="DESC">Desc.</option>
+                    th:classappend="${#authentication.principal.preferences.get('sortDirection') == 'DESC'? 'pref-val': ''}" value="DESC">Desc.</option>
                 </select>
                 <label for="sortOrder">Order</label>
               </div>
