@@ -325,11 +325,9 @@ function decrementValue(e) {
 
 function addItemToCart(upc) {
   itemPurchased = true;
-  $('#addItemToCart_' + upc).prop('disabled',true);
   $('#addItemToCart_' + upc).find('.fa-cart-plus').hide('fast');
   $('#addItemToCart_' + upc).find('.fa-check').show('fast');
   setTimeout(function(){
-    $('#addItemToCart_' + upc).prop('disabled',false);
     $('#addItemToCart_' + upc).find('.fa-cart-plus').show('fast');
     $('#addItemToCart_' + upc).find('.fa-check').hide('fast');
   },2000)

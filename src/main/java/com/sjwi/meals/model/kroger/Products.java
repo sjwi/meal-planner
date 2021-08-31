@@ -18,6 +18,12 @@ public class Products {
     public Item[] items;
     public Map<String, String> itemInformation;
     public Map<String, Object> temperature;
+    public String getImage(String size) {
+      return Arrays.stream(images)
+        .filter(i -> i.perspective.equals("front"))
+        .map(i -> i.getSize(size))
+        .findFirst().orElse(images.length > 0? images[0].getSize(size) : "");
+    }
   }
 
   public static class Image {
@@ -28,7 +34,7 @@ public class Products {
       return Arrays.stream(sizes)
         .filter(s -> s.size.equals(name))
         .map(s -> s.url)
-        .findFirst().orElse("");
+        .findFirst().orElse(sizes.length > 0? sizes[0].url : "");
     }
   }
 
