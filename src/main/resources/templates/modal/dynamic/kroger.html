@@ -1,7 +1,7 @@
 <ul class="list-group">
   <li class="list-group-item" th:each="product : ${products.data}">
     <div class="row" th:id="${'productRow_' + product.upc}">
-      <div class="col col-2 ps-0">
+      <div class="col col-2 px-0 text-center">
         <img class="my-2 kroger-thumbnail" th:src="${product.getImage('medium')}"></img>
       </div>
       <div class="col-10">

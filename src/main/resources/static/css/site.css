@@ -30,8 +30,8 @@
   min-height: 38px;
 }
 img.kroger-thumbnail {
-  width:50px;
-  max-height: 55px;
+  max-width:50px;
+  max-height: 75px;
 }
 
 .icon-sm {
