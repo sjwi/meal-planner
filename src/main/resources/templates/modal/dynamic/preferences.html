@@ -39,13 +39,13 @@
   <div class="col-12 mb-1">
     <span>Kroger Store</span>
   </div>
-  <div class="col-6">
+  <div class="col-12 mb-2">
     <div class="form-floating">
       <input id="krogerZip" name="krogerZip" class="form-control" type="text" value="40517">
-      <label for="krogerZip">Zip Code</label>
+      <label for="krogerZip">Search via zip code</label>
     </div>
   </div>
-  <div class="col-6">
+  <div class="col-12">
     <div class="form-floating">
       <select class="form-select" id="prefKrogerLocationId" name="prefKrogerLocationId" aria-label="Sort direction">
         <option th:each="location: ${locations.data}" 
@@ -53,7 +53,7 @@
           th:value="${location.locationId}"
           th:text="${location.name}"></option>
       </select>
-      <label for="prefKrogerLocationId">Location</label>
+      <label for="prefKrogerLocationId">Choose location</label>
     </div>
   </div>
 </div>
