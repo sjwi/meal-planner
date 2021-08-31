@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.stream.Collectors;
 
 import com.sjwi.meals.model.Ingredient;
@@ -52,6 +54,8 @@ public class MealDao {
   @Autowired
   NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
+  private final Calendar tzCal = Calendar.getInstance(TimeZone.getTimeZone("America/New_York"));
+
   public List<Meal> getAllMeals(Map<String,String> preferences) {
     return jdbcTemplate.query(queryStore.get("getAllMeals",preferences), new Object[] {getSuperUsername()}, r -> {
       List<Meal> meals = new ArrayList<>();
@@ -84,7 +88,7 @@ public class MealDao {
       List<Week> weeks = new ArrayList<>();
       while (r.next()) {
         List<WeekMeal> meals = getMealsInWeek(r.getInt("ID"));
-        weeks.add(new Week(r.getInt("ID"), r.getDate("DATE_BEGIN"), r.getDate("DATE_END"), meals));
+        weeks.add(new Week(r.getInt("ID"), r.getDate("DATE_BEGIN", tzCal), r.getDate("DATE_END", tzCal), meals));
       }
       return weeks;
     });
@@ -95,7 +99,7 @@ public class MealDao {
       List<Week> weeks = new ArrayList<>();
       while (r.next()) {
         List<WeekMeal> meals = getMealsInWeek(r.getInt("ID"));
-        weeks.add(new Week(r.getInt("ID"), new java.util.Date(r.getDate("DATE_BEGIN").getTime()), r.getDate("DATE_END"), meals));
+        weeks.add(new Week(r.getInt("ID"), r.getDate("DATE_BEGIN", tzCal), r.getDate("DATE_END", tzCal), meals));
       }
       return weeks;
     });
