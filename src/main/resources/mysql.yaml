@@ -1,5 +1,5 @@
 getAllMeals: >
-  select m.ID,m.NAME,(SELECT MAX(w.DATE_BEGIN) FROM PlannedMeals pm JOIN WeeklySchedule w on w.ID = pm.SCHEDULE_ID where pm.MEAL_ID = m.ID) as LAST_EATEN, m.FAVORITE,m.RECIPE_URL,m.NOTES, COUNT(*) as CNT from Meals m LEFT JOIN PlannedMeals ppm on ppm.MEAL_ID = m.ID where m.DISABLED = 0 AND m.USER like ? group by m.ID,m.NAME
+  select m.ID,m.NAME,(SELECT MAX(w.DATE_BEGIN) FROM PlannedMeals pm JOIN WeeklySchedule w on w.ID = pm.SCHEDULE_ID where pm.MEAL_ID = m.ID and w.DISABLED = 0) as LAST_EATEN, m.FAVORITE,m.RECIPE_URL,m.NOTES, COUNT(*) as CNT from Meals m LEFT JOIN PlannedMeals ppm on ppm.MEAL_ID = m.ID where m.DISABLED = 0 AND m.USER like ? group by m.ID,m.NAME
   ORDER BY {{SORT}} {{SORT_DIRECTION}}
 
 searchMeals: >
