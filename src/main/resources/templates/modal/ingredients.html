@@ -24,9 +24,9 @@
       success: function(data) {
         $('#ingredientsModal .modal-body').html(data);
       },
-      error: function(data){
-        alertWithFade('danger','Something went wrong! Unable to retreive ingredients')
-      },
+      error: function() {
+        alert("Oof! Something went wrong. Oh well, you get what you pay for.")
+      }
     });
   }
 </script>

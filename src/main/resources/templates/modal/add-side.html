@@ -59,6 +59,9 @@
         complete: function() {
           $('#addSideSubmitBtn').prop('disabled',false);
           $('#addSideModal').modal('hide');
+        },
+        error: function() {
+          alert("Oof! Something went wrong. Oh well, you get what you pay for.")
         }
       });
     } else {

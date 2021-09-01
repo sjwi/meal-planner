@@ -55,6 +55,9 @@
       },
       complete: function() {
         $('#inputSideSubmitBtn').prop('disabled',false);
+      },
+      error: function() {
+        alert("Oof! Something went wrong. Oh well, you get what you pay for.")
       }
     });
   });

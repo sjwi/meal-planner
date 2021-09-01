@@ -33,6 +33,9 @@ function search() {
         $('#mealCheckbox_' + id).prop('checked',true);
         $('#sideAlert_' + id).addClass('show');
       });
+    },
+    error: function() {
+      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
     }
   });
 }
@@ -43,6 +46,9 @@ function refreshSearchModal() {
     success: function (data) {
       $('#searchForm').html(data)
       search();
+    },
+    error: function() {
+      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
     }
   });
 }
@@ -78,6 +84,9 @@ function addSelectedMealsToWeek() {
       $('#addMealsWeekSelect option:selected').val(data.id);
       cachedCheckedMealIds = new Set();
       mealSidesMap = {};
+    },
+    error: function() {
+      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
     }
   });
 }
@@ -93,6 +102,9 @@ function removeSideFromWeekMeal(sideId,mealId,weekId) {
     },
     success: function () {
       refreshWeekList(() => focusWeekMeal(weekId, mealId));
+    },
+    error: function() {
+      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
     }
   });
 }
@@ -114,6 +126,9 @@ function removeMealFromWeek(mealId, weekId) {
       $('#weekAccordion_' + weekId + ' .accordion-sub-' + mealId).remove();
       refreshMeal(mealId);
       refreshWeekList();
+    },
+    error: function() {
+      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
     }
   });
 }
@@ -127,6 +142,9 @@ function deleteWeek(id) {
         $('#weekAccordion_' + id).remove();
         $('#weekAccordionHeader_' + id).remove();
         $('#addMealsWeekSelect option[value="' + id + '"]').remove();
+      },
+      error: function() {
+        alert("Oof! Something went wrong. Oh well, you get what you pay for.")
       }
     });
   }
@@ -144,6 +162,9 @@ function deleteSide(id) {
         refreshWeekList();
         // $('[id^=accordion_header_sub_' + id + ']').remove();
         // $('.accordion-sub-' + id).remove();
+      },
+      error: function() {
+        alert("Oof! Something went wrong. Oh well, you get what you pay for.")
       }
     });
   }
@@ -159,6 +180,9 @@ function deleteMeal(id) {
         $('#accordion_' + id).remove();
         $('[id^=accordion_header_sub_' + id + ']').remove();
         $('.accordion-sub-' + id).remove();
+      },
+      error: function() {
+        alert("Oof! Something went wrong. Oh well, you get what you pay for.")
       }
     });
   }
@@ -185,6 +209,9 @@ function refreshWeekList(callback) {
       $('.week-meal-sides').unbind();
       $('.week-meal-sides').listSwipe();
       typeof callback === 'function' && callback();
+    },
+    error: function() {
+      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
     }
   });
 }
@@ -199,6 +226,9 @@ function refreshSideList() {
     success: function (data) {
       $('#sideTable').removeClass('loading');
       $('#sideTable').html(data);
+    },
+    error: function() {
+      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
     }
   });
 }
@@ -218,6 +248,9 @@ function refreshMealDetails(mealId) {
     success: function (data) {
       $('#accordion_' + mealId).replaceWith(data);
       $('#accordion_' + mealId).removeClass('loading');
+    },
+    error: function() {
+      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
     }
   });
 }
@@ -228,6 +261,9 @@ function refreshMealName(mealId) {
     success: function (data) {
       $('#mealName_' + mealId).html(data.name);
       $('[id^=subMealName_' + mealId +']').html(data.name);
+    },
+    error: function() {
+      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
     }
   });
 }
@@ -240,6 +276,9 @@ function refreshWeek(id) {
       $('#weekAccordionHeader_' + id).click();
       $('.sub-meal-list').unbind();
       $('.sub-meal-list').listSwipe();
+    },
+    error: function() {
+      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
     }
   });
 }
@@ -250,6 +289,9 @@ function refreshTags() {
     method: "GET",
     success: function (data) {
       tags = new Map(Object.entries(data))
+    },
+    error: function() {
+      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
     }
   });
 }
@@ -260,6 +302,9 @@ function refreshSides() {
     method: "GET",
     success: function (data) {
       sides = data;
+    },
+    error: function() {
+      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
     }
   });
 }
@@ -270,6 +315,9 @@ function refreshIngredients() {
     method: "GET",
     success: function (data) {
       ingredients = data;
+    },
+    error: function() {
+      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
     }
   });
 }
@@ -337,6 +385,9 @@ function addItemToCart(upc) {
     data: {
       upc: upc,
       count: $('#productRow_' + upc + ' .quantity-field').val()
+    },
+    error: function() {
+      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
     }
   });
 }
