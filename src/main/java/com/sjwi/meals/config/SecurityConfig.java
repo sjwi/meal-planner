@@ -60,6 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/css/**").permitAll()
 				.antMatchers("/js/**").permitAll()
 				.antMatchers("/images/**").permitAll()
+				.antMatchers("/favicon.ico").permitAll()
 				.antMatchers("/**").access("hasAuthority('USER')")
 				.and().exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
 				.and().requestCache().requestCache(requestCache())
