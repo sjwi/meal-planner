@@ -109,7 +109,7 @@ searchSides: >
   ORDER BY NAME ASC
 
 registerNewUser: >
-  INSERT INTO users (username,refreshToken,enabled) values (?,?,1);
+  INSERT INTO users (username,refreshToken,enabled) values (?,?,1)
 
 updateUserRefreshToken: >
   UPDATE users set refreshToken = ? where username = ?
@@ -124,7 +124,7 @@ getAllIngredients: >
   ORDER BY NAME ASC
 
 getMealById: >
-  select m.ID,m.NAME,(SELECT MAX(w.DATE_BEGIN) FROM PlannedMeals pm JOIN WeeklySchedule w on w.ID = pm.SCHEDULE_ID where pm.MEAL_ID = m.ID where w.DISABLED = 0) as LAST_EATEN, m.FAVORITE,m.RECIPE_URL,m.NOTES, COUNT(*) as CNT from Meals m 
+  select m.ID,m.NAME,(SELECT MAX(w.DATE_BEGIN) FROM PlannedMeals pm JOIN WeeklySchedule w on w.ID = pm.SCHEDULE_ID where pm.MEAL_ID = m.ID and w.DISABLED = 0) as LAST_EATEN, m.FAVORITE,m.RECIPE_URL,m.NOTES, COUNT(*) as CNT from Meals m 
   LEFT JOIN PlannedMeals ppm on ppm.MEAL_ID = m.ID
   LEFT JOIN WeeklySchedule ws on ppm.SCHEDULE_ID = ws.ID
   where m.ID = ? and (ws.DISABLED = 0 OR ws.DISABLED is null) group by m.ID
