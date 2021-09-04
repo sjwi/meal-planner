@@ -25,7 +25,7 @@
         $('#ingredientsModal .modal-body').html(data);
       },
       error: function() {
-        alert("Oof! Something went wrong. Oh well, you get what you pay for.")
+        ajaxErrorHandler();
       }
     });
   }

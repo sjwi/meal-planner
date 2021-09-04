@@ -36,7 +36,7 @@
         $('#preferencesModal #preferencesForm').html(data)
       },
       error: function(data){
-        alert("Oof! Something went wrong. Oh well, you get what you pay for.")
+        ajaxErrorHandler();
       },
     });
   }
@@ -51,7 +51,7 @@
         refreshSearchModal();
       },
       error: function(data){
-        alert("Oof! Something went wrong. Oh well, you get what you pay for.")
+        ajaxErrorHandler();
       },
     })
   });
@@ -77,7 +77,7 @@
           });
       },
       error: function(data){
-        alert("Oof! Something went wrong. Oh well, you get what you pay for.")
+        ajaxErrorHandler();
       },
     });
   });

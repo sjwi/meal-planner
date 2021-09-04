@@ -49,7 +49,7 @@
         $('#krogerModal #productTable').html(data);
       },
       error: function(data){
-        alert("Oof! Something went wrong. Oh well, you get what you pay for.")
+        ajaxErrorHandler();
       },
     });
   }

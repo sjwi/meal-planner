@@ -35,7 +35,7 @@ function search() {
       });
     },
     error: function() {
-      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
+      ajaxErrorHandler();
     }
   });
 }
@@ -48,7 +48,7 @@ function refreshSearchModal() {
       search();
     },
     error: function() {
-      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
+      ajaxErrorHandler();
     }
   });
 }
@@ -86,7 +86,7 @@ function addSelectedMealsToWeek() {
       mealSidesMap = {};
     },
     error: function() {
-      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
+      ajaxErrorHandler();
     }
   });
 }
@@ -104,7 +104,7 @@ function removeSideFromWeekMeal(sideId,mealId,weekId) {
       refreshWeekList(() => focusWeekMeal(weekId, mealId));
     },
     error: function() {
-      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
+      ajaxErrorHandler();
     }
   });
 }
@@ -128,7 +128,7 @@ function removeMealFromWeek(mealId, weekId) {
       refreshWeekList();
     },
     error: function() {
-      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
+      ajaxErrorHandler();
     }
   });
 }
@@ -144,7 +144,7 @@ function deleteWeek(id) {
         $('#addMealsWeekSelect option[value="' + id + '"]').remove();
       },
       error: function() {
-        alert("Oof! Something went wrong. Oh well, you get what you pay for.")
+        ajaxErrorHandler();
       }
     });
   }
@@ -164,7 +164,7 @@ function deleteSide(id) {
         // $('.accordion-sub-' + id).remove();
       },
       error: function() {
-        alert("Oof! Something went wrong. Oh well, you get what you pay for.")
+        ajaxErrorHandler();
       }
     });
   }
@@ -182,7 +182,7 @@ function deleteMeal(id) {
         $('.accordion-sub-' + id).remove();
       },
       error: function() {
-        alert("Oof! Something went wrong. Oh well, you get what you pay for.")
+        ajaxErrorHandler();
       }
     });
   }
@@ -211,7 +211,7 @@ function refreshWeekList(callback) {
       typeof callback === 'function' && callback();
     },
     error: function() {
-      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
+      ajaxErrorHandler();
     }
   });
 }
@@ -228,7 +228,7 @@ function refreshSideList() {
       $('#sideTable').html(data);
     },
     error: function() {
-      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
+      ajaxErrorHandler();
     }
   });
 }
@@ -250,7 +250,7 @@ function refreshMealDetails(mealId) {
       $('#accordion_' + mealId).removeClass('loading');
     },
     error: function() {
-      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
+      ajaxErrorHandler();
     }
   });
 }
@@ -263,7 +263,7 @@ function refreshMealName(mealId) {
       $('[id^=subMealName_' + mealId +']').html(data.name);
     },
     error: function() {
-      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
+      ajaxErrorHandler();
     }
   });
 }
@@ -278,7 +278,7 @@ function refreshWeek(id) {
       $('.sub-meal-list').listSwipe();
     },
     error: function() {
-      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
+      ajaxErrorHandler();
     }
   });
 }
@@ -291,7 +291,7 @@ function refreshTags() {
       tags = new Map(Object.entries(data))
     },
     error: function() {
-      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
+      ajaxErrorHandler();
     }
   });
 }
@@ -304,7 +304,7 @@ function refreshSides() {
       sides = data;
     },
     error: function() {
-      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
+      ajaxErrorHandler();
     }
   });
 }
@@ -317,7 +317,7 @@ function refreshIngredients() {
       ingredients = data;
     },
     error: function() {
-      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
+      ajaxErrorHandler();
     }
   });
 }
@@ -387,7 +387,12 @@ function addItemToCart(upc) {
       count: $('#productRow_' + upc + ' .quantity-field').val()
     },
     error: function() {
-      alert("Oof! Something went wrong. Oh well, you get what you pay for.")
+      ajaxErrorHandler();
     }
   });
+}
+
+function ajaxErrorHandler() {
+  alert("Oof! Something went wrong. Oh well, you get what you pay for.")
+  location.reload();
 }
