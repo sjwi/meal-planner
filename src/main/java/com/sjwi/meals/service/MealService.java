@@ -29,7 +29,7 @@ public class MealService {
     Set<Integer> existingIngredients = new HashSet<>();
     rawIngredients.forEach(i -> {
       if (!NumberUtils.isCreatable(i))
-        ingredientsToCreate.add(i);
+        ingredientsToCreate.add(i.toLowerCase());
       else
         existingIngredients.add(Integer.parseInt(i));
     });
@@ -43,7 +43,7 @@ public class MealService {
       Set<Integer> existingTags = new HashSet<>();
       rawTags.forEach(t -> {
         if (!NumberUtils.isCreatable(t))
-          tagsToCreate.add(t);
+          tagsToCreate.add(t.toLowerCase());
         else
           existingTags.add(Integer.parseInt(t));
       });

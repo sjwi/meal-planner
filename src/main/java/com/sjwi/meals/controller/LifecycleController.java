@@ -22,6 +22,7 @@ import com.sjwi.meals.service.MealService;
 import com.sjwi.meals.util.WeekGenerator;
 
 import org.apache.commons.collections4.SetUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -133,7 +134,7 @@ public class LifecycleController {
       Set<Integer> createdIngredients = mealService.getItemIngredientsIdsToAdd(ingredients);
       Set<Integer> createdTags = mealService.getMealTagIdsToAdd(tags);
 
-      int mealId = mealDao.createMeal(inputMealName, favorite, createdIngredients, createdTags, notes, recipeUrl);
+      int mealId = mealDao.createMeal(StringUtils.capitalize(inputMealName), favorite, createdIngredients, createdTags, notes, recipeUrl);
       if (recipeToggle && recipeImages != null) {
         List<String> fileNames = imageService.storeFiles(recipeImages, mealId);
         mealDao.setMealsFiles(fileNames, mealId);
@@ -151,7 +152,7 @@ public class LifecycleController {
       if (sideAsIngredient == null)
         sideAsIngredient = mealDao.createIngredient(inputSideName);
       createdIngredients.add(sideAsIngredient);
-      mealDao.createSide(inputSideName, createdIngredients);
+      mealDao.createSide(StringUtils.capitalize(inputSideName), createdIngredients);
     }
 
     @RequestMapping(value = "/side/edit/{id}", method = RequestMethod.POST)
@@ -165,7 +166,7 @@ public class LifecycleController {
       Set<Integer> originalSideIngredients = new HashSet<Ingredient>(originalSide.getIngredients()).stream().map(i -> i.getId()).collect(Collectors.toSet());
       Set<Integer> ingredientsToDelete = SetUtils.difference(originalSideIngredients, existingIngredients);
       Set<Integer> ingredientsToAdd = SetUtils.difference(existingIngredients, originalSideIngredients);
-      mealDao.editSide(id,inputSideName, notes, recipeUrl, ingredientsToAdd, ingredientsToDelete);
+      mealDao.editSide(id,StringUtils.capitalize(inputSideName), notes, recipeUrl, ingredientsToAdd, ingredientsToDelete);
     }
 
     @RequestMapping(value = "/meal/edit/{id}", method = RequestMethod.POST)
@@ -193,7 +194,7 @@ public class LifecycleController {
       Set<Integer> ingredientsToAdd = SetUtils.difference(existingIngredients, originalIngredients);
       Set<Integer> tagsToAdd = SetUtils.difference(existingTags, originalTags);
 
-      mealDao.editMeal(id,inputMealName,favorite,notes,recipeUrl,ingredientsToAdd,tagsToAdd,ingredientsToDelete,tagsToDelete);
+      mealDao.editMeal(id,StringUtils.capitalize(inputMealName),favorite,notes,recipeUrl,ingredientsToAdd,tagsToAdd,ingredientsToDelete,tagsToDelete);
       if (recipeToggle && recipeImages != null) {
         List<String> fileNames = imageService.storeFiles(recipeImages, id);
         mealDao.setMealsFiles(fileNames, id);
