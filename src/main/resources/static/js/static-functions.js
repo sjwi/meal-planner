@@ -332,10 +332,15 @@ function addScrollListener(size, delay){
 		delay = 0;
 	}
 	var prevScrollpos = window.pageYOffset;
+  var showNav;
 	$(document).ready(function(){
-		$(window).on('scroll',function(e){
+		$(window).on('scroll',function(){
 			var currentScrollPos = window.pageYOffset;
-			if (prevScrollpos > currentScrollPos || $(window).scrollTop() <= delay) {
+      if (prevScrollpos > currentScrollPos && (prevScrollpos - currentScrollPos) > 10)
+        showNav = true
+      if (prevScrollpos < currentScrollPos)
+        showNav = false
+			if (showNav || $(window).scrollTop() <= delay) {
 				$('.navbar').css('top','0');
 			} else {
 				$('.navbar').css('top',size);
