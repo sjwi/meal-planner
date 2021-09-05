@@ -68,17 +68,17 @@ img.kroger-thumbnail {
 .alert.add-meal {
   transition-duration: .5s;
   position:fixed; 
-  bottom: -325px; 
+  bottom: -275px; 
   left: 2%; 
   width: 96%;
   z-index:9999; 
-  padding-bottom: 150px;
+  padding-bottom: 100px;
 }
 .alert.add-meal.display {
   bottom: -100px;
 }
 .alert.add-meal.slide-down {
-  bottom: -300px; 
+  bottom: -250px; 
 }
 #searchFilterBtn:focus {
   outline: none;
