@@ -336,7 +336,7 @@ function addScrollListener(size, delay){
 	$(document).ready(function(){
 		$(window).on('scroll',function(){
 			var currentScrollPos = window.pageYOffset;
-      if (prevScrollpos > currentScrollPos && (prevScrollpos - currentScrollPos) > 10)
+      if (prevScrollpos > currentScrollPos && (prevScrollpos - currentScrollPos) > 15)
         showNav = true
       if (prevScrollpos < currentScrollPos)
         showNav = false
