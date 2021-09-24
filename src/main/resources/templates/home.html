@@ -156,10 +156,12 @@
       $('.alert.add-meal').removeClass('slide-down');
       $('#hideAddAlert .fa-angle-up').hide();
       $('#hideAddAlert .fa-angle-down').show();
+      $('#mealTable').css('padding-bottom','175px');
     } else {
       $('.alert.add-meal').addClass('slide-down');
       $('#hideAddAlert .fa-angle-up').show();
       $('#hideAddAlert .fa-angle-down').hide();
+      $('#mealTable').css('padding-bottom','25px');
     }
   })
   $(document).on('click', '.meal-list-fav .fas.fa-heart', function () {
@@ -191,7 +193,9 @@
     if (cachedCheckedMealIds.size > 0) {
       $('#addMealCount').html(cachedCheckedMealIds.size)
       $('.alert.add-meal').addClass('display');
+      $('#mealTable').css('padding-bottom','175px');
     } else {
+      $('#mealTable').css('padding-bottom','0px');
       $('.alert.add-meal').removeClass('display slide-down');
       $('#hideAddAlert .fa-angle-up').hide();
       $('#hideAddAlert .fa-angle-down').show();

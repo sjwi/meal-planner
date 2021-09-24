@@ -62,6 +62,7 @@ function addSelectedMealsToWeek() {
   $('.add-side-alert ').removeClass('show');
   setTimeout(function(){
     $('.alert.add-meal').removeClass('display');
+    $('#mealTable').css('padding-bottom','0px');
     setTimeout(function(){
       $('#addMealsToWeekCheckboxContainer').hide();
       $('#addMealsToWeekButtonContainer').show();
