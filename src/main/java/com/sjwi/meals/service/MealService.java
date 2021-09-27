@@ -9,10 +9,6 @@ import com.sjwi.meals.dao.MealDao;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -55,8 +51,6 @@ public class MealService {
 
   public void setPreferences(boolean pinFavorites, String sortBy, String sortOrder, int weekStartDay, String locationId, String username) {
     mealDao.updatePreferences(pinFavorites, sortBy, sortOrder, weekStartDay, locationId, username);
-    UserDetails userDetails = userService.loadUserByUsername(username);
-    Authentication newAuth = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(), userDetails.getAuthorities());
-    SecurityContextHolder.getContext().setAuthentication(newAuth);
+    userService.refreshUserState(username);
   }
 }

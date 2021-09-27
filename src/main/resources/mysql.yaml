@@ -205,3 +205,48 @@ flagRecipeUrlSelfHosted: >
 
 getRecipeImagesForMeal: >
   SELECT * FROM RecipeImageUrls where MEAL_ID = ?
+
+updateUser: >
+  UPDATE users set firstName = ?, lastName = ?, email = ? where username = ?
+
+deleteUserStoredLogins: >
+  DELETE FROM StoredLogins where username = ?
+
+deleteUserAuthorities: >
+  DELETE FROM authorities where username = ?
+
+deleteUser: >
+  DELETE FROM users where username = ?
+
+deleteUser: >
+  DELETE FROM users where username = ?
+
+deleteUserPlannedWeeks: >
+  DELETE FROM PlannedMeals where SCHEDULE_ID in (Select ID from WeeklySchedule where USER = ?)
+
+deleteUserWeeks: >
+  DELETE FROM WeeklySchedule where USER = ?
+
+deleteUserMeals: >
+  DELETE FROM Meals where USER = ?
+
+deleteUserSides: >
+  DELETE FROM Sides where USER = ?
+
+deleteUserMealSides: >
+  DELETE FROM MealSides where MEAL_ID in (Select ID from Meals where USER = ?)
+
+deleteUserSideIngredients: >
+  DELETE FROM SideIngredients where INGREDIENT_ID in (select ID from Ingredients where USER = ?)
+
+deleteUserMealIngredients: >
+  DELETE FROM MealIngredients where INGREDIENT_ID in (select ID from Ingredients where USER = ?)
+
+deleteUserIngredients: >
+  DELETE FROM Ingredients where USER = ?
+
+deleteUserMealTags: >
+  DELETE FROM MealTags where TAG_ID in (Select ID from Tags where USER = ?)
+
+deleteUserTags: >
+  DELETE FROM Tags where USER = ?

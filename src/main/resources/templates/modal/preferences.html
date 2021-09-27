@@ -6,7 +6,7 @@
         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form id="preferencesForm" th:action="@{/update-preferences}" onkeydown="return event.key != 'Enter';">
+        <form id="preferencesForm" th:action="@{/update-preferences}">
         </form>
       </div>
       <div class="modal-footer">
@@ -56,6 +56,12 @@
     })
   });
 
+  $(document).on('keypress','#preferencesFrom input', function (e) {
+    if(e.which === 13) {
+      e.preventDefault();
+      $(this).blur();
+    }
+   });
   $(document).on('change','#krogerZip',function(){
     $('#prefKrogerLocationId').find('option').remove().end();
     $.ajax({

@@ -7,6 +7,7 @@
       <a class="dropdown-toggle user-toggle text-white text-decoration-none" data-toggle="dropdown" style="font-size:.7rem; line-height:1" 
         th:text="${#authentication.principal.firstName != null && #authentication.principal.lastName !=null? #authentication.principal.firstName + ' ' + #authentication.principal.lastName: #authentication.principal.username}"></a>
       <ul class="dropdown-menu dropdown-menu-right nav-dropdown-menu py-1" style="right:0;">
+        <li><a class="dropdown-item" href="javascript:void(0)" onclick="openUserAccount()">Account</a></li>
         <li><a class="dropdown-item" href="javascript:void(0)" onclick="openUserPreferences()">Preferences</a></li>
         <li><a class="dropdown-item logout" href="javascript:void(0)" onclick="$('#logoutForm').submit()">Logout</a></li>
       </ul>

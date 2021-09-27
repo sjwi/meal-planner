@@ -660,5 +660,40 @@ public class MealDao {
       return imageUrls;
     });
   }
+
+  public void updateUser(String username, String firstName, String lastName, String email) {
+    jdbcTemplate.update(queryStore.get("updateUser"), new Object[] {firstName, lastName, email, username});
+  }
+
+  public void deleteAccount(String name) {
+    jdbcTemplate.update(queryStore.get("deleteUserStoredLogins"), new Object[] {name});
+    jdbcTemplate.update(queryStore.get("deleteUserAuthorities"), new Object[] {name});
+    jdbcTemplate.update(queryStore.get("deleteUser"), new Object[] {name});
+  }
+
+  public void deleteUserWeeks(String name) {
+    jdbcTemplate.update(queryStore.get("deleteUserPlannedWeeks"), new Object[] {name});
+    jdbcTemplate.update(queryStore.get("deleteUserWeeks"), new Object[] {name});
+  }
+
+  public void deleteUserMeals(String name) {
+    jdbcTemplate.update(queryStore.get("deleteUserMeals"), new Object[] {name});
+  }
+
+  public void deleteUserSides(String name) {
+    jdbcTemplate.update(queryStore.get("deleteUserMealSides"), new Object[] {name});
+    jdbcTemplate.update(queryStore.get("deleteUserSides"), new Object[] {name});
+  }
+
+  public void deleteUserIngredients(String name) {
+    jdbcTemplate.update(queryStore.get("deleteUserSideIngredients"), new Object[] {name});
+    jdbcTemplate.update(queryStore.get("deleteUserMealIngredients"), new Object[] {name});
+    jdbcTemplate.update(queryStore.get("deleteUserIngredients"), new Object[] {name});
+  }
+
+  public void deleteUserTags(String name) {
+    jdbcTemplate.update(queryStore.get("deleteUserMealTags"), new Object[] {name});
+    jdbcTemplate.update(queryStore.get("deleteUserTags"), new Object[] {name});
+  }
 }
  

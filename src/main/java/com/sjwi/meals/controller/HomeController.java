@@ -1,5 +1,6 @@
 package com.sjwi.meals.controller;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +16,7 @@ import com.sjwi.meals.model.security.AccessTokenResponse;
 import com.sjwi.meals.model.security.MealsUser;
 import com.sjwi.meals.service.KrogerService;
 import com.sjwi.meals.service.MealService;
+import com.sjwi.meals.service.UserService;
 import com.sjwi.meals.util.WeekGenerator;
 import com.sjwi.meals.util.security.AuthenticationService;
 import com.sjwi.meals.util.security.JwtManager;
@@ -34,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class HomeController {
@@ -49,6 +52,9 @@ public class HomeController {
 
   @Autowired
   OAuthManager oAuthManager;
+
+  @Autowired
+  UserService userService;
 
   @Autowired
   AuthenticationService authenticationService;
@@ -77,6 +83,18 @@ public class HomeController {
       prefKrogerLocationId, ((MealsUser) auth.getPrincipal()).getUsername());
   }
 
+  @RequestMapping(value = "/update-account", method = RequestMethod.POST)
+  @ResponseStatus(HttpStatus.OK)
+  public void updateAccount(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, Principal principal) {
+    userService.updateAccount(principal.getName(),firstName,lastName,email);
+  }
+
+  @RequestMapping(value = "/user-account/delete", method = RequestMethod.DELETE)
+  @ResponseStatus(HttpStatus.OK)
+  public void deleteAccount(Principal principal) {
+    userService.deleteAccount(principal.getName());
+  }
+
   @RequestMapping("/search/meals")
   public ModelAndView search(@RequestParam(required = false) String searchTerm, Authentication auth,
       @RequestParam(value="tags[]",required = false) List<Integer> tags,
@@ -102,8 +120,8 @@ public class HomeController {
   }
 
   @RequestMapping(value = "/oauth2/login", method = RequestMethod.GET)
-  public ModelAndView krogerLogin(@RequestParam String code, HttpServletRequest request, HttpServletResponse response) throws Exception {
-
+  public ModelAndView krogerLogin(@RequestParam String code, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) throws Exception {
+    ModelAndView mv = new ModelAndView("redirect:/");
     AccessTokenResponse tokenResponse = oAuthManager.getOAuthToken(code);
     JwtManager jwtManager = new JwtManager(tokenResponse);
     request.getSession().setAttribute("JWT", tokenResponse.getAccess_token());
@@ -113,6 +131,7 @@ public class HomeController {
     if (user == null) {
       user = mealDao.registerNewUser(jwtManager.getOAuthUser(), tokenResponse.getRefresh_token());
       authenticationService.generateCookieToken(jwtManager.getOAuthUser());
+      redirectAttributes.addFlashAttribute("REGISTER_USER",true);
     }
     else {
       user = mealDao.updateUserRefreshToken(jwtManager.getOAuthUser(),tokenResponse.getRefresh_token());
@@ -120,7 +139,7 @@ public class HomeController {
         authenticationService.generateCookieToken(jwtManager.getOAuthUser());
     }
     SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
-    return new ModelAndView("redirect:/");
+    return mv;
   }
 
   @RequestMapping("/meals")

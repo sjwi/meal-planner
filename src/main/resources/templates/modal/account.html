@@ -1,0 +1,97 @@
+<div class="modal fade" id="accountModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h6 class="modal-title text-dark">User Account</h6>
+        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="accountForm" th:action="@{/update-account}">
+          <div class="row mt-3">
+            <div class="col-12 mb-2">
+              <div class="form-floating">
+                <input id="krogerId" name="krogerId" class="form-control" type="text" value="40517" disabled th:value="${#authentication.principal.username}">
+                <label for="krogerId">Kroger Plus Account #</label>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-12 mb-2">
+              <div class="form-floating">
+                <input id="firstName" name="firstName" class="form-control" type="text" th:value="${#authentication.principal.firstName}">
+                <label for="firstName">First Name</label>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-12 mb-2">
+              <div class="form-floating">
+                <input id="lastName" name="lastName" class="form-control" type="text" th:value="${#authentication.principal.lastName}">
+                <label for="lastName">Last Name</label>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="col-12 mb-2">
+              <div class="form-floating">
+                <input id="email" name="email" class="form-control" type="text" th:value="${#authentication.principal.email}">
+                <label for="email">Email</label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" form="accountForm" class="btn btn-lg btn-primary w-100">Update Account</button>
+        <button type="button" class="btn btn-lg btn-danger w-100" onclick="deleteAccount()">Delete Account</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script th:inline="javascript" th:if="${REGISTER_USER}">
+  $(document).ready(function(){
+    openUserAccount();
+  })
+</script>
+<script>
+  function openUserAccount() {
+    $('#accountModal').modal('show');
+  }
+  function deleteAccount() {
+    if (confirm('Are you sure you want to delete your account? This will erase all your meals, sides, and history. This action cannot be undone.')) {
+      $.ajax({
+        url: contextpath + 'user-account/delete',
+        method: "DELETE",
+        success: function(data){
+          localStorage.clear();
+          location.reload();
+        },
+        error: function(data){
+          ajaxErrorHandler();
+        },
+      });
+    }
+  }
+  $(document).on('keypress','#accountForm input', function (e) {
+    if(e.which === 13) {
+      e.preventDefault();
+      $(this).blur();
+    }
+   });
+  $(document).on('submit','#accountForm',function(e){
+    e.preventDefault();
+    $('#accountModal').modal('hide');
+    $.ajax({
+      url: contextpath + 'update-account',
+      method: "POST",
+      data: $(this).serialize(),
+      success: function(){
+        location.reload();
+      },
+      error: function(data){
+        ajaxErrorHandler();
+      },
+    })
+  });
+
+</script>
