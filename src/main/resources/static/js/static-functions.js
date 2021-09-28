@@ -399,7 +399,6 @@ function addItemToCart(upc) {
 }
 
 function ajaxErrorHandler() {
-  alert("Oof! Something went wrong. Oh well, you get what you pay for.")
   location.reload();
 }
 

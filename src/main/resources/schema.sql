@@ -333,7 +333,7 @@ CREATE TABLE users (
   enabled tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (username)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT INTO users (username,firstName,lastName,email,enabled) values ('de9a8c23-bb74-512d-a390-2b8cb659ebcf','Stephen','Williams','stephenjw@fastmail.com',1);
+INSERT INTO users (username,firstName,lastName,email,enabled) values ('de9a8c23-bb74-512d-a390-2b8cb659ebcf','Demo','User','demouser@stephenky.com',1);
 
 DROP TABLE IF EXISTS authorities;
 CREATE TABLE authorities (
