@@ -18,10 +18,11 @@
   function openIngredientsModal(id) {
     $('#ingredientsModal .modal-body').html($('#loading').html());
     $('#ingredientsModal').modal('show');
-    $.ajax({
+    var xhr = $.ajax({
       url: contextpath + 'week/ingredients/' + id,
       method: "GET",
       success: function(data) {
+        reloadIfRedirect(xhr);
         $('#ingredientsModal .modal-body').html(data);
       },
       error: function() {

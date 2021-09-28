@@ -38,13 +38,14 @@
   function refreshKrogerPage(pageCount) {
     if(!pageCount)
       pageCount = 1;
-    $.ajax({
+    var xhr = $.ajax({
       url: contextpath + 'kroger/searchProducts?term=' + encodeURI($('#krogerModal #krogerSearchBox').val()) + '&pageCount=' + pageCount,
       method: "GET",
       beforeSend: function(){
         $('#krogerModal #productTable').addClass('loading');
       },
       success: function(data) {
+        reloadIfRedirect(xhr);
         $('#krogerModal #productTable').removeClass('loading');
         $('#krogerModal #productTable').html(data);
       },

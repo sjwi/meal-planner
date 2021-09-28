@@ -97,4 +97,10 @@ public class LandingPageSessionInitializer {
       }
     }
   }
+  @Before("execution(* com.sjwi.meals.controller.kroger.*.*(..))" + 
+  "|| execution(* com.sjwi.meals.controller.*.*(..))")
+  public void addRedirectHeader(JoinPoint joinPoint) {
+    if (SecurityContextHolder.getContext().getAuthentication() == null || !(SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails))
+      ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse().setHeader("REQUIRED-AUTH","1");
+  }
 }

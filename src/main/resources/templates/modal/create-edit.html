@@ -78,7 +78,7 @@
   $('#createEditForm').on('submit',function(e){
     var dataString = new FormData(this);
     e.preventDefault();
-    $.ajax({
+    var xhr = $.ajax({
       url: $(this).attr("action"),
       type: "POST",
       method: "POST",
@@ -91,6 +91,7 @@
         $('#inputSubmitBtn').prop('disabled',true);
       },
       success: function () {
+        reloadIfRedirect(xhr);
         $('#createEditModal').modal('hide');
         $('#noMealsMessage').hide();
         refreshMealList();

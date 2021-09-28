@@ -402,3 +402,10 @@ function ajaxErrorHandler() {
   alert("Oof! Something went wrong. Oh well, you get what you pay for.")
   location.reload();
 }
+
+function reloadIfRedirect(request){
+  if (request.getResponseHeader('REQUIRED-AUTH') === '1') {
+    console.log("refreshing");
+    location.reload();
+  }
+}

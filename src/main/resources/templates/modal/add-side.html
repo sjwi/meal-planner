@@ -45,7 +45,7 @@
     e.preventDefault();
     if ($('#addSidePostUpdates').val() == "true") {
       var dataString = $(this).serialize();
-      $.ajax({
+      var xhr = $.ajax({
         url: $(this).attr("action"),
         type: "POST",
         method: "POST",
@@ -54,6 +54,7 @@
           $('#addSideSubmitBtn').prop('disabled',true);
         },
         success: function () {
+          reloadIfRedirect(xhr);
           refreshWeekList(() => focusWeekMeal($('#addSideWeekId').val(), $('#addSideMealId').val()));
         },
         complete: function() {

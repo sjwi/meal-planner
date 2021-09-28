@@ -25,7 +25,7 @@
     $('#prefKrogerLocationId').val('02400347');
   }
   function openUserPreferences() {
-    $.ajax({
+    var xhr = $.ajax({
       url: contextpath + 'user-preferences',
       method: "GET",
       beforeSend: function() {
@@ -33,6 +33,7 @@
         $('#preferencesModal').modal('show');
       },
       success: function(data){
+        reloadIfRedirect(xhr);
         $('#preferencesModal #preferencesForm').html(data)
       },
       error: function(data){
@@ -43,11 +44,12 @@
   $(document).on('submit','#preferencesForm',function(e){
     e.preventDefault();
     $('#preferencesModal').modal('hide');
-    $.ajax({
+    var xhr = $.ajax({
       url: contextpath + 'update-preferences',
       method: "POST",
       data: $(this).serialize(),
       success: function(){
+        reloadIfRedirect(xhr);
         refreshSearchModal();
       },
       error: function(data){
@@ -64,7 +66,7 @@
    });
   $(document).on('change','#krogerZip',function(){
     $('#prefKrogerLocationId').find('option').remove().end();
-    $.ajax({
+    var xhr = $.ajax({
       url: contextpath + 'json/kroger-locations',
       method: "GET",
       data: {
@@ -74,6 +76,7 @@
         $('#prefKrogerLocationId').prepend('<option selected>Loading...</option>')
       },
       success: function(data){
+        reloadIfRedirect(xhr);
         $('#prefKrogerLocationId').find('option').remove().end();
         data.data.forEach(l => {
           jQuery('<option/>', {

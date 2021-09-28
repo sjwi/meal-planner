@@ -35,7 +35,7 @@
   $('#createEditSideForm').on('submit',function(e){
     var dataString = $(this).serialize();
     e.preventDefault();
-    $.ajax({
+    var xhr = $.ajax({
       url: $(this).attr("action"),
       type: "POST",
       method: "POST",
@@ -43,7 +43,8 @@
       beforeSend: function() {
         $('#inputSideSubmitBtn').prop('disabled',true);
       },
-      success: function () {
+      success: function (data) {
+        reloadIfRedirect(xhr);
         $('#createEditSideModal').modal('hide');
         $('#noSidesMessage').hide();
         refreshMealList();

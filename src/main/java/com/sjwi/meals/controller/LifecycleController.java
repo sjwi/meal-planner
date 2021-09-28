@@ -147,6 +147,7 @@ public class LifecycleController {
     public void createSide(@RequestParam String inputSideName,
         @RequestParam(name="inputSideIngredients", defaultValue = "") Set<String> ingredients) {
 
+      inputSideName = inputSideName.toLowerCase();
       Set<Integer> createdIngredients = mealService.getItemIngredientsIdsToAdd(ingredients);
       Integer sideAsIngredient = mealDao.getIngredientIdByName(inputSideName);
       if (sideAsIngredient == null)
