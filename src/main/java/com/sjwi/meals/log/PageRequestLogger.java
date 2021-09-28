@@ -4,6 +4,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.sjwi.meals.dao.MealDao;
 import com.sjwi.meals.model.security.MealsUser;
 
 import org.aspectj.lang.JoinPoint;
@@ -24,6 +25,9 @@ public class PageRequestLogger {
 
 	@Autowired
 	CustomLogger log;
+
+	@Autowired
+	MealDao mealDao;
 	
 	@Before("execution(* com.sjwi.meals.controller.kroger.*.*(..))" + 
   "|| execution(* com.sjwi.meals.controller.HomeController.*(..))" +
@@ -34,11 +38,12 @@ public class PageRequestLogger {
 		String signature = joinPoint.getSignature().toShortString();
 		String requestUrl = request.getRequestURL().toString();
 		String parameters = request.getParameterMap().entrySet().stream()
-				.map(p -> "\n\t\t" + p.getKey() + ": " + String.join(",", request.getParameterMap().get(p.getKey()))).collect(Collectors.joining());
+				.map(p -> "[" + p.getKey() + ": " + String.join(",", request.getParameterMap().get(p.getKey())) + "],").collect(Collectors.joining());
 		String username = getLoggedInUser();
 		String os =  getOs();
 
-		log.info(signature + "\n\t" + requestUrl + parameters + "\n\tcalled by " + username + " on a " + os + " device.\n\n");
+		log.info(signature + "\n\t" + requestUrl + "\n\t\t" + parameters + "\n\tcalled by " + username + " on a " + os + " device.\n\n");
+		mealDao.log(username,os,signature,requestUrl,parameters);
 	}
 
 	private String getLoggedInUser(){

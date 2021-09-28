@@ -250,3 +250,6 @@ deleteUserMealTags: >
 
 deleteUserTags: >
   DELETE FROM Tags where USER = ?
+
+log: >
+  INSERT INTO Log (USERNAME,DEVICE,METHOD,REQ_URL,PARAMS) values (?,?,?,?,?)

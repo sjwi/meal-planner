@@ -404,7 +404,6 @@ function ajaxErrorHandler() {
 
 function reloadIfRedirect(request){
   if (request.getResponseHeader('REQUIRED-AUTH') === '1') {
-    console.log("refreshing");
     location.reload();
   }
 }

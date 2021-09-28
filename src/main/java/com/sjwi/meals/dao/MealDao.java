@@ -33,6 +33,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -694,6 +695,11 @@ public class MealDao {
   public void deleteUserTags(String name) {
     jdbcTemplate.update(queryStore.get("deleteUserMealTags"), new Object[] {name});
     jdbcTemplate.update(queryStore.get("deleteUserTags"), new Object[] {name});
+  }
+
+  @Async
+  public void log(String username, String os, String signature, String requestUrl, String parameters) {
+    jdbcTemplate.update(queryStore.get("log"), new Object[]{username,os,signature,requestUrl,parameters});
   }
 }
  
