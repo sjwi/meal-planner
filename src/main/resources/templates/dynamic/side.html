@@ -1,7 +1,7 @@
 <th:block th:fragment="side(side)">
   <li th:id="${'sideAccordionHeader_' + side.id}" data-toggle="collapse"
     th:attr="data-target=${'#sideAccordion_' + side.id},data-sideid=${side.id}"
-    class="clickable my-0 accordion-header item side-item list-group-item list-group-item-action">
+    class="clickable my-0 accordion-header item side-item list-group-item list-group-item-action collapsed">
     <button th:attr="onclick=${'editSide(' + side.id + ')'}" class="action edit bg-primary stop-prop">Edit</button>
     <div class="row no-gutters">
       <div th:id="${'sideName_' + side.id}" class="side-text text-truncate col col-12 ps-2" th:text="${side.name}"></div>

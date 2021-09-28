@@ -1,5 +1,5 @@
 <th:block th:fragment="mealDetails(meal)">
-  <li th:id="${'accordion_' + meal.id}" class="pt-0 pb-0 px-2 bg-light container accordion-collapse collapse"
+  <li th:id="${'accordion_' + meal.id}" class="pt-0 pb-0 px-2 bg-light container accordion-collapse collapse border rounded-bottom"
     th:attr="data-target=${meal.id}" data-parent="#mealTable">
     <h6 th:if="${#lists.size(meal.ingredients) > 0}" class="my-2">Ingredients</h6>
     <div th:if="${#lists.size(meal.ingredients) > 0}"
@@ -51,5 +51,10 @@
       <a th:id="${'mealRecipeUrl_' + meal.id}" th:attr="data-image=${meal.recipeUrl}" th:href="${meal.recipeUrl == 'self_hosted'}? @{/recipe/hosted/__${meal.id}__} : ${meal.recipeUrl}"
         target="_blank">View Recipe <i class="ms-1 fas fa-external-link-alt"></i></a>
     </div>
+    <!-- <div class="row bg-secondary">
+      <div class="col py-0 border text-center" data-toggle="collapse" th:attr="data-target=${'#accordion_' + meal.id},data-mealid=${meal.id}">
+        <i class="fa fa-angle-up" aria-hidden="true"></i>
+      </div>
+    </div> -->
   </li>
 </th:block>

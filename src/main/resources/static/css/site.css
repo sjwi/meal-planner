@@ -65,6 +65,9 @@ img.kroger-thumbnail {
   padding-left: .4rem !important;
   padding-right: .4rem !important;
 }
+.accordion-header:not(.collapsed){
+  border-width:1 !important;
+}
 .alert.add-meal {
   transition-duration: .5s;
   position:fixed; 
@@ -250,13 +253,13 @@ ul {
   height: 100%;
 }
 
-.item-list .item .action:first-child { left: -81px; }
+.item-list .item .action:first-child { left: -82px; }
 
-.item-list .item .action:first-child::before { right: 81px; }
+.item-list .item .action:first-child::before { right: 82px; }
 
-.item-list .item .action:last-child { right: -81px; }
+.item-list .item .action:last-child { right: -82px; }
 
-.item-list .item .action:last-child::before { left: 81px; }
+.item-list .item .action:last-child::before { left: 82px; }
 
 .item-list .item .action, .item-list .item .action::before { background: #959595; }
 

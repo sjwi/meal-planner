@@ -1,6 +1,6 @@
 <th:block th:fragment="sideDetails(side)">
   <li th:id="${'sideAccordion_' + side.id}"
-    class="pt-0 pb-0 px-0 bg-light container accordion-collapse collapse"
+    class="pt-0 pb-0 px-0 bg-light container accordion-collapse collapse border rounded-bottom"
     th:classappend="${index == 0? 'show':''}" th:attr="data-target=${side.id}" data-parent="#sideTable">
     <div class="container">
       <h6 th:if="${#lists.size(side.ingredients) > 0}" class="mt-2">Ingredients</h6>

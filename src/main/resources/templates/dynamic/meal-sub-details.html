@@ -1,6 +1,6 @@
 <th:block th:fragment="mealSubDetails(meal)">
   <li th:classappend="${'accordion-sub-' + meal.id}" th:attr="data-parent=${'#subMealList_' + week.id}"
-    class="container px-4 bg-secondary accordion-collapse collapse">
+    class="container px-4 bg-secondary accordion-collapse collapse border rounded-bottom">
     <h6 th:if="${#lists.size(meal.sides) > 0}" class="mt-2">Sides</h6>
     <div th:if="${#lists.size(meal.sides) > 0}" class="row no-gutters">
       <div class="col">

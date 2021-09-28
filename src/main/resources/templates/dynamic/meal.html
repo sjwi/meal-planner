@@ -1,7 +1,7 @@
 <th:block th:fragment="meal(meal)">
   <li th:id="${'accordionHeader_' + meal.id}" data-toggle="collapse"
     th:attr="data-target=${'#accordion_' + meal.id},data-mealid=${meal.id}"
-    class="clickable my-0 accordion-header item list-group-item list-group-item-action">
+    class="clickable my-0 accordion-header item list-group-item list-group-item-action collapsed">
     <button class="action edit bg-primary stop-prop" th:attr="onclick=${'editMeal('+meal.id+')'}">Edit</button>
     <div class="row no-gutters">
       <div class="round form-check col col-2">
