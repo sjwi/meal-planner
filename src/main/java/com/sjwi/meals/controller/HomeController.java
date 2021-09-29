@@ -64,7 +64,8 @@ public class HomeController {
   private static final int DEFAULT_NUMBER_OF_WEEKS = 25;
 
   @RequestMapping("/")
-  public ModelAndView homeController(HttpServletRequest request, Authentication auth) {
+  public ModelAndView homeController(HttpServletRequest request, Authentication auth, HttpServletResponse response) {
+    response.setHeader("REQUIRED-AUTH","1");
     Map<String, String> preferences  = ((MealsUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPreferences();
     ModelAndView mv = new ModelAndView("home");
     List<Week> weeks = mealDao.getNNumberOfWeeks(DEFAULT_NUMBER_OF_WEEKS);
@@ -135,10 +136,8 @@ public class HomeController {
 
   @RequestMapping(value = "/login", method = RequestMethod.GET)
   public ModelAndView login(HttpServletResponse response) {
-    if(SecurityContextHolder.getContext().getAuthentication() != null && SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails){
-      response.setHeader("REQUIRED-AUTH","1");
+    if(SecurityContextHolder.getContext().getAuthentication() != null && SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails)
       return new ModelAndView("redirect:/");
-    }
     return new ModelAndView("redirect:" + oAuthManager.getSignOnUrl());
   }
 
