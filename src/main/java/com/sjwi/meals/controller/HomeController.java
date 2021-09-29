@@ -9,7 +9,9 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.sjwi.meals.config.LandingPageSessionInitializer;
 import com.sjwi.meals.dao.MealDao;
+import com.sjwi.meals.log.CustomLogger;
 import com.sjwi.meals.model.Ingredient;
 import com.sjwi.meals.model.Week;
 import com.sjwi.meals.model.security.AccessTokenResponse;
@@ -109,6 +111,24 @@ public class HomeController {
     ModelAndView mv = new ModelAndView("home :: mealList");
     mv.addObject("meals", mealDao.searchMeals(searchTerm, tags, searchParams));
     return mv;
+  }
+
+  @Autowired
+  CustomLogger logger;
+
+  @Autowired
+  LandingPageSessionInitializer sessionInitializer;
+
+  @RequestMapping(value="/refresh-login")
+  @ResponseStatus(HttpStatus.OK)
+  public void refreshLogin() {
+    logger.debug("In refresh");
+    if (SecurityContextHolder.getContext().getAuthentication() != null
+						&& SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails) {
+				return;
+    }
+    logger.debug("Refreshing state");
+    sessionInitializer.refreshUserSession();
   }
 
 

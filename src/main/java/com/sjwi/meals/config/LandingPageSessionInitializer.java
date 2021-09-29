@@ -50,11 +50,15 @@ public class LandingPageSessionInitializer {
       SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(localUser, null, localUser.getAuthorities()));
       return;
     }
-    HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
     if (SecurityContextHolder.getContext().getAuthentication() != null
 						&& SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails) {
 				return;
     }
+    refreshUserSession();
+  }
+
+  public void refreshUserSession(){
+    HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
     if (request.getCookies() != null) {
       Optional<Cookie> cookie = Arrays.stream(request.getCookies()).filter(c -> com.sjwi.meals.util.security.AuthenticationService.STORED_COOKIE_TOKEN_KEY.equals(c.getName())).findFirst();
       if (cookie.isPresent()) {

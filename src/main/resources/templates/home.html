@@ -257,6 +257,15 @@
     $("#sidesContainer").show();
   }
 
+  document.addEventListener('visibilitychange', () => {
+    $.ajax({
+      url: contextpath + 'refresh-login',
+      method: "GET",
+      error: function() {
+        ajaxErrorHandler();
+      }
+    })
+  });
 
   $(document).on('click', '.counter-input-group .button-plus', function(e) {
       incrementValue(e);
