@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -48,7 +49,7 @@ public class PageRequestLogger {
 
 	private String getLoggedInUser(){
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		if (auth != null){
+		if (auth != null && SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails){
         MealsUser user = (MealsUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 				return user.getFirstName() != null? user.getFullName(): user.getUsername();
 		}

@@ -58,6 +58,7 @@ public class LifecycleController {
           List<Week> weeks = weekGenerator.getWeeksForSelect(mealDao.getAllWeeks());
           weekId = mealDao.createWeek(weeks.get(addIndex - 1).getStart(),weeks.get(addIndex - 1).getEnd());
       }
+      System.out.println("MEALS:" + meals);
       List<Integer> mealIdsToAdd = new Gson().fromJson(meals, new TypeToken<ArrayList<Integer>>() {}.getType());
       List<Integer> existingMealIds = mealDao.getWeekById(weekId).getMeals().stream()
         .map(m -> m.getId())
@@ -73,7 +74,6 @@ public class LifecycleController {
     @ResponseStatus(HttpStatus.OK)
     public void addSidesToMeal(@RequestParam Integer addSideWeekId, @RequestParam Integer addSideMealId, 
       @RequestParam(name = "sidesToAdd", defaultValue = "") List<Integer> sidesToAdd) {
-        System.out.println(sidesToAdd);
         List<Integer> existingSideIds = mealDao.getWeekById(addSideWeekId).getMeals().stream()
           .filter(m -> m.getId() == addSideMealId)
           .findFirst().get().getSides().stream()

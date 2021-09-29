@@ -133,9 +133,11 @@ public class HomeController {
 
 
   @RequestMapping(value = "/login", method = RequestMethod.GET)
-  public ModelAndView login() {
-    if(SecurityContextHolder.getContext().getAuthentication() != null && SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails)
+  public ModelAndView login(HttpServletResponse response) {
+    if(SecurityContextHolder.getContext().getAuthentication() != null && SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails){
+      response.setHeader("REQUIRED-AUTH","1");
       return new ModelAndView("redirect:/");
+    }
     return new ModelAndView("redirect:" + oAuthManager.getSignOnUrl());
   }
 
