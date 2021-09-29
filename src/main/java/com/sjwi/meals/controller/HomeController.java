@@ -122,12 +122,12 @@ public class HomeController {
   @RequestMapping(value="/refresh-login")
   @ResponseStatus(HttpStatus.OK)
   public void refreshLogin() {
-    logger.debug("In refresh");
+    logger.info("In refresh");
     if (SecurityContextHolder.getContext().getAuthentication() != null
 						&& SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails) {
 				return;
     }
-    logger.debug("Refreshing state");
+    logger.info("Refreshing state");
     sessionInitializer.refreshUserSession();
   }
 

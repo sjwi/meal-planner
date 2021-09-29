@@ -258,13 +258,15 @@
   }
 
   document.addEventListener('visibilitychange', () => {
-    $.ajax({
-      url: contextpath + 'refresh-login',
-      method: "GET",
-      error: function() {
-        ajaxErrorHandler();
-      }
-    })
+    if (document.visibilityState === "visible") {
+      $.ajax({
+        url: contextpath + 'refresh-login',
+        method: "GET",
+        error: function() {
+          ajaxErrorHandler();
+        }
+      })
+    }
   });
 
   $(document).on('click', '.counter-input-group .button-plus', function(e) {
