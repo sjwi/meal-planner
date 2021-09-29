@@ -261,10 +261,7 @@
     if (document.visibilityState === "visible") {
       $.ajax({
         url: contextpath + 'refresh-login',
-        method: "GET",
-        error: function() {
-          ajaxErrorHandler();
-        }
+        method: "GET"
       })
     }
   });
