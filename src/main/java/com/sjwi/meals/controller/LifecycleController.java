@@ -58,7 +58,6 @@ public class LifecycleController {
           List<Week> weeks = weekGenerator.getWeeksForSelect(mealDao.getAllWeeks());
           weekId = mealDao.createWeek(weeks.get(addIndex - 1).getStart(),weeks.get(addIndex - 1).getEnd());
       }
-      System.out.println("MEALS:" + meals);
       List<Integer> mealIdsToAdd = new Gson().fromJson(meals, new TypeToken<ArrayList<Integer>>() {}.getType());
       List<Integer> existingMealIds = mealDao.getWeekById(weekId).getMeals().stream()
         .map(m -> m.getId())

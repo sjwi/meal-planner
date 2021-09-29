@@ -19,7 +19,7 @@ public class SqlQueryStore {
 	}
 	
 	public String get(String key, Map<String, String> preferences) {
-		String sort = preferences.get("pinFavorites").equals("1")?
+		String sort = preferences.get("pinFavorites").equals("1") || preferences.get("pinFavorites").equalsIgnoreCase("true")?
 			"FAVORITE DESC," + preferences.get("sort"):
 			preferences.get("sort");
 

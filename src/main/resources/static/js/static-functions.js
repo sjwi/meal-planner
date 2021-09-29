@@ -19,7 +19,7 @@ function search() {
     data: {
       searchTerm: searchTerm,
       tags: tags,
-      pinFavorites: $('#searchModal #pinFavorites').val(),
+      pinFavorites: $('#searchModal #pinFavorites').is(':checked'),
       sortBy: $('#searchModal #sortBy').val(),
       sortOrder: $('#searchModal #sortOrder').val()
     },
@@ -33,6 +33,18 @@ function search() {
         $('#mealCheckbox_' + id).prop('checked',true);
         $('#sideAlert_' + id).addClass('show');
       });
+    },
+    error: function() {
+      ajaxErrorHandler();
+    }
+  });
+}
+function refreshWeeksForSelect() {
+  $.ajax({
+    url: contextpath + 'weeks-for-select',
+    method: "GET",
+    success: function (data) {
+      $('#weeksForSelectContainer').html(data)
     },
     error: function() {
       ajaxErrorHandler();
@@ -143,6 +155,7 @@ function deleteWeek(id) {
         $('#weekAccordion_' + id).remove();
         $('#weekAccordionHeader_' + id).remove();
         $('#addMealsWeekSelect option[value="' + id + '"]').remove();
+        refreshWeeksForSelect();
       },
       error: function() {
         ajaxErrorHandler();

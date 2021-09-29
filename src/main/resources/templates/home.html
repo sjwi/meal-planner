@@ -94,13 +94,9 @@
     <i class="fa fa-angle-down" aria-hidden="true"></i>
     <i class="fa fa-angle-up collapse" aria-hidden="true"></i>
   </div>
-  <label for="addMealsWeekSelect" class="mb-2">Add <span id="addMealCount">1</span> meal(s) to week </label>
-  <select id="addMealsWeekSelect" class="form-select form-select-sm text-center">
-    <option th:each="week, iter : ${weeksForSelect}" th:value="${week.id}" th:attr="data-add-index=${iter.count}"
-      th:selected="${week.isNext()}" th:text="${#dates.format(week.start,'MM/dd/yyyy') + ' - ' + #dates.format(week.end,'MM/dd/yyyy')} + 
-                    ${week.isNext()? ' (next)': week.isCurrent()? ' (current)': ''}">
-    </option>
-  </select>
+  <div id="weeksForSelectContainer">
+    <th:block th:replace="dynamic/weeks-for-select :: weeksForSelect(${weeksForSelect})"></th:block>
+  </div>
   <div class="row">
     <div id="addMealsToWeekButtonContainer" class="col text-center my-2">
       <button type="button" class="btn btn-success w-100 mt-2 mb-2 px-5" onclick="addSelectedMealsToWeek()">Add</button>

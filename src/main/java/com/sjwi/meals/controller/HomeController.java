@@ -102,10 +102,11 @@ public class HomeController {
       @RequestParam(value="tags[]",required = false) List<Integer> tags,
       @RequestParam(name="pinFavorites", required = false) boolean pinFavorites,
       @RequestParam String sortBy, @RequestParam String sortOrder) {
+    Map<String, String> preferences = ((MealsUser) auth.getPrincipal()).getPreferences();
     Map<String, String> searchParams = new HashMap<>();
     searchParams.put("sort",sortBy);
     searchParams.put("sortDirection",sortOrder);
-    searchParams.put("pinFavorites",pinFavorites? "1":"0");
+    searchParams.put("pinFavorites",pinFavorites? "1": preferences.get("pinFavorites"));
     if (tags == null)
         tags = new ArrayList<Integer>();
     ModelAndView mv = new ModelAndView("home :: mealList");
@@ -243,6 +244,15 @@ public class HomeController {
   public ModelAndView getWeekMealDetails(@PathVariable int id, @RequestParam String view, @RequestParam int weekId) {
     ModelAndView mv = new ModelAndView(view);
     mv.addObject("meal", mealDao.getWeekMealById(id,weekId));
+    return mv;
+  }
+
+  @RequestMapping("/weeks-for-select")
+  public ModelAndView getWeeksForSelect() {
+    ModelAndView mv = new ModelAndView("dynamic/weeks-for-select :: weeksForSelect");
+    Map<String, String> preferences  = ((MealsUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPreferences();
+    WeekGenerator weekGenerator = new WeekGenerator(Integer.parseInt(preferences.get("weekStartDay")));
+    mv.addObject("weeksForSelect", weekGenerator.getWeeksForSelect(mealDao.getNNumberOfWeeks(DEFAULT_NUMBER_OF_WEEKS)));
     return mv;
   }
 }
