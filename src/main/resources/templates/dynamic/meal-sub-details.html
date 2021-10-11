@@ -5,7 +5,7 @@
     <div th:if="${#lists.size(meal.sides) > 0}" class="row no-gutters">
       <div class="col">
         <ul class="list-group list-group-flush item-list week-meal-sides" th:id="${'weekMealSideList_' + week.id + '_' + meal.id}">
-          <li class="list-group-item border-bottom bg-dark rounded item py-0 my-0" th:each="side: ${meal.sides}" th:attr="data-target=${side.id}">
+          <li class="list-group-item border-bottom list-group-item-dark rounded item py-0 my-0" th:each="side: ${meal.sides}" th:attr="data-target=${side.id}">
             <button class="action edit bg-primary stop-prop btn btn-sm" th:attr="onclick=${'editSide('+side.id+')'}">Edit</button>
             <div class="text-truncate col col-12 text-white" th:text="${side.name}"></div>
             <button th:attr="onclick=${'removeSideFromWeekMeal(' + side.id + ',' + meal.id + ',' + week.id + ')'}"
@@ -32,14 +32,14 @@
             th:attr="data-target=${tag.key}" th:text="${tag.value}"></span>
       </div>
     </div>
-    <h6 th:if="${meal.notes != null && meal.notes != ''}" class="my-2">Notes</h6>
+    <h6 th:if="${meal.notes != null && meal.notes != ''}" class="my-2 text-white">Notes</h6>
     <div th:if="${meal.notes != null && meal.notes != ''}" class="row no-gutters my-2">
       <div class="col px-4">
-          <p th:id="${'mealNotes_' + meal.id}" th:text="${meal.notes}" class="text-prewrap text-small mb-0"></p>
+          <p th:id="${'mealNotes_' + meal.id}" th:text="${meal.notes}" class="text-prewrap text-small mb-0 text-white"></p>
       </div>
     </div>
     <div th:if="${meal.recipeUrl != null && meal.recipeUrl != ''}" class="my-2 col text-center">
-      <a th:id="${'mealRecipeUrl_' + meal.id}" th:href="${meal.recipeUrl == 'self_hosted'}? @{/recipe/hosted/__${meal.id}__} : ${meal.recipeUrl}"
+      <a class="text-white" th:id="${'mealRecipeUrl_' + meal.id}" th:href="${meal.recipeUrl == 'self_hosted'}? @{/recipe/hosted/__${meal.id}__} : ${meal.recipeUrl}"
         target="_blank">View Recipe <i class="ms-1 fas fa-external-link-alt"></i></a>
     </div>
   </li>

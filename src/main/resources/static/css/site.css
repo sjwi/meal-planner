@@ -233,7 +233,7 @@ ul {
 /* Slide */
 .item-list { overflow: hidden; }
 
-.item-list .item {
+.item-list .item::not(.list-group-item-dark) {
   position: relative;
   display: table;
   width: 100%;
