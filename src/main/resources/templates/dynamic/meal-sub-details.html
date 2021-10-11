@@ -1,20 +1,20 @@
 <th:block th:fragment="mealSubDetails(meal)">
   <li th:classappend="${'accordion-sub-' + meal.id}" th:attr="data-parent=${'#subMealList_' + week.id}"
-    class="container px-4 bg-secondary accordion-collapse collapse border rounded-bottom">
-    <h6 th:if="${#lists.size(meal.sides) > 0}" class="mt-2">Sides</h6>
+    class="container px-4 bg-secondary-2 accordion-collapse collapse border rounded-bottom">
+    <h6 th:if="${#lists.size(meal.sides) > 0}" class="mt-2 text-white">Sides</h6>
     <div th:if="${#lists.size(meal.sides) > 0}" class="row no-gutters">
       <div class="col">
         <ul class="list-group list-group-flush item-list week-meal-sides" th:id="${'weekMealSideList_' + week.id + '_' + meal.id}">
-          <li class="list-group-item border-bottom bg-light rounded item py-0 my-0" th:each="side: ${meal.sides}" th:attr="data-target=${side.id}">
+          <li class="list-group-item border-bottom bg-dark rounded item py-0 my-0" th:each="side: ${meal.sides}" th:attr="data-target=${side.id}">
             <button class="action edit bg-primary stop-prop btn btn-sm" th:attr="onclick=${'editSide('+side.id+')'}">Edit</button>
-            <div class="text-truncate col col-12" th:text="${side.name}"></div>
+            <div class="text-truncate col col-12 text-white" th:text="${side.name}"></div>
             <button th:attr="onclick=${'removeSideFromWeekMeal(' + side.id + ',' + meal.id + ',' + week.id + ')'}"
               class="action delete bg-danger stop-prop btn btn-sm">Delete</button>
           </li>
         </ul>
       </div>
     </div>
-    <h6 th:if="${#maps.size(meal.ingredients) > 0}" class="my-2">Ingredients</h6>
+    <h6 th:if="${#maps.size(meal.ingredients) > 0}" class="my-2 text-white">Ingredients</h6>
     <div th:if="${#maps.size(meal.ingredients) > 0}"
       class="row no-gutters my-2">
       <div class="col">
@@ -25,7 +25,7 @@
         </span>
       </div>
     </div>
-    <h6 th:if="${#maps.size(meal.tags) > 0}" class="my-2">Tags</h6>
+    <h6 th:if="${#maps.size(meal.tags) > 0}" class="my-2 text-white">Tags</h6>
     <div th:if="${#maps.size(meal.tags) > 0}" class="row no-gutters my-2">
       <div class="col">
           <span class="badge rounded-pill bg-info px-2 py-2 mx-1 my-1 meal-tag" th:each="tag : ${meal.tags}"

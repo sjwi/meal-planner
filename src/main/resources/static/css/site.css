@@ -116,6 +116,9 @@ img.kroger-thumbnail {
 #addSideModal {
   z-index: 10000;
 }
+.bg-secondary-2 {
+  background-color: #a19f9f;
+}
 .container.scroll {
   max-height: 70vh;
   overflow-y: auto;
