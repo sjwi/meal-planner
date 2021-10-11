@@ -123,6 +123,13 @@ img.kroger-thumbnail {
 .create-meal.showme, .create-side.showme {
   bottom:15px;
 }
+li.add-meal-from-week {
+  padding:0 1px 1px 1px;
+  opacity:.8;
+}
+li.add-meal-from-week:hover, li.add-meal-from-week:active {
+  opacity:1;
+}
 .text-prewrap {
   white-space: pre;
 }

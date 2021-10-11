@@ -20,7 +20,9 @@
         </li>
         <th:block th:replace="dynamic/meal-sub-details :: mealSubDetails(${meal})"></th:block>
       </th:block>
-      <button class="btn rounded-0 py-0 w-100 btn-success" style="font-size:1.5rem; line-height: 1.85rem" th:attr="onclick=${'addMeal(' + week.id + ')'}">+</button>
+      <li class="item list-group-item list-group-item-action my-0 bg-light add-meal-from-week">
+        <button class="btn rounded-0 rounded-bottom py-0 w-100 btn-success" style="font-size:1.5rem; line-height: 1.85rem" th:attr="onclick=${'addMeal(' + week.id + ')'}">+</button>
+      </li>
     </ul>
   </li>
 </th:block>
