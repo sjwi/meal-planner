@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Meal {
 
     private int id;
@@ -54,6 +56,7 @@ public class Meal {
     public String getNotes() {
         return notes;
     }
+    @JsonIgnore
     public long getWeeksSinceLastEaten() {
         Calendar calLastEaten = Calendar.getInstance();
         calLastEaten.setTime(lastEaten);

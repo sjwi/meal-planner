@@ -69,6 +69,17 @@ public class LifecycleController {
       return mealDao.getWeekById(weekId);
     }
     
+    @RequestMapping(value = "/week/add-meals", method = RequestMethod.POST)
+    @ResponseBody
+    public Week addMealsToWeek(@RequestParam Integer addMealWeekId, @RequestParam(name = "mealsToAdd", defaultValue = "") List<Integer> mealsToAdd) {
+      List<Integer> existingMealIds = mealDao.getWeekById(addMealWeekId).getMeals().stream()
+        .map(m -> m.getId())
+        .collect(Collectors.toList());
+      mealsToAdd.removeAll(existingMealIds);
+      mealDao.addMealsToWeek(addMealWeekId,mealsToAdd);
+      return mealDao.getWeekById(addMealWeekId);
+    }
+    
     @RequestMapping(value = "/meal/add-sides", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.OK)
     public void addSidesToMeal(@RequestParam Integer addSideWeekId, @RequestParam Integer addSideMealId, 

@@ -126,6 +126,10 @@ function focusWeekMeal(weekId, mealId) {
     $('#weekAccordionHeader_' + weekId).click();
   $('#accordion_header_sub_' + mealId + '_' + weekId).click()
 }
+function focusWeek(weekId) {
+  if (!$('#weekAccordion_' + weekId).is(":visible"))
+    $('#weekAccordionHeader_' + weekId).click();
+}
 function removeMealFromWeek(mealId, weekId) {
   $.ajax({
     url: contextpath + 'meal/remove-from-week',
@@ -204,6 +208,7 @@ function deleteMeal(id) {
 
 function refreshMealList() {
   search();
+  refreshMeals();
 }
 
 function refreshWeekList(callback) {
@@ -250,6 +255,7 @@ function refreshSideList() {
 function refreshMeal(id) {
   refreshMealDetails(id);
   refreshMealName(id);
+  refreshMeals();
 }
 
 function refreshMealDetails(mealId) {
@@ -262,6 +268,7 @@ function refreshMealDetails(mealId) {
     success: function (data) {
       $('#accordion_' + mealId).replaceWith(data);
       $('#accordion_' + mealId).removeClass('loading');
+      refreshMeals();
     },
     error: function() {
       ajaxErrorHandler();
@@ -275,6 +282,7 @@ function refreshMealName(mealId) {
     success: function (data) {
       $('#mealName_' + mealId).html(data.name);
       $('[id^=subMealName_' + mealId +']').html(data.name);
+      refreshMeals();
     },
     error: function() {
       ajaxErrorHandler();
@@ -316,6 +324,19 @@ function refreshSides() {
     method: "GET",
     success: function (data) {
       sides = data;
+    },
+    error: function() {
+      ajaxErrorHandler();
+    }
+  });
+}
+
+function refreshMeals() {
+  $.ajax({
+    url: contextpath + 'json/meals',
+    method: "GET",
+    success: function (data) {
+      meals = data;
     },
     error: function() {
       ajaxErrorHandler();

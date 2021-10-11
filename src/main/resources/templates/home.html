@@ -111,6 +111,7 @@
   let tags;
   let ingredients;
   let sides;
+  let meals;
   let mealSidesMap = {};
   let unselecting = false;
   let showAllWeeks = false;
@@ -118,6 +119,7 @@
     refreshIngredients();
     refreshTags();
     refreshSides();
+    refreshMeals();
     addScrollListener(-111, 111);
   });
 

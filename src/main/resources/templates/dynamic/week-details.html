@@ -3,8 +3,8 @@
     class="pt-0 pb-0 px-0 bg-light container accordion-collapse collapse accordion-header clickable"
     th:classappend="${index == 0? 'show':''}" th:attr="data-target=${week.id}" data-parent="#weekTable">
     <ul class="list-group item-list sub-meal-list" th:id="${'subMealList_' + week.id}">
-      <th:block th:each="meal: ${week.meals}">
-        <li class="item list-group-item list-group-item-action my-0 bg-light rounded week-meal-item"
+      <th:block th:each="meal, iStat: ${week.meals}">
+        <li class="item list-group-item list-group-item-action my-0 bg-light week-meal-item" th:classappend="${iStat.last? 'rounded-top':'rounded'}"
           th:id="${'accordion_header_sub_' + meal.id + '_' + week.id}" th:attr="data-target=${'#weekAccordion_' + week.id + ' .accordion-sub-' + meal.id}"
           data-toggle="collapse">
           <button class="action edit bg-primary stop-prop" th:attr="onclick=${'editMeal('+meal.id+')'}">Edit</button>
@@ -20,6 +20,7 @@
         </li>
         <th:block th:replace="dynamic/meal-sub-details :: mealSubDetails(${meal})"></th:block>
       </th:block>
+      <button class="btn rounded-0 py-0 w-100 btn-success" style="font-size:1.5rem; line-height: 1.85rem" th:attr="onclick=${'addMeal(' + week.id + ')'}">+</button>
     </ul>
   </li>
 </th:block>

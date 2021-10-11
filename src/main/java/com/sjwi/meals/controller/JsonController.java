@@ -7,8 +7,10 @@ import com.sjwi.meals.dao.MealDao;
 import com.sjwi.meals.model.Ingredient;
 import com.sjwi.meals.model.Meal;
 import com.sjwi.meals.model.Side;
+import com.sjwi.meals.model.security.MealsUser;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,6 +43,13 @@ public class JsonController {
   @ResponseBody
   public List<Side> getAllSides() {
     return mealDao.getAllSides();
+  }
+
+  @RequestMapping("/json/meals")
+  @ResponseBody
+  public List<Meal> getAllMeals() {
+    Map<String, String> preferences  = ((MealsUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPreferences();
+    return mealDao.getAllMeals(preferences);
   }
 
 }

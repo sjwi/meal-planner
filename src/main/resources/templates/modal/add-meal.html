@@ -1,0 +1,102 @@
+<div class="modal fade" id="addMealModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header border-0">
+        <h6 class="modal-title text-dark">Add Meals to Week</h6>
+        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body pt-0">
+        <form id="addMealForm" th:action="@{/week/add-meals}" method="POST">
+          <input type="hidden" name="addMealWeekId" id="addMealWeekId" value="0">
+          <div class="container pt-2 border-bottom">
+            <table class="table mb-0" id="mealDataTable">
+              <thead>
+                <tr>
+                  <th class="border-0"></th>
+                </tr>
+              </thead>
+              <tbody id="addMealList">
+
+              </tbody>
+            </table>
+          </div>
+          <button type="submit" id="addMealSubmitBtn" form="addMealForm" class="btn btn-lg btn-primary w-100 mt-3">Add meal(s)</button>
+        </form>
+      </div>
+      <div class="collapse" id="mealRowTemplate">
+        <div class="row no-gutters px-2">
+          <div class="col-1 round mb-2">
+            <input type="checkbox" class="form-check-input add-meal-checkbox" name="mealsToAdd"/>
+            <label class="add-meal-checkbox-label"></label>
+          </div>
+          <div class="col-11 ps-3">
+            <label class="add-meal-label w-100 my-1"></label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $('#addMealForm').on('submit',function(e){
+    e.preventDefault();
+    var dataString = $(this).serialize();
+    var xhr = $.ajax({
+      url: $(this).attr("action"),
+      type: "POST",
+      method: "POST",
+      data: dataString,
+      beforeSend: function() {
+        $('#addMealSubmitBtn').prop('disabled',true);
+      },
+      success: function () {
+        reloadIfRedirect(xhr);
+        refreshWeekList(() => focusWeek($('#addMealWeekId').val()));
+      },
+      complete: function() {
+        $('#addMealSubmitBtn').prop('disabled',false);
+        $('#addMealModal').modal('hide');
+      },
+      error: function() {
+        ajaxErrorHandler();
+      }
+    });
+  });
+  async function addMeal(weekId) {
+    $('#addMealWeekId').val(weekId);
+    await meals.forEach((m) => {
+      var newLineItem = $('#mealRowTemplate > div').clone()
+      $(newLineItem).find('.add-meal-checkbox').val(m.id);
+      $(newLineItem).find('.add-meal-checkbox').attr('id','mealSelect_' + m.id);
+      $(newLineItem).find('.add-meal-checkbox-label').attr('for','mealSelect_' + m.id);
+      $(newLineItem).find('.add-meal-label').text(m.name);
+      $(newLineItem).find('.add-meal-label').attr('for','mealSelect_' + m.id);
+      let markup = '<tr><td>' + $('<div>').append($(newLineItem).clone()).html(); + '</td></tr>';
+      $('#addMealList').append(markup);
+    });
+    if (!$.fn.DataTable.isDataTable('#mealDataTable')) {
+      $('#mealDataTable').dataTable( {
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": true,
+        "bInfo": false,
+        "ordering": false,
+        "bScrollInfinite": true,
+        "bScrollCollapse": true,
+        "sScrollY": "55vh",
+        language: {
+          search:'',
+          searchPlaceholder: "Search",
+          emptyTable: "No meals could be found"
+        }
+      } );
+      $('#mealDataTable_filter').addClass('mb-2')
+      $('#mealDataTable_filter input').addClass('form-control')
+    }
+    $('#addMealModal').modal('show');
+  }
+  $('#addSideModal').on('hidden.bs.modal', function () {
+    $('#addMealList').html("");
+  })
+</script>
