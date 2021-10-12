@@ -119,6 +119,9 @@ img.kroger-thumbnail {
 .bg-secondary-2 {
   background-color: #a19f9f;
 }
+.bg-dark-2 {
+  background-color: #8f8e8e;
+}
 .container.scroll {
   max-height: 70vh;
   overflow-y: auto;
@@ -129,6 +132,10 @@ img.kroger-thumbnail {
 li.add-meal-from-week {
   padding:0 0 0 0;
   opacity:.8;
+}
+.sub-meal-text {
+  font-size: .9rem;
+  padding-top: .40rem;
 }
 li.add-meal-from-week:hover, li.add-meal-from-week:active {
   opacity:1;
