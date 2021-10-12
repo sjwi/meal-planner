@@ -4,7 +4,7 @@
     th:classappend="${index == 0? 'show':''}" th:attr="data-target=${week.id}" data-parent="#weekTable">
     <ul class="list-group item-list sub-meal-list" th:id="${'subMealList_' + week.id}">
       <th:block th:each="meal, iStat: ${week.meals}">
-        <li class="item list-group-item list-group-item-action my-0 bg-secondary week-meal-item" th:classappend="${iStat.last? 'rounded-top':'rounded'}"
+        <li class="item list-group-item list-group-item-action my-0 bg-secondary week-meal-item collapsed" th:classappend="${iStat.last? 'rounded-top':'rounded'}"
           th:id="${'accordion_header_sub_' + meal.id + '_' + week.id}" th:attr="data-target=${'#weekAccordion_' + week.id + ' .accordion-sub-' + meal.id}"
           data-toggle="collapse">
           <button class="action edit bg-primary stop-prop" th:attr="onclick=${'editMeal('+meal.id+')'}">Edit</button>

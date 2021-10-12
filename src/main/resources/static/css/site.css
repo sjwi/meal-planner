@@ -229,6 +229,10 @@ ul {
   opacity:.85
 }
 
+.week-meal-item:not(.collapsed) {
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
 
 /* Slide */
 .item-list { overflow: hidden; }
