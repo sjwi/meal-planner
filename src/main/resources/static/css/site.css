@@ -113,6 +113,9 @@ img.kroger-thumbnail {
   height:55px;
   box-shadow: 0 .5rem 1rem rgba(0,0,0,.35)!important;
 }
+.accordion-header.collapsed + .accordion-collapse.collapsing {
+  border: none !important;
+}
 #addSideModal {
   z-index: 10000;
 }
