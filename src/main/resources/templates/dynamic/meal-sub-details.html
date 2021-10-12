@@ -1,6 +1,6 @@
-<th:block th:fragment="mealSubDetails(meal)">
-  <li th:classappend="${'accordion-sub-' + meal.id}" th:attr="data-parent=${'#subMealList_' + week.id}"
-    class="container px-4 bg-secondary-2 accordion-collapse collapse border-0 rounded-bottom">
+<th:block th:fragment="mealSubDetails(meal, iStat)">
+  <li th:attr="data-parent=${'#subMealList_' + week.id}"  th:classappend="${iStat.last}? 'rounded-0 accordion-sub-' + ${meal.id}: 'rounded-bottom accordion-sub-' + ${meal.id}"
+    class="container px-4 bg-secondary-2 accordion-collapse collapse border-0">
     <div th:if="${#lists.size(meal.sides) == 0 && #maps.size(meal.ingredients) == 0 && #maps.size(meal.tags) == 0 && (meal.notes == null || meal.notes == '') && (meal.recipeUrl == null || meal.recipeUrl == '')}">
       <div class="py-2 my-0 text-white text-small">No additional details</div>
     </div>
