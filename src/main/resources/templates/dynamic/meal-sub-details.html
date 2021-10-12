@@ -8,7 +8,7 @@
     <div th:if="${#lists.size(meal.sides) > 0}" class="row no-gutters">
       <div class="col">
         <ul class="list-group list-group-flush item-list week-meal-sides" th:id="${'weekMealSideList_' + week.id + '_' + meal.id}">
-          <li class="list-group-item border-bottom list-group-item-dark rounded item py-0 my-0" th:each="side: ${meal.sides}" th:attr="data-target=${side.id}">
+          <li class="list-group-item border-bottom list-group-item-dark rounded item py-0 my-0 px-0" th:each="side: ${meal.sides}" th:attr="data-target=${side.id}">
             <button class="action edit bg-primary stop-prop btn btn-sm" th:attr="onclick=${'editSide('+side.id+')'}">Edit</button>
             <div class="text-truncate col col-12 text-white text-small py-1" th:text="${side.name}"></div>
             <button th:attr="onclick=${'removeSideFromWeekMeal(' + side.id + ',' + meal.id + ',' + week.id + ')'}"
