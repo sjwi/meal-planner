@@ -9,7 +9,7 @@
           data-toggle="collapse">
           <button class="action edit bg-primary stop-prop" th:attr="onclick=${'editMeal('+meal.id+')'}">Edit</button>
           <div class="row py-0">
-            <div th:id="${'subMealName_' + meal.id + '_' + week.id}" class="meal-text text-truncate col col-8 py-1 px-0 sub-meal-text"
+            <div th:id="${'subMealName_' + meal.id + '_' + week.id}" class="meal-text text-truncate col col-8 py-1 pe-0 ps-2 sub-meal-text"
               th:text="${meal.name}"></div>
             <div class="col col-4 px-0 text-end">
               <button class="btn btn-sm btn-outline-primary stop-prop" th:attr="onclick=${'addSide(' + meal.id + ',' + week.id + ')'}"><i class="fas fa-edit"></i> Sides</button>
