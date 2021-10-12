@@ -122,6 +122,10 @@ img.kroger-thumbnail {
 .bg-dark-2 {
   background-color: #8f8e8e;
 }
+.rounded-bottom {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
 .container.scroll {
   max-height: 70vh;
   overflow-y: auto;
