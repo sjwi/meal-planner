@@ -21,7 +21,7 @@
     <div th:if="${#maps.size(meal.ingredients) > 0}"
       class="row no-gutters my-2">
       <div class="col">
-        <span th:each="ingredient : ${meal.ingredients}" class="badge rounded-pill bg-dark px-2 py-2 mx-1 my-1 meal-ingredient position-relative"
+        <span th:each="ingredient : ${meal.ingredients}" class="badge rounded-pill bg-dark px-2 py-2 mx-1 my-1 meal-ingredient position-relative border-bottom"
           th:attr="data-target=${ingredient.key.id}">
           <small th:text="${ingredient.key.name}"></small>
           <small class="ingredient-counter position-absolute top-0 start-100 translate-middle py-1 bg-primary border border-light rounded-circle" th:text="${ingredient.value}"></small>
@@ -31,13 +31,13 @@
     <h6 th:if="${#maps.size(meal.tags) > 0}" class="my-2 text-white text-small">Tags</h6>
     <div th:if="${#maps.size(meal.tags) > 0}" class="row no-gutters my-2">
       <div class="col small">
-          <span class="badge rounded-pill bg-info px-2 py-2 mx-1 my-1 meal-tag" th:each="tag : ${meal.tags}"
+          <span class="badge rounded-pill bg-info px-2 py-2 mx-1 my-1 meal-tag border-bottom" th:each="tag : ${meal.tags}"
             th:attr="data-target=${tag.key}" th:text="${tag.value}"></span>
       </div>
     </div>
     <h6 th:if="${meal.notes != null && meal.notes != ''}" class="my-2 text-white text-small">Notes</h6>
     <div th:if="${meal.notes != null && meal.notes != ''}" class="row gx-0 my-2">
-      <div class="col px-2 bg-dark rounded py-1">
+      <div class="col px-2 bg-dark rounded py-1 border-bottom">
           <p th:id="${'mealNotes_' + meal.id}" th:text="${meal.notes}" class="text-prewrap text-small mb-0 text-white"></p>
       </div>
     </div>
