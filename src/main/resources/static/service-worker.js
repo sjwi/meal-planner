@@ -1,4 +1,4 @@
-var CACHE_NAME = 'song-catalog-cache-v1';
+var CACHE_NAME = 'meal-planner-cache';
 
 self.addEventListener('install', function(event) {
   var urlsToCache = [
