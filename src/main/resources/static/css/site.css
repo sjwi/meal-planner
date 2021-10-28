@@ -148,7 +148,7 @@ li.add-meal-from-week:hover, li.add-meal-from-week:active {
   opacity:1;
 }
 .text-prewrap {
-  white-space: pre;
+  white-space: pre-wrap;
 }
 .text-small {
   font-size: .875rem
