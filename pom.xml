@@ -21,7 +21,6 @@
         <start-class>com.sjwi.meals.MealPlannerWebApplication</start-class>
         <java.version>11</java.version>
         <rest.assured.version>2.3.3</rest.assured.version>
-        <spring-loaded.version>1.2.7.RELEASE</spring-loaded.version>
     </properties>
 
     <dependencies>
