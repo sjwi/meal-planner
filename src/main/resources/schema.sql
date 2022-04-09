@@ -8,7 +8,7 @@ CREATE TABLE Meals (
   USER varchar(50) NOT NULL,
   DISABLED BOOLEAN DEFAULT 0,
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+);
 
 INSERT INTO Meals (NAME, FAVORITE, USER) values 
 ('Meal 1',1,'de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
@@ -53,7 +53,7 @@ CREATE TABLE Ingredients (
   USER varchar(50) NOT NULL,
   DISABLED BOOLEAN DEFAULT 0,
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+);
 
 INSERT INTO Ingredients (NAME, USER) values
 ('Ingredient 1','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
@@ -76,7 +76,7 @@ CREATE TABLE Sides (
   USER varchar(50) NOT NULL,
   DISABLED BOOLEAN DEFAULT 0,
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+);
 
 INSERT INTO Sides (NAME, USER) values
 ('Side 1','de9a8c23-bb74-512d-a390-2b8cb659ebcf'),
@@ -108,7 +108,7 @@ CREATE TABLE RecipeImageUrls (
   MEAL_ID int(11),
   IMAGE_URL varchar(2000),
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+);
 
 DROP TABLE IF EXISTS MealSides;
 CREATE TABLE MealSides (
@@ -117,7 +117,7 @@ CREATE TABLE MealSides (
   SIDE_ID int(11),
   DISABLED BOOLEAN DEFAULT 0,
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+);
 
 INSERT INTO MealSides(MEAL_ID,SIDE_ID) values
 (1,1),
@@ -158,7 +158,7 @@ CREATE TABLE SideIngredients (
   INGREDIENT_ID int(11),
   DISABLED BOOLEAN DEFAULT 0,
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+);
 
 INSERT INTO SideIngredients (SIDE_ID,INGREDIENT_ID) values
 (1,1),
@@ -187,7 +187,7 @@ CREATE TABLE MealIngredients (
   INGREDIENT_ID int(11),
   DISABLED BOOLEAN DEFAULT 0,
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+);
 
 INSERT INTO MealIngredients (MEAL_ID,INGREDIENT_ID) values
 (1,1),
@@ -221,7 +221,7 @@ CREATE TABLE WeeklySchedule (
   USER varchar(50) NOT NULL DEFAULT 'de9a8c23-bb74-512d-a390-2b8cb659ebcf',
   DISABLED BOOLEAN DEFAULT 0,
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+);
 
 INSERT INTO WeeklySchedule (DATE_BEGIN,DATE_END) values
 (PARSEDATETIME('08/06/2021','MM/dd/yyyy'), PARSEDATETIME('08/13/2021','MM/dd/yyyy')),
@@ -242,7 +242,7 @@ CREATE TABLE PlannedMeals (
   MEAL_ID int(11),
   DISABLED BOOLEAN DEFAULT 0,
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+);
 
 INSERT INTO PlannedMeals (SCHEDULE_ID,MEAL_ID) values
 (1,1),
@@ -271,7 +271,7 @@ CREATE TABLE Tags (
   NAME varchar(255),
   USER varchar(50) NOT NULL DEFAULT 'de9a8c23-bb74-512d-a390-2b8cb659ebcf',
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+);
 
 INSERT INTO Tags (NAME) values
 ('Tag 1'),
@@ -286,7 +286,7 @@ CREATE TABLE MealTags (
   TAG_ID int(11),
   MEAL_ID int(11),
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+);
 
 INSERT INTO MealTags (TAG_ID,MEAL_ID) values
 (1,1),
@@ -332,7 +332,7 @@ CREATE TABLE users (
   krogerLocationId varchar(50) DEFAULT '02400347',
   enabled tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (username)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 INSERT INTO users (username,firstName,lastName,email,enabled) values ('de9a8c23-bb74-512d-a390-2b8cb659ebcf','Demo','User','demouser@stephenky.com',1);
 
 DROP TABLE IF EXISTS authorities;
@@ -341,7 +341,7 @@ CREATE TABLE authorities (
   authority varchar(50) NOT NULL,
   UNIQUE KEY ix_auth_username (username,authority),
   CONSTRAINT authorities_ibfk_1 FOREIGN KEY (username) REFERENCES users (username)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 
 INSERT INTO authorities values ('de9a8c23-bb74-512d-a390-2b8cb659ebcf','USER');
 
@@ -352,7 +352,7 @@ CREATE TABLE StoredLogins (
   LOGIN_COOKIE varchar(5000) NOT NULL,
   CREATED_ON datetime NOT NULL,
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+);
 
 INSERT INTO StoredLogins (username,LOGIN_COOKIE,CREATED_ON)
 values
@@ -369,4 +369,4 @@ CREATE TABLE Log (
   REQ_URL varchar(1000),
   PARAMS varchar(2000),
   PRIMARY KEY (ID)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+);
