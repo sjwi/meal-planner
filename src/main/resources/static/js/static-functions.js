@@ -411,6 +411,28 @@ function decrementValue(e) {
   }
 }
 
+function addItemToList(upc) {
+  itemAdded = true;
+  $('#addItemToList_' + upc).find('.fa-list-plus').hide('fast');
+  $('#addItemToList_' + upc).find('.fa-check').show('fast');
+  setTimeout(function(){
+    $('#addItemToList_' + upc).find('.fa-list-plus').show('fast');
+    $('#addItemToList_' + upc).find('.fa-check').hide('fast');
+  },2000)
+  $.ajax({
+    url: contextpath + 'kroger/addProductToList',
+    method: "PUT",
+    data: {
+      upc: upc,
+      count: $('#productRow_' + upc + ' .quantity-field').val(),
+      weekName: openWeek
+    },
+    error: function() {
+      ajaxErrorHandler();
+    }
+  });
+}
+
 function addItemToCart(upc) {
   itemPurchased = true;
   $('#addItemToCart_' + upc).find('.fa-cart-plus').hide('fast');

@@ -15,7 +15,9 @@
   </div>
 </div>
 <script>
-  function openIngredientsModal(id) {
+  let openWeek
+  function openIngredientsModal(id,week) {
+    openWeek = week;
     $('#ingredientsModal .modal-body').html($('#loading').html());
     $('#ingredientsModal').modal('show');
     var xhr = $.ajax({

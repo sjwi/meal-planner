@@ -9,7 +9,7 @@
       <div class="col-1 text-right d-flex align-items-center">
         <div>
           <i class="far fa-list-alt text-info clickable stop-prop"
-            th:attr="onclick=${'openIngredientsModal(' + week.id + ')'}" aria-hidden="true"></i>
+            th:attr="onclick=${'openIngredientsModal(' + week.id + ',''' + week.getKey() + ''')'}" aria-hidden="true"></i>
         </div>
       </div>
     </div>

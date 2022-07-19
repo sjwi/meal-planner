@@ -4,12 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.util.Map;
 
-import com.sjwi.meals.dao.MealDao;
-import com.sjwi.meals.model.kroger.Locations;
-import com.sjwi.meals.model.kroger.Products;
-import com.sjwi.meals.model.security.MealsUser;
-import com.sjwi.meals.service.KrogerService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +14,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.sjwi.meals.dao.MealDao;
+import com.sjwi.meals.model.kroger.Locations;
+import com.sjwi.meals.model.kroger.Products;
+import com.sjwi.meals.model.security.MealsUser;
+import com.sjwi.meals.service.KrogerService;
 
 @Controller
 public class KrogerController {
@@ -48,6 +48,14 @@ public class KrogerController {
   @ResponseStatus(HttpStatus.OK)
   public void addProductToCart(@RequestParam String upc, @RequestParam int count) throws URISyntaxException, UnsupportedEncodingException{
     krogerService.addProductToCart(upc, count);
+  }
+
+  @RequestMapping(value = "/kroger/addProductToList", method = RequestMethod.PUT)
+  @ResponseStatus(HttpStatus.OK)
+  public void addProductToList(@RequestParam String upc,
+      @RequestParam int count,
+      @RequestParam String weekName) throws URISyntaxException, UnsupportedEncodingException{
+    krogerService.addProductToList(weekName, upc, count);
   }
   @RequestMapping("/user-preferences")
   public ModelAndView getUserPreferences(){
