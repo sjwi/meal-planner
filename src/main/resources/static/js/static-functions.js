@@ -413,10 +413,10 @@ function decrementValue(e) {
 
 function addItemToList(upc) {
   itemAdded = true;
-  $('#addItemToList_' + upc).find('.fa-list-plus').hide('fast');
+  $('#addItemToList_' + upc).find('.fa-list-ul').hide('fast');
   $('#addItemToList_' + upc).find('.fa-check').show('fast');
   setTimeout(function(){
-    $('#addItemToList_' + upc).find('.fa-list-plus').show('fast');
+    $('#addItemToList_' + upc).find('.fa-list-ul').show('fast');
     $('#addItemToList_' + upc).find('.fa-check').hide('fast');
   },2000)
   $.ajax({
