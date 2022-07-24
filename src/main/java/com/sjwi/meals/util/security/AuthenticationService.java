@@ -9,13 +9,13 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.sjwi.meals.dao.MealDao;
-
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import com.sjwi.meals.dao.MealDao;
 
 @Component
 public class AuthenticationService {
@@ -29,6 +29,7 @@ public class AuthenticationService {
   ServletContext context;
 
   public void generateCookieToken(String username) {
+    System.out.println("Generating cookie token");
     HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
     String token = generateTokenString();
     mealDao.storeCookieToken(username,token);
@@ -68,7 +69,11 @@ public class AuthenticationService {
   public boolean userHasLoginCookie() {
     HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
     Cookie[] cookies = request.getCookies();
-    return cookies != null && Arrays.stream(cookies).anyMatch(c -> c.getName() != null && c.getName().equals(STORED_COOKIE_TOKEN_KEY));
+    if (cookies == null) return false;
+    System.out.println("Inspecting cookies");
+    return Arrays.stream(cookies)
+      .peek(c -> System.out.println(c))
+      .anyMatch(c -> c.getName() != null && c.getName().equals(STORED_COOKIE_TOKEN_KEY) && c.getPath().equals("/"));
   }
 
   public void deleteTokenCookie() {
