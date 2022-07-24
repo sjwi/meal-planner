@@ -253,3 +253,6 @@ deleteUserTags: >
 
 log: >
   INSERT INTO Log (USERNAME,DEVICE,METHOD,REQ_URL,PARAMS) values (?,?,?,?,?)
+
+moveWeekMeal: >
+  UPDATE PlannedMeals SET SCHEDULE_ID = :weekId where SCHEDULE_ID = :oldWeekId AND MEAL_ID = :mealId;

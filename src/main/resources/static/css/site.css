@@ -153,6 +153,9 @@ li.add-meal-from-week:hover, li.add-meal-from-week:active {
 .text-small {
   font-size: .875rem
 }
+.week-item.droppable {
+  background:#d1d1d1;
+}
 span.select2-container {
 	z-index :4001 !important;
 }

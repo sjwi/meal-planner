@@ -270,4 +270,50 @@
   $(document).on('click', '.counter-input-group .button-minus', function(e) {
       decrementValue(e);
   });
+
+  var dragCtr = 0;
+  var dragWeek = null;
+  
+  function leaveDrop(e){
+    e.preventDefault();
+  }
+
+  function allowDrop(e){
+    e.preventDefault();
+  }
+
+  function dragSong(e){
+    var row = $(e.target).closest('.song-metadata');
+    e.dataTransfer.setData("removeFromWeekId",$(e.target).data('parentweek'));
+    e.dataTransfer.setData("mealId",$(e.target).data('mealid'));
+  }
+
+  function dropMealToWeek(e, weekId){
+    moveMeal(e.dataTransfer.getData("mealId"),weekId,e.dataTransfer.getData("removeFromWeekId"));
+  }
+
+  function moveMeal(mealId,weekId,oldWeekId) {
+    console.log(mealId + " " + weekId + " " + oldWeekId)
+    var xhr = $.ajax({
+      url: contextpath + "week/move-meal/" + mealId,
+      method: "POST",
+      contentType: "application/json",
+      data: JSON.stringify({
+        weekId: weekId,
+        oldWeekId: oldWeekId
+      }),
+      success: function (data) {
+        reloadIfRedirect(xhr);
+        refreshMealList();
+        refreshWeekList(() => focusWeek(weekId));
+        refreshSideList();
+        refreshIngredients();
+        refreshTags();
+        refreshSides();
+      },
+      error: function() {
+        // ajaxErrorHandler();
+      }
+    });
+  }
 </script>

@@ -9,6 +9,24 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.sjwi.meals.config.LandingPageSessionInitializer;
 import com.sjwi.meals.dao.MealDao;
 import com.sjwi.meals.log.CustomLogger;
@@ -23,22 +41,6 @@ import com.sjwi.meals.util.WeekGenerator;
 import com.sjwi.meals.util.security.AuthenticationService;
 import com.sjwi.meals.util.security.JwtManager;
 import com.sjwi.meals.util.security.OAuthManager;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class HomeController {
@@ -223,6 +225,13 @@ public class HomeController {
     mv.addObject("ingredients", ingredientMaster);
     return mv;
   }
+
+  @PostMapping("/week/move-meal/{id}")
+  @ResponseStatus(HttpStatus.OK)
+  public void moveWeekMeal(@RequestBody Map<String,Integer> requestBody, @PathVariable Integer id) {
+    mealDao.moveWeekMeal(id,requestBody.get("weekId"),requestBody.get("oldWeekId"));
+  }
+  
 
   @RequestMapping("/week/details/{id}")
   public ModelAndView getWeekDetails(@PathVariable int id, @RequestParam String view) {

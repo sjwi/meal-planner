@@ -18,14 +18,6 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
 
-import com.sjwi.meals.model.Ingredient;
-import com.sjwi.meals.model.Meal;
-import com.sjwi.meals.model.Side;
-import com.sjwi.meals.model.SqlQueryStore;
-import com.sjwi.meals.model.Week;
-import com.sjwi.meals.model.WeekMeal;
-import com.sjwi.meals.model.security.MealsUser;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -39,6 +31,14 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
+
+import com.sjwi.meals.model.Ingredient;
+import com.sjwi.meals.model.Meal;
+import com.sjwi.meals.model.Side;
+import com.sjwi.meals.model.SqlQueryStore;
+import com.sjwi.meals.model.Week;
+import com.sjwi.meals.model.WeekMeal;
+import com.sjwi.meals.model.security.MealsUser;
 
 @Repository
 public class MealDao {
@@ -700,6 +700,11 @@ public class MealDao {
   @Async
   public void log(String username, String os, String signature, String requestUrl, String parameters) {
     jdbcTemplate.update(queryStore.get("log"), new Object[]{username,os,signature,requestUrl,parameters});
+  }
+
+  public void moveWeekMeal(Integer mealId, Integer weekId, Integer oldWeekId) {
+    Map<String, Integer> params = Map.of("mealId",mealId,"weekId",weekId,"oldWeekId",oldWeekId);
+    namedParameterJdbcTemplate.update(queryStore.get("moveWeekMeal"),params);
   }
 }
  

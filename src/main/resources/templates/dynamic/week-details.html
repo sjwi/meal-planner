@@ -8,7 +8,7 @@
           th:id="${'accordion_header_sub_' + meal.id + '_' + week.id}" th:attr="data-target=${'#weekAccordion_' + week.id + ' .accordion-sub-' + meal.id}"
           data-toggle="collapse">
           <button class="action edit bg-primary stop-prop" th:attr="onclick=${'editMeal('+meal.id+')'}">Edit</button>
-          <div class="row py-0">
+          <div draggable="true" ondragstart="dragSong(event)" class="row py-0" th:attr="data-parentweek=${week.id},data-mealid=${meal.id}">
             <div th:id="${'subMealName_' + meal.id + '_' + week.id}" class="meal-text text-truncate col col-8 pb-1 pe-0 ps-2 sub-meal-text"
               th:text="${meal.name}"></div>
             <div class="col col-4 px-0 text-end">
