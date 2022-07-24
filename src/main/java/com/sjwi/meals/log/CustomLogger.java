@@ -1,14 +1,14 @@
 package com.sjwi.meals.log;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
-import com.sjwi.meals.model.security.MealsUser;
-
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+
+import com.sjwi.meals.model.security.MealsUser;
 
 import eu.bitwalker.useragentutils.UserAgent;
 
@@ -17,22 +17,17 @@ public class CustomLogger {
 	
 	public static final String LOG_FILE_PROPERTY_KEY = "log.feed";
 
-	private Logger log;
+	Logger log = LoggerFactory.getLogger(CustomLogger.class);
 
-	@PostConstruct
-	public void initialize() {
-		System.setProperty(LOG_FILE_PROPERTY_KEY,System.getenv("CATALINA_BASE") + "/logs/meals");
-		log = Logger.getLogger(CustomLogger.class.getName());
-	}
-	public void info(Object message) {
+	public void info(String message) {
 		log.info(message);
 	}
 	
-	public void debug(Object message) {
+	public void debug(String message) {
 		log.debug(message);
 	}
 
-	public void error(Object message) {
+	public void error(String message) {
 		log.error(message);
 	}
 	
