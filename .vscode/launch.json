@@ -17,7 +17,7 @@
                 "MEALS_MAIL_SMTP": "smtp.fastmail.com",
                 "MEALS_MAIL_PORT": "587",
                 "MEALS_DATASOURCE_INIT": "always",
-                "MEALS_JDBC_DATASOURCE_URL": "jdbc:h2:mem:Meals;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE",
+                "MEALS_JDBC_DATASOURCE_URL": "jdbc:h2:mem:Meals;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;NON_KEYWORDS=USER;MODE=LEGACY",
                 "MEALS_JDBC_DRIVER": "com.mysql.jdbc.Driver",
                 "MEALS_JDBC_DRIVER_H2": "org.h2.Driver",
                 "MEALS_JDBC_PASSWORD": "sa",
