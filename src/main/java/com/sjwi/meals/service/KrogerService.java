@@ -1,13 +1,19 @@
+/* (C)2022 sjwi */
 package com.sjwi.meals.service;
 
+import com.google.gson.Gson;
+import com.sjwi.meals.model.kroger.Item;
+import com.sjwi.meals.model.kroger.Items;
+import com.sjwi.meals.model.kroger.Lists;
+import com.sjwi.meals.model.kroger.Lists.List;
+import com.sjwi.meals.model.kroger.Locations;
+import com.sjwi.meals.model.kroger.Products;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,17 +24,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import com.google.gson.Gson;
-import com.sjwi.meals.model.kroger.Item;
-import com.sjwi.meals.model.kroger.Items;
-import com.sjwi.meals.model.kroger.Lists;
-import com.sjwi.meals.model.kroger.Lists.List;
-import com.sjwi.meals.model.kroger.Locations;
-import com.sjwi.meals.model.kroger.Products;
-
 @Component
 public class KrogerService {
-  
+
   @Value("${meals.auth.auth_url}")
   String authUrl;
 
@@ -59,22 +57,28 @@ public class KrogerService {
   public Products getProductsByTerm(String name, String locationId, Integer pageCount) {
     try {
       RestTemplate restTemplate = new RestTemplate();
-      if (name == null || name.trim().isEmpty()) 
-        return new Products();
+      if (name == null || name.trim().isEmpty()) return new Products();
 
-      Integer start = pageCount == 1? 1: (pageCount - 1) * ITEMS_PER_PAGE;
-      String url = baseUrl + PRODUCTS_ENDPOINT +
-          "?filter.locationId=" + locationId +
-          "&filter.term=" + URLEncoder.encode(name, "UTF-8") +
-          "&filter.limit=" + ITEMS_PER_PAGE + 
-          "&filter.start=" + start;
+      Integer start = pageCount == 1 ? 1 : (pageCount - 1) * ITEMS_PER_PAGE;
+      String url =
+          baseUrl
+              + PRODUCTS_ENDPOINT
+              + "?filter.locationId="
+              + locationId
+              + "&filter.term="
+              + URLEncoder.encode(name, "UTF-8")
+              + "&filter.limit="
+              + ITEMS_PER_PAGE
+              + "&filter.start="
+              + start;
 
       URI uri = new URI(url);
-      
+
       HttpHeaders headers = new HttpHeaders();
       headers.add("Authorization", "Bearer " + getSessionToken());
       HttpEntity<String> requestEntity = new HttpEntity<>(null, headers);
-      ResponseEntity<Products> result = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, Products.class);
+      ResponseEntity<Products> result =
+          restTemplate.exchange(uri, HttpMethod.GET, requestEntity, Products.class);
       return result.getBody();
     } catch (Exception e) {
       e.printStackTrace();
@@ -85,17 +89,17 @@ public class KrogerService {
   public Locations getLocationsByZip(String zipCode) {
     try {
       RestTemplate restTemplate = new RestTemplate();
-      if (zipCode == null || zipCode.trim().isEmpty()) 
-        return new Locations();
+      if (zipCode == null || zipCode.trim().isEmpty()) return new Locations();
 
       String url = baseUrl + LOCATIONS_ENDPOINT + "?filter.zipCode.near=" + zipCode;
 
       URI uri = new URI(url);
-      
+
       HttpHeaders headers = new HttpHeaders();
       headers.add("Authorization", "Bearer " + getSessionToken());
       HttpEntity<String> requestEntity = new HttpEntity<>(null, headers);
-      ResponseEntity<Locations> result = restTemplate.exchange(uri, HttpMethod.GET, requestEntity, Locations.class);
+      ResponseEntity<Locations> result =
+          restTemplate.exchange(uri, HttpMethod.GET, requestEntity, Locations.class);
       return result.getBody();
     } catch (Exception e) {
       e.printStackTrace();
@@ -103,17 +107,18 @@ public class KrogerService {
     }
   }
 
-  public void addProductToList(String weekName, String upc, int count) throws URISyntaxException, UnsupportedEncodingException {
+  public void addProductToList(String weekName, String upc, int count)
+      throws URISyntaxException, UnsupportedEncodingException {
     List list = getListForWeek(weekName);
     RestTemplate restTemplate = new RestTemplate();
     String url = baseUrl + LISTS_ENDPOINT + "/" + list.id;
     URI uri = new URI(url);
-    
-    Item[] items = new Item[] {new Item(upc,count)};
+
+    Item[] items = new Item[] {new Item(upc, count)};
     HttpHeaders headers = new HttpHeaders();
     headers.add("Authorization", "Bearer " + getSessionToken());
     headers.add("Content-Type", "application/json");
-    Map<String,Object> requestObject = Map.of("versionKey", list.versionKey,"items", items);
+    Map<String, Object> requestObject = Map.of("versionKey", list.versionKey, "items", items);
     HttpEntity<String> requestEntity = new HttpEntity<>(new Gson().toJson(requestObject), headers);
     restTemplate.exchange(uri, HttpMethod.PATCH, requestEntity, String.class);
   }
@@ -125,10 +130,10 @@ public class KrogerService {
     headers.add("Authorization", "Bearer " + getSessionToken());
     HttpEntity<String> requestEntity = new HttpEntity<>(null, headers);
     Map<String, ?> params = Map.of("filter.name", weekName);
-    ResponseEntity<Lists> result = restTemplate.exchange(url, HttpMethod.GET, requestEntity, Lists.class, params);
+    ResponseEntity<Lists> result =
+        restTemplate.exchange(url, HttpMethod.GET, requestEntity, Lists.class, params);
     Lists lists = result.getBody();
-    if (lists.data.length == 0)
-      return createListForWeek(weekName);
+    if (lists.data.length == 0) return createListForWeek(weekName);
     return result.getBody().data[0];
   }
 
@@ -139,18 +144,21 @@ public class KrogerService {
     HttpHeaders headers = new HttpHeaders();
     headers.add("Authorization", "Bearer " + getSessionToken());
     headers.add("Content-Type", "application/json");
-    HttpEntity<String> requestEntity = new HttpEntity<>(new Gson().toJson(Map.entry("name",weekName)), headers);
-    ResponseEntity<Lists> result = restTemplate.exchange(uri, HttpMethod.POST, requestEntity, Lists.class);
+    HttpEntity<String> requestEntity =
+        new HttpEntity<>(new Gson().toJson(Map.entry("name", weekName)), headers);
+    ResponseEntity<Lists> result =
+        restTemplate.exchange(uri, HttpMethod.POST, requestEntity, Lists.class);
     return result.getBody().data[0];
   }
 
-  public void addProductToCart(String upc, int count) throws URISyntaxException, UnsupportedEncodingException {
+  public void addProductToCart(String upc, int count)
+      throws URISyntaxException, UnsupportedEncodingException {
     RestTemplate restTemplate = new RestTemplate();
-     
+
     String url = baseUrl + ADD_CART_ENDPOINT;
     URI uri = new URI(url);
-    
-    Items items = new Items(new Item[] {new Item(upc,count)});
+
+    Items items = new Items(new Item[] {new Item(upc, count)});
     HttpHeaders headers = new HttpHeaders();
     headers.add("Authorization", "Bearer " + getSessionToken());
     headers.add("Content-Type", "application/json");
@@ -159,8 +167,8 @@ public class KrogerService {
   }
 
   private String getSessionToken() {
-    HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+    HttpServletRequest request =
+        ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
     return request.getSession().getAttribute("JWT").toString();
   }
-
 }

@@ -1,5 +1,9 @@
+/* (C)2022 sjwi */
 package com.sjwi.meals.util.security;
 
+import com.google.gson.Gson;
+import com.sjwi.meals.model.security.AccessTokenResponse;
+import com.sjwi.meals.service.ParameterStringBuilder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -7,11 +11,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.google.gson.Gson;
-import com.sjwi.meals.model.security.AccessTokenResponse;
-import com.sjwi.meals.service.ParameterStringBuilder;
-
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -50,7 +49,7 @@ public class OAuthManager {
 
     RestTemplate restTemplate = new RestTemplate();
 
-    String credentials = clientId +  ":" + clientSecret;
+    String credentials = clientId + ":" + clientSecret;
     String encodedCredentials = new String(Base64.encodeBase64(credentials.getBytes()));
 
     HttpHeaders headers = new HttpHeaders();
@@ -58,23 +57,27 @@ public class OAuthManager {
     headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
     headers.add("Authorization", "Basic " + encodedCredentials);
 
-    Map<String,String> params = new HashMap<>();
-    params.put("client_id",clientId);
-    params.put("redirect_uri",redirectUri);
-    params.put("code",code);
-    params.put("grant_type","authorization_code");
+    Map<String, String> params = new HashMap<>();
+    params.put("client_id", clientId);
+    params.put("redirect_uri", redirectUri);
+    params.put("code", code);
+    params.put("grant_type", "authorization_code");
 
-    HttpEntity<String> request = new HttpEntity<String>(ParameterStringBuilder.getParamsString(params),headers);
+    HttpEntity<String> request =
+        new HttpEntity<String>(ParameterStringBuilder.getParamsString(params), headers);
     response = restTemplate.postForEntity(tokenUrl, request, String.class);
     return new Gson().fromJson(response.getBody(), AccessTokenResponse.class);
   }
 
   public String getSignOnUrl() {
-    return authUrl + "?response_type=code&client_id=" + clientId +
-    "&redirect_uri=" + redirectUri +
-    "&scope=" + scopes.replaceAll("&"," ") +
-    "&state=STATE";
-      
+    return authUrl
+        + "?response_type=code&client_id="
+        + clientId
+        + "&redirect_uri="
+        + redirectUri
+        + "&scope="
+        + scopes.replaceAll("&", " ")
+        + "&state=STATE";
   }
 
   public String getExpirationDate(int expiresIn) {
@@ -96,7 +99,7 @@ public class OAuthManager {
     ResponseEntity<String> response = null;
     RestTemplate restTemplate = new RestTemplate();
 
-    String credentials = clientId +  ":" + clientSecret;
+    String credentials = clientId + ":" + clientSecret;
     String encodedCredentials = new String(Base64.encodeBase64(credentials.getBytes()));
 
     HttpHeaders headers = new HttpHeaders();
@@ -104,13 +107,13 @@ public class OAuthManager {
     headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
     headers.add("Authorization", "Basic " + encodedCredentials);
 
-    Map<String,String> params = new HashMap<>();
-    params.put("grant_type","refresh_token");
-    params.put("refresh_token",refreshToken);
+    Map<String, String> params = new HashMap<>();
+    params.put("grant_type", "refresh_token");
+    params.put("refresh_token", refreshToken);
 
-    HttpEntity<String> request = new HttpEntity<String>(ParameterStringBuilder.getParamsString(params),headers);
+    HttpEntity<String> request =
+        new HttpEntity<String>(ParameterStringBuilder.getParamsString(params), headers);
     response = restTemplate.postForEntity(tokenUrl, request, String.class);
     return new Gson().fromJson(response.getBody(), AccessTokenResponse.class);
   }
-
 }

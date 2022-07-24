@@ -1,3 +1,4 @@
+/* (C)2022 sjwi */
 package com.sjwi.meals.model;
 
 import java.util.List;
@@ -36,5 +37,4 @@ public class Side {
   public int getId() {
     return id;
   }
-
 }

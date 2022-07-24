@@ -1,14 +1,27 @@
+/* (C)2022 sjwi */
 package com.sjwi.meals.controller;
 
+import com.sjwi.meals.config.LandingPageSessionInitializer;
+import com.sjwi.meals.dao.MealDao;
+import com.sjwi.meals.log.CustomLogger;
+import com.sjwi.meals.model.Ingredient;
+import com.sjwi.meals.model.Week;
+import com.sjwi.meals.model.security.AccessTokenResponse;
+import com.sjwi.meals.model.security.MealsUser;
+import com.sjwi.meals.service.KrogerService;
+import com.sjwi.meals.service.MealService;
+import com.sjwi.meals.service.UserService;
+import com.sjwi.meals.util.WeekGenerator;
+import com.sjwi.meals.util.security.AuthenticationService;
+import com.sjwi.meals.util.security.JwtManager;
+import com.sjwi.meals.util.security.OAuthManager;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,51 +40,34 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.sjwi.meals.config.LandingPageSessionInitializer;
-import com.sjwi.meals.dao.MealDao;
-import com.sjwi.meals.log.CustomLogger;
-import com.sjwi.meals.model.Ingredient;
-import com.sjwi.meals.model.Week;
-import com.sjwi.meals.model.security.AccessTokenResponse;
-import com.sjwi.meals.model.security.MealsUser;
-import com.sjwi.meals.service.KrogerService;
-import com.sjwi.meals.service.MealService;
-import com.sjwi.meals.service.UserService;
-import com.sjwi.meals.util.WeekGenerator;
-import com.sjwi.meals.util.security.AuthenticationService;
-import com.sjwi.meals.util.security.JwtManager;
-import com.sjwi.meals.util.security.OAuthManager;
-
 @Controller
 public class HomeController {
 
-  @Autowired
-  MealDao mealDao;
+  @Autowired MealDao mealDao;
 
-  @Autowired
-  MealService mealService;
+  @Autowired MealService mealService;
 
-  @Autowired
-  KrogerService krogerService;
+  @Autowired KrogerService krogerService;
 
-  @Autowired
-  OAuthManager oAuthManager;
+  @Autowired OAuthManager oAuthManager;
 
-  @Autowired
-  UserService userService;
+  @Autowired UserService userService;
 
-  @Autowired
-  AuthenticationService authenticationService;
+  @Autowired AuthenticationService authenticationService;
 
   private static final int DEFAULT_NUMBER_OF_WEEKS = 25;
 
   @RequestMapping("/")
-  public ModelAndView homeController(HttpServletRequest request, Authentication auth, HttpServletResponse response) {
-    response.setHeader("REQUIRED-AUTH","1");
-    Map<String, String> preferences  = ((MealsUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPreferences();
+  public ModelAndView homeController(
+      HttpServletRequest request, Authentication auth, HttpServletResponse response) {
+    response.setHeader("REQUIRED-AUTH", "1");
+    Map<String, String> preferences =
+        ((MealsUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+            .getPreferences();
     ModelAndView mv = new ModelAndView("home");
     List<Week> weeks = mealDao.getNNumberOfWeeks(DEFAULT_NUMBER_OF_WEEKS);
-    WeekGenerator weekGenerator = new WeekGenerator(Integer.parseInt(preferences.get("weekStartDay")));
+    WeekGenerator weekGenerator =
+        new WeekGenerator(Integer.parseInt(preferences.get("weekStartDay")));
     mv.addObject("meals", mealDao.getAllMeals(preferences));
     mv.addObject("sides", mealDao.getAllSides());
     mv.addObject("weeks", weeks);
@@ -81,17 +77,30 @@ public class HomeController {
 
   @RequestMapping(value = "/update-preferences", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
-  public void setPreferences(@RequestParam(name="prefPreferFavorites", required = false) boolean pinFavorites,
-      @RequestParam String prefSortBy, @RequestParam String prefSortOrder, @RequestParam int prefWeekStartDay,
-      @RequestParam String prefKrogerLocationId, Authentication auth) {
-    mealService.setPreferences(pinFavorites,prefSortBy,prefSortOrder, prefWeekStartDay,
-      prefKrogerLocationId, ((MealsUser) auth.getPrincipal()).getUsername());
+  public void setPreferences(
+      @RequestParam(name = "prefPreferFavorites", required = false) boolean pinFavorites,
+      @RequestParam String prefSortBy,
+      @RequestParam String prefSortOrder,
+      @RequestParam int prefWeekStartDay,
+      @RequestParam String prefKrogerLocationId,
+      Authentication auth) {
+    mealService.setPreferences(
+        pinFavorites,
+        prefSortBy,
+        prefSortOrder,
+        prefWeekStartDay,
+        prefKrogerLocationId,
+        ((MealsUser) auth.getPrincipal()).getUsername());
   }
 
   @RequestMapping(value = "/update-account", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.OK)
-  public void updateAccount(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, Principal principal) {
-    userService.updateAccount(principal.getName(),firstName,lastName,email);
+  public void updateAccount(
+      @RequestParam String firstName,
+      @RequestParam String lastName,
+      @RequestParam String email,
+      Principal principal) {
+    userService.updateAccount(principal.getName(), firstName, lastName, email);
   }
 
   @RequestMapping(value = "/user-account/delete", method = RequestMethod.DELETE)
@@ -101,68 +110,80 @@ public class HomeController {
   }
 
   @RequestMapping("/search/meals")
-  public ModelAndView search(@RequestParam(required = false) String searchTerm, Authentication auth,
-      @RequestParam(value="tags[]",required = false) List<Integer> tags,
-      @RequestParam(name="pinFavorites", required = false) boolean pinFavorites,
-      @RequestParam String sortBy, @RequestParam String sortOrder) {
+  public ModelAndView search(
+      @RequestParam(required = false) String searchTerm,
+      Authentication auth,
+      @RequestParam(value = "tags[]", required = false) List<Integer> tags,
+      @RequestParam(name = "pinFavorites", required = false) boolean pinFavorites,
+      @RequestParam String sortBy,
+      @RequestParam String sortOrder) {
     Map<String, String> preferences = ((MealsUser) auth.getPrincipal()).getPreferences();
     Map<String, String> searchParams = new HashMap<>();
-    searchParams.put("sort",sortBy);
-    searchParams.put("sortDirection",sortOrder);
-    searchParams.put("pinFavorites",pinFavorites? "1": preferences.get("pinFavorites"));
-    if (tags == null)
-        tags = new ArrayList<Integer>();
+    searchParams.put("sort", sortBy);
+    searchParams.put("sortDirection", sortOrder);
+    searchParams.put("pinFavorites", pinFavorites ? "1" : preferences.get("pinFavorites"));
+    if (tags == null) tags = new ArrayList<Integer>();
     ModelAndView mv = new ModelAndView("home :: mealList");
     mv.addObject("meals", mealDao.searchMeals(searchTerm, tags, searchParams));
     return mv;
   }
 
-  @Autowired
-  CustomLogger logger;
+  @Autowired CustomLogger logger;
 
-  @Autowired
-  LandingPageSessionInitializer sessionInitializer;
+  @Autowired LandingPageSessionInitializer sessionInitializer;
 
-  @RequestMapping(value="/refresh-login")
+  @RequestMapping(value = "/refresh-login")
   @ResponseStatus(HttpStatus.OK)
   public void refreshLogin() {
     logger.info("In refresh");
     if (SecurityContextHolder.getContext().getAuthentication() != null
-						&& SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails) {
-				return;
+        && SecurityContextHolder.getContext().getAuthentication().getPrincipal()
+            instanceof UserDetails) {
+      return;
     }
     logger.info("Refreshing state");
     sessionInitializer.refreshUserSession();
   }
 
-
   @RequestMapping(value = "/login", method = RequestMethod.GET)
   public ModelAndView login(HttpServletResponse response) {
-    if(SecurityContextHolder.getContext().getAuthentication() != null && SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof UserDetails)
-      return new ModelAndView("redirect:/");
+    if (SecurityContextHolder.getContext().getAuthentication() != null
+        && SecurityContextHolder.getContext().getAuthentication().getPrincipal()
+            instanceof UserDetails) return new ModelAndView("redirect:/");
     return new ModelAndView("redirect:" + oAuthManager.getSignOnUrl());
   }
 
   @RequestMapping(value = "/oauth2/login", method = RequestMethod.GET)
-  public ModelAndView krogerLogin(@RequestParam String code, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) throws Exception {
+  public ModelAndView krogerLogin(
+      @RequestParam String code,
+      HttpServletRequest request,
+      HttpServletResponse response,
+      RedirectAttributes redirectAttributes)
+      throws Exception {
     ModelAndView mv = new ModelAndView("redirect:/");
     AccessTokenResponse tokenResponse = oAuthManager.getOAuthToken(code);
     JwtManager jwtManager = new JwtManager(tokenResponse);
     request.getSession().setAttribute("JWT", tokenResponse.getAccess_token());
-    request.getSession().setAttribute("JWT_EXPIRES_ON", oAuthManager.getExpirationDate(tokenResponse.getExpires_in()));
+    request
+        .getSession()
+        .setAttribute(
+            "JWT_EXPIRES_ON", oAuthManager.getExpirationDate(tokenResponse.getExpires_in()));
 
     User user = mealDao.getUser(jwtManager.getOAuthUser());
     if (user == null) {
       user = mealDao.registerNewUser(jwtManager.getOAuthUser(), tokenResponse.getRefresh_token());
       authenticationService.generateCookieToken(jwtManager.getOAuthUser());
-      redirectAttributes.addFlashAttribute("REGISTER_USER",true);
-    }
-    else {
-      user = mealDao.updateUserRefreshToken(jwtManager.getOAuthUser(),tokenResponse.getRefresh_token());
+      redirectAttributes.addFlashAttribute("REGISTER_USER", true);
+    } else {
+      user =
+          mealDao.updateUserRefreshToken(
+              jwtManager.getOAuthUser(), tokenResponse.getRefresh_token());
       if (!authenticationService.userHasLoginCookie())
         authenticationService.generateCookieToken(jwtManager.getOAuthUser());
     }
-    SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
+    SecurityContextHolder.getContext()
+        .setAuthentication(
+            new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities()));
     return mv;
   }
 
@@ -181,24 +202,20 @@ public class HomeController {
     return mv;
   }
 
-
   @RequestMapping("/weeks")
   public ModelAndView weeks(@RequestParam boolean showAll) {
     ModelAndView mv = new ModelAndView("home :: weekList");
-    if (showAll)
-      mv.addObject("weeks", mealDao.getAllWeeks());
-    else 
-      mv.addObject("weeks", mealDao.getNNumberOfWeeks(DEFAULT_NUMBER_OF_WEEKS));
+    if (showAll) mv.addObject("weeks", mealDao.getAllWeeks());
+    else mv.addObject("weeks", mealDao.getNNumberOfWeeks(DEFAULT_NUMBER_OF_WEEKS));
     return mv;
   }
 
   @RequestMapping("/sides")
-  public ModelAndView sides(@RequestParam(required=false) String searchTerm) {
+  public ModelAndView sides(@RequestParam(required = false) String searchTerm) {
     ModelAndView mv = new ModelAndView("home :: sideList");
     if (searchTerm != null && !searchTerm.trim().isEmpty())
       mv.addObject("sides", mealDao.searchSides(searchTerm));
-    else
-      mv.addObject("sides", mealDao.getAllSides());
+    else mv.addObject("sides", mealDao.getAllSides());
     return mv;
   }
 
@@ -212,15 +229,17 @@ public class HomeController {
     Week week = mealDao.getWeekById(id);
 
     Map<Ingredient, Integer> ingredientMaster = new HashMap<>();
-    week.getMeals().stream().map(m -> m.getIngredients())
-        .forEach(im -> {
-          for (Map.Entry<Ingredient,Integer> entry : im.entrySet()){
-            if (ingredientMaster.containsKey(entry.getKey()))
-              ingredientMaster.put(entry.getKey(), ingredientMaster.get(entry.getKey()) + entry.getValue());
-            else
-              ingredientMaster.put(entry.getKey(), entry.getValue());
-          }
-        });
+    week.getMeals().stream()
+        .map(m -> m.getIngredients())
+        .forEach(
+            im -> {
+              for (Map.Entry<Ingredient, Integer> entry : im.entrySet()) {
+                if (ingredientMaster.containsKey(entry.getKey()))
+                  ingredientMaster.put(
+                      entry.getKey(), ingredientMaster.get(entry.getKey()) + entry.getValue());
+                else ingredientMaster.put(entry.getKey(), entry.getValue());
+              }
+            });
     ModelAndView mv = new ModelAndView("modal/dynamic/ingredients");
     mv.addObject("ingredients", ingredientMaster);
     return mv;
@@ -228,10 +247,10 @@ public class HomeController {
 
   @PostMapping("/week/move-meal/{id}")
   @ResponseStatus(HttpStatus.OK)
-  public void moveWeekMeal(@RequestBody Map<String,Integer> requestBody, @PathVariable Integer id) {
-    mealDao.moveWeekMeal(id,requestBody.get("weekId"),requestBody.get("oldWeekId"));
+  public void moveWeekMeal(
+      @RequestBody Map<String, Integer> requestBody, @PathVariable Integer id) {
+    mealDao.moveWeekMeal(id, requestBody.get("weekId"), requestBody.get("oldWeekId"));
   }
-  
 
   @RequestMapping("/week/details/{id}")
   public ModelAndView getWeekDetails(@PathVariable int id, @RequestParam String view) {
@@ -249,18 +268,24 @@ public class HomeController {
   }
 
   @RequestMapping("/week-meal/details/{id}")
-  public ModelAndView getWeekMealDetails(@PathVariable int id, @RequestParam String view, @RequestParam int weekId) {
+  public ModelAndView getWeekMealDetails(
+      @PathVariable int id, @RequestParam String view, @RequestParam int weekId) {
     ModelAndView mv = new ModelAndView(view);
-    mv.addObject("meal", mealDao.getWeekMealById(id,weekId));
+    mv.addObject("meal", mealDao.getWeekMealById(id, weekId));
     return mv;
   }
 
   @RequestMapping("/weeks-for-select")
   public ModelAndView getWeeksForSelect() {
     ModelAndView mv = new ModelAndView("dynamic/weeks-for-select :: weeksForSelect");
-    Map<String, String> preferences  = ((MealsUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getPreferences();
-    WeekGenerator weekGenerator = new WeekGenerator(Integer.parseInt(preferences.get("weekStartDay")));
-    mv.addObject("weeksForSelect", weekGenerator.getWeeksForSelect(mealDao.getNNumberOfWeeks(DEFAULT_NUMBER_OF_WEEKS)));
+    Map<String, String> preferences =
+        ((MealsUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal())
+            .getPreferences();
+    WeekGenerator weekGenerator =
+        new WeekGenerator(Integer.parseInt(preferences.get("weekStartDay")));
+    mv.addObject(
+        "weeksForSelect",
+        weekGenerator.getWeeksForSelect(mealDao.getNNumberOfWeeks(DEFAULT_NUMBER_OF_WEEKS)));
     return mv;
   }
 }

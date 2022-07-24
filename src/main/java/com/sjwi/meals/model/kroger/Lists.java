@@ -1,10 +1,11 @@
+/* (C)2022 sjwi */
 package com.sjwi.meals.model.kroger;
 
 import java.util.UUID;
 
 public class Lists {
   public List[] data;
-  
+
   public static class List {
     public UUID id;
     public String versionKey;
