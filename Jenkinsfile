@@ -13,9 +13,9 @@ pipeline {
             usernamePassword(credentialsId: 'digiocean_creds', usernameVariable: 'DIGIOCEAN_UN', passwordVariable: 'DIGIOCEAN_PW'),
             string(credentialsId:'meals_dns', variable: 'DNS')
         ]) {
-            sh "sshpass -p '$DREAMHOST_PW' scp target/meals.war $DREAMHOST_UN@$DNS:/opt/tomcat/webapps/ROOT.war"
+            sh "sshpass -p '$DIGIOCEAN_PW' scp target/meals.war $DIGIOCEAN_UN@$DNS:/opt/tomcat/webapps/ROOT.war"
             sh "sleep 3"
-            sh "sshpass -p '$DREAMHOST_PW' ssh $DREAMHOST_UN@$DNS -o StrictHostKeyChecking=no 'systemctl restart tomcat.service'"
+            sh "sshpass -p '$DIGIOCEAN_PW' ssh $DIGIOCEAN_UN@$DNS -o StrictHostKeyChecking=no 'systemctl restart tomcat.service'"
         }
       }
     }
