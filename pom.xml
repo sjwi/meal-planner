@@ -185,12 +185,14 @@
                             <version>1.8</version>
                             <style>GOOGLE</style>
                             <reflowLongStrings>false</reflowLongStrings>
+                            <fixImports>false</fixImports>
+                            <maxLineLength>120</maxLineLength>
                         </googleJavaFormat>
                         <!-- make sure every file has the following copyright header.
                             optionally, Spotless can set copyright years by digging
                             through git history (see "license" section below) -->
                         <licenseHeader>
-                            <content>/* (C)$YEAR sjwi */</content>  <!-- or <file>${project.basedir}/license-header</file> -->
+                            <content>/* (C)$YEAR https://stephenky.com */</content>  <!-- or <file>${project.basedir}/license-header</file> -->
                         </licenseHeader>
                     </java>
                 </configuration>

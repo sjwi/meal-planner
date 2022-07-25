@@ -1,7 +1,6 @@
 /* (C)2022 sjwi */
 package com.sjwi.meals.util;
 
-import com.sjwi.meals.model.Week;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -12,6 +11,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import com.sjwi.meals.model.Week;
 
 public class WeekGenerator {
 

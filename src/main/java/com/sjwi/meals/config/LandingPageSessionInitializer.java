@@ -1,19 +1,16 @@
 /* (C)2022 sjwi */
 package com.sjwi.meals.config;
 
-import com.sjwi.meals.dao.MealDao;
-import com.sjwi.meals.model.security.AccessTokenResponse;
-import com.sjwi.meals.model.security.MealsUser;
-import com.sjwi.meals.util.security.AuthenticationService;
-import com.sjwi.meals.util.security.OAuthManager;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Optional;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -25,6 +22,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import com.sjwi.meals.dao.MealDao;
+import com.sjwi.meals.model.security.AccessTokenResponse;
+import com.sjwi.meals.model.security.MealsUser;
+import com.sjwi.meals.util.security.AuthenticationService;
+import com.sjwi.meals.util.security.OAuthManager;
 
 @Aspect
 @Component

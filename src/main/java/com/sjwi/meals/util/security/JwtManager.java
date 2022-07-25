@@ -1,6 +1,10 @@
 /* (C)2022 sjwi */
 package com.sjwi.meals.util.security;
 
+import java.security.interfaces.RSAPublicKey;
+
+import org.apache.commons.codec.binary.Base64;
+
 import com.auth0.jwk.Jwk;
 import com.auth0.jwk.JwkException;
 import com.auth0.jwk.JwkProvider;
@@ -9,8 +13,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.sjwi.meals.model.security.AccessTokenResponse;
-import java.security.interfaces.RSAPublicKey;
-import org.apache.commons.codec.binary.Base64;
 
 public class JwtManager {
 

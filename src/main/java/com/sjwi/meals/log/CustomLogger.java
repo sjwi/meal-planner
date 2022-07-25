@@ -1,14 +1,17 @@
 /* (C)2022 sjwi */
 package com.sjwi.meals.log;
 
-import com.sjwi.meals.model.security.MealsUser;
-import eu.bitwalker.useragentutils.UserAgent;
 import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+
+import com.sjwi.meals.model.security.MealsUser;
+
+import eu.bitwalker.useragentutils.UserAgent;
 
 @Component
 public class CustomLogger {

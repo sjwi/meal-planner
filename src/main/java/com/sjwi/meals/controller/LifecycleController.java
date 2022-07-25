@@ -1,17 +1,6 @@
 /* (C)2022 sjwi */
 package com.sjwi.meals.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.sjwi.meals.dao.MealDao;
-import com.sjwi.meals.model.Ingredient;
-import com.sjwi.meals.model.Meal;
-import com.sjwi.meals.model.Side;
-import com.sjwi.meals.model.Week;
-import com.sjwi.meals.model.security.MealsUser;
-import com.sjwi.meals.service.ImageService;
-import com.sjwi.meals.service.MealService;
-import com.sjwi.meals.util.WeekGenerator;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +24,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.sjwi.meals.dao.MealDao;
+import com.sjwi.meals.model.Ingredient;
+import com.sjwi.meals.model.Meal;
+import com.sjwi.meals.model.Side;
+import com.sjwi.meals.model.Week;
+import com.sjwi.meals.model.security.MealsUser;
+import com.sjwi.meals.service.ImageService;
+import com.sjwi.meals.service.MealService;
+import com.sjwi.meals.util.WeekGenerator;
 
 @Controller
 public class LifecycleController {

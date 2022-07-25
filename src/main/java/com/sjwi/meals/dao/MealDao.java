@@ -3,13 +3,6 @@ package com.sjwi.meals.dao;
 
 import static com.sjwi.meals.model.security.MealsUser.USER_PREFERENCE_KEYS;
 
-import com.sjwi.meals.model.Ingredient;
-import com.sjwi.meals.model.Meal;
-import com.sjwi.meals.model.Side;
-import com.sjwi.meals.model.SqlQueryStore;
-import com.sjwi.meals.model.Week;
-import com.sjwi.meals.model.WeekMeal;
-import com.sjwi.meals.model.security.MealsUser;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,6 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -38,6 +32,14 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
+
+import com.sjwi.meals.model.Ingredient;
+import com.sjwi.meals.model.Meal;
+import com.sjwi.meals.model.Side;
+import com.sjwi.meals.model.SqlQueryStore;
+import com.sjwi.meals.model.Week;
+import com.sjwi.meals.model.WeekMeal;
+import com.sjwi.meals.model.security.MealsUser;
 
 @Repository
 public class MealDao {

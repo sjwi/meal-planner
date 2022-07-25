@@ -4,6 +4,7 @@ package com.sjwi.meals.model;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Map;
+
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
 import org.yaml.snakeyaml.Yaml;
