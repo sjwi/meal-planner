@@ -1,10 +1,14 @@
-/* (C)2022 sjwi */
+/* (C)2022 https://stephenky.com */
 package com.sjwi.meals.controller.kroger;
 
+import com.sjwi.meals.dao.MealDao;
+import com.sjwi.meals.model.kroger.Locations;
+import com.sjwi.meals.model.kroger.Products;
+import com.sjwi.meals.model.security.MealsUser;
+import com.sjwi.meals.service.KrogerService;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,12 +19,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.sjwi.meals.dao.MealDao;
-import com.sjwi.meals.model.kroger.Locations;
-import com.sjwi.meals.model.kroger.Products;
-import com.sjwi.meals.model.security.MealsUser;
-import com.sjwi.meals.service.KrogerService;
 
 @Controller
 public class KrogerController {

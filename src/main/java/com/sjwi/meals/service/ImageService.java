@@ -1,4 +1,4 @@
-/* (C)2022 sjwi */
+/* (C)2022 https://stephenky.com */
 package com.sjwi.meals.service;
 
 import java.io.IOException;
@@ -8,7 +8,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

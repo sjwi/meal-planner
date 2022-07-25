@@ -1,6 +1,9 @@
-/* (C)2022 sjwi */
+/* (C)2022 https://stephenky.com */
 package com.sjwi.meals.util.security;
 
+import com.google.gson.Gson;
+import com.sjwi.meals.model.security.AccessTokenResponse;
+import com.sjwi.meals.service.ParameterStringBuilder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -8,7 +11,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -17,10 +19,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
-import com.google.gson.Gson;
-import com.sjwi.meals.model.security.AccessTokenResponse;
-import com.sjwi.meals.service.ParameterStringBuilder;
 
 @Component
 public class OAuthManager {

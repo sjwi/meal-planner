@@ -1,14 +1,19 @@
-/* (C)2022 sjwi */
+/* (C)2022 https://stephenky.com */
 package com.sjwi.meals.service;
 
+import com.google.gson.Gson;
+import com.sjwi.meals.model.kroger.Item;
+import com.sjwi.meals.model.kroger.Items;
+import com.sjwi.meals.model.kroger.Lists;
+import com.sjwi.meals.model.kroger.Lists.List;
+import com.sjwi.meals.model.kroger.Locations;
+import com.sjwi.meals.model.kroger.Products;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -18,14 +23,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import com.google.gson.Gson;
-import com.sjwi.meals.model.kroger.Item;
-import com.sjwi.meals.model.kroger.Items;
-import com.sjwi.meals.model.kroger.Lists;
-import com.sjwi.meals.model.kroger.Lists.List;
-import com.sjwi.meals.model.kroger.Locations;
-import com.sjwi.meals.model.kroger.Products;
 
 @Component
 public class KrogerService {

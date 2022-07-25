@@ -1,8 +1,7 @@
-/* (C)2022 sjwi */
+/* (C)2022 https://stephenky.com */
 package com.sjwi.meals.config;
 
 import javax.sql.DataSource;
-
 import org.h2.server.web.WebServlet;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;

@@ -1,4 +1,4 @@
-/* (C)2022 sjwi */
+/* (C)2022 https://stephenky.com */
 package com.sjwi.meals.service;
 
 import java.net.URLEncoder;

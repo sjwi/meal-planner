@@ -1,15 +1,27 @@
-/* (C)2022 sjwi */
+/* (C)2022 https://stephenky.com */
 package com.sjwi.meals.controller;
 
+import com.sjwi.meals.config.LandingPageSessionInitializer;
+import com.sjwi.meals.dao.MealDao;
+import com.sjwi.meals.log.CustomLogger;
+import com.sjwi.meals.model.Ingredient;
+import com.sjwi.meals.model.Week;
+import com.sjwi.meals.model.security.AccessTokenResponse;
+import com.sjwi.meals.model.security.MealsUser;
+import com.sjwi.meals.service.KrogerService;
+import com.sjwi.meals.service.MealService;
+import com.sjwi.meals.service.UserService;
+import com.sjwi.meals.util.WeekGenerator;
+import com.sjwi.meals.util.security.AuthenticationService;
+import com.sjwi.meals.util.security.JwtManager;
+import com.sjwi.meals.util.security.OAuthManager;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,21 +39,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import com.sjwi.meals.config.LandingPageSessionInitializer;
-import com.sjwi.meals.dao.MealDao;
-import com.sjwi.meals.log.CustomLogger;
-import com.sjwi.meals.model.Ingredient;
-import com.sjwi.meals.model.Week;
-import com.sjwi.meals.model.security.AccessTokenResponse;
-import com.sjwi.meals.model.security.MealsUser;
-import com.sjwi.meals.service.KrogerService;
-import com.sjwi.meals.service.MealService;
-import com.sjwi.meals.service.UserService;
-import com.sjwi.meals.util.WeekGenerator;
-import com.sjwi.meals.util.security.AuthenticationService;
-import com.sjwi.meals.util.security.JwtManager;
-import com.sjwi.meals.util.security.OAuthManager;
 
 @Controller
 public class HomeController {

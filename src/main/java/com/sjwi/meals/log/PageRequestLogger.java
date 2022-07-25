@@ -1,10 +1,11 @@
-/* (C)2022 sjwi */
+/* (C)2022 https://stephenky.com */
 package com.sjwi.meals.log;
 
+import com.sjwi.meals.dao.MealDao;
+import com.sjwi.meals.model.security.MealsUser;
+import eu.bitwalker.useragentutils.UserAgent;
 import java.util.stream.Collectors;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -15,11 +16,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
-import com.sjwi.meals.dao.MealDao;
-import com.sjwi.meals.model.security.MealsUser;
-
-import eu.bitwalker.useragentutils.UserAgent;
 
 @Aspect
 @Configuration
