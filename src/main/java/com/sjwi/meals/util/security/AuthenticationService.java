@@ -1,19 +1,22 @@
 /* (C)2022 https://stephenky.com */
 package com.sjwi.meals.util.security;
 
-import com.sjwi.meals.dao.MealDao;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import com.sjwi.meals.dao.MealDao;
 
 @Component
 public class AuthenticationService {
@@ -76,9 +79,7 @@ public class AuthenticationService {
             c ->
                 c.getName() != null
                     && c.getName().equals(STORED_COOKIE_TOKEN_KEY)
-                    && c.getPath()
-                        .equals(
-                            context.getContextPath().isEmpty() ? "/" : context.getContextPath()));
+                    && (context.getContextPath().isEmpty() ? "/" : context.getContextPath()).equals(c.getPath()));
   }
 
   public void deleteTokenCookie() {
